@@ -1,0 +1,33 @@
+---
+
+db_hostname: "{{ hostvars[groups['db_server'][0]]['inventory_hostname'] }}"
+scm_hostname: "{{ hostvars[groups['scm_server'][0]]['inventory_hostname'] }}"
+
+cdh_version: 5.8.3
+cluster_display_name: cluster_1
+
+cdh_services:
+  - type: hdfs
+    dfs_data_dir_list: /dfs/dn
+    fs_checkpoint_dir_list: /dfs/snn
+    dfs_name_dir_list: /dfs/nn
+    dfs_journalnode_edits_dir: /dfs/jn
+
+  - type: hive
+
+  - type: hue
+
+  - type: impala
+    scratch_dirs: /tmp/impala
+
+  - type: oozie
+
+  - type: sentry
+
+  - type: spark
+
+  - type: yarn
+    yarn_nodemanager_local_dirs: /tmp/nm
+    yarn_nodemanager_log_dirs: /var/log/nm
+
+  - type: zookeeper

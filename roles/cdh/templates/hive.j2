@@ -1,0 +1,67 @@
+{
+  "refName": "HIVE-1",
+  "serviceType": "HIVE",
+  "serviceConfigs": [
+    {
+      "name": "hive_metastore_database_host",
+      "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+    }, {
+      "name": "hive_metastore_database_type",
+      "value": "{{ databases.metastore.type }}"
+    }, {
+      "name": "hive_metastore_database_name",
+      "value": "{{ databases.metastore.name }}"
+    }, {
+      "name": "hive_metastore_database_user",
+      "value": "{{ databases.metastore.user }}"
+    }, {
+      "name": "hive_metastore_database_password",
+      "value": "{{ databases.metastore.pass }}"
+    }, {
+      "name": "spark_on_yarn_service",
+      "ref": "SPARK_ON_YARN-1"
+    }, {
+      "name": "mapreduce_yarn_service",
+      "ref": "YARN-1"
+    }, {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    }, {
+      "name": "sentry_service",
+      "ref": "SENTRY-1"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "HIVE-1-GATEWAY-BASE",
+      "roleType": "GATEWAY",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HIVE-1-WEBHCAT-BASE",
+      "roleType": "WEBHCAT",
+      "configs": [
+        {
+          "name": "hive_webhcat_address_port",
+          "value": "7272"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "HIVE-1-HIVEMETASTORE-BASE",
+      "roleType": "HIVEMETASTORE",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HIVE-1-HIVESERVER2-BASE",
+      "roleType": "HIVESERVER2",
+      "configs": [
+        {
+          "name": "hiveserver2_enable_impersonation",
+          "value": "false"
+        }
+      ],
+      "base": true
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+---
+
+ansible_become: true
+tmp_dir: /tmp

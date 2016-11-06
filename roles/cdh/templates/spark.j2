@@ -1,0 +1,22 @@
+{
+  "refName": "SPARK_ON_YARN-1",
+  "serviceType": "SPARK_ON_YARN",
+  "serviceConfigs": [
+    {
+      "name": "yarn_service",
+      "ref": "YARN-1"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "SPARK_ON_YARN-1-GATEWAY-BASE",
+      "roleType": "GATEWAY",
+      "base": true
+    }, {
+      "refName": "SPARK_ON_YARN-1-SPARK_YARN_HISTORY_SERVER-BASE",
+      "roleType": "SPARK_YARN_HISTORY_SERVER",
+      "configs": [],
+      "base": true
+    }
+  ]
+}

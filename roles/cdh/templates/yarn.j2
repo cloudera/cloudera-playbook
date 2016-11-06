@@ -1,0 +1,61 @@
+{
+  "refName": "YARN-1",
+  "serviceType": "YARN",
+  "serviceConfigs": [
+    {
+      "name": "cm_yarn_container_usage_job_user",
+      "value": "cmjobuser"
+    }, {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    }, {
+      "name": "hdfs_service",
+      "ref": "HDFS-1"
+    }, {
+      "name": "hadoop_secure_web_ui",
+      "value": "true"
+    }, {
+      "name": "cm_yarn_enable_container_usage_aggregation",
+      "value": "true"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "YARN-1-JOBHISTORY-BASE",
+      "roleType": "JOBHISTORY",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "YARN-1-GATEWAY-BASE",
+      "roleType": "GATEWAY",
+      "configs": [
+        {
+          "name": "mapred_submit_replication",
+          "value": "1"
+        }, {
+          "name": "mapred_reduce_tasks",
+          "value": "6"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "YARN-1-NODEMANAGER-BASE",
+      "roleType": "NODEMANAGER",
+      "configs": [
+        {
+          "name": "yarn_nodemanager_local_dirs",
+          "variable": "YARN_NODEMANAGER_LOCAL_DIRS"
+        }, {
+          "name": "yarn_nodemanager_log_dirs",
+          "variable": "YARN_NODEMANAGER_LOG_DIRS"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "YARN-1-RESOURCEMANAGER-BASE",
+      "roleType": "RESOURCEMANAGER",
+      "configs": [],
+      "base": true
+    }
+  ]
+}

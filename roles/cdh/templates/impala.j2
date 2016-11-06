@@ -1,0 +1,73 @@
+{
+  "refName": "IMPALA-1",
+  "serviceType": "IMPALA",
+  "serviceConfigs": [
+    {
+      "name": "impala_cmd_args_safety_valve",
+      "value": ""
+    }, {
+      "name": "hdfs_service",
+      "ref": "HDFS-1"
+    }, {
+      "name": "admission_control_enabled",
+      "value": "true"
+    }, {
+      "name": "sentry_service",
+      "ref": "SENTRY-1"
+    }, {
+      "name": "kerberos_reinit_interval",
+      "value": "10"
+    }, {
+      "name": "enable_core_dump",
+      "value": "true"
+    }, {
+      "name": "hive_service",
+      "ref": "HIVE-1"
+    }, {
+      "name": "all_admission_control_enabled",
+      "value": "true"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "IMPALA-1-IMPALAD-BASE",
+      "roleType": "IMPALAD",
+      "configs": [
+        {
+          "name": "enable_audit_event_log",
+          "value": "true"
+        }, {
+          "name": "scratch_dirs",
+          "variable": "SCRATCH_DIRS"
+        }, {
+          "name": "logbuflevel",
+          "value": "-1"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "IMPALA-1-CATALOGSERVER-BASE",
+      "roleType": "CATALOGSERVER",
+      "configs": [
+        {
+          "name": "logbuflevel",
+          "value": "-1"
+        }, {
+          "name": "catalogd_embedded_jvm_heapsize",
+          "value": "603979776"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "IMPALA-1-STATESTORE-BASE",
+      "roleType": "STATESTORE",
+      "configs": [
+        {
+          "name": "logbuflevel",
+          "value": "-1"
+        }
+      ],
+      "base": true
+    }
+  ]
+}

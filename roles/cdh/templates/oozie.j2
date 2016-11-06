@@ -1,0 +1,53 @@
+{
+  "refName": "OOZIE-1",
+  "serviceType": "OOZIE",
+  "serviceConfigs": [
+    {
+      "name": "oozie_upload_sharelib_cmd_timeout",
+      "value": "540"
+    }, {
+      "name": "hive_service",
+      "ref": "HIVE-1"
+    }, {
+      "name": "mapreduce_yarn_service",
+      "ref": "YARN-1"
+    }, {
+      "name": "spark_on_yarn_service",
+      "ref": "SPARK_ON_YARN-1"
+    }, {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "OOZIE-1-OOZIE_SERVER-BASE",
+      "roleType": "OOZIE_SERVER",
+      "configs": [
+        {
+          "name": "oozie_database_host",
+          "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+        }, {
+          "name": "oozie_database_type",
+          "value": "{{ databases.oozie.type }}"
+        }, {
+          "name": "oozie_database_name",
+          "value": "{{ databases.oozie.name }}"
+        }, {
+          "name": "oozie_database_user",
+          "value": "{{ databases.oozie.user }}"
+        }, {
+          "name": "oozie_database_password",
+          "value": "{{ databases.oozie.pass }}"
+        }, {
+          "name": "oozie_workflow_extension_schemas",
+          "value": ",ssh-action-0.1.xsd,hive-action-0.3.xsd,sqoop-action-0.3.xsd,shell-action-0.2.xsd,shell-action-0.1.xsd"
+        }, {
+          "name": "oozie_config_safety_valve",
+          "value": "\n<property>\n<name>oozie.action.launcher.mapreduce.job.ubertask.enable</name>\n<value>false</value>\n</property>"
+        }
+      ],
+      "base": true
+    }
+  ]
+}

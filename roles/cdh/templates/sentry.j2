@@ -1,0 +1,40 @@
+{
+  "refName": "SENTRY-1",
+  "serviceType": "SENTRY",
+  "serviceConfigs": [
+    {
+      "name": "sentry_server_database_host",
+      "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+    }, {
+      "name": "sentry_server_database_type",
+      "value": "{{ databases.sentry.type }}"
+    }, {
+      "name": "sentry_server_database_name",
+      "value": "{{ databases.sentry.name }}"
+    }, {
+      "name": "sentry_server_database_user",
+      "value": "{{ databases.sentry.user }}"
+    }, {
+      "name": "sentry_server_database_password",
+      "value": "{{ databases.sentry.pass }}"
+    }, {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    }, {
+      "name": "hdfs_service",
+      "ref": "HDFS-1"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "SENTRY-1-GATEWAY-BASE",
+      "roleType": "GATEWAY",
+      "base": true
+    }, {
+      "refName": "SENTRY-1-SENTRY_SERVER-BASE",
+      "roleType": "SENTRY_SERVER",
+      "configs": [],
+      "base": true
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "refName": "HUE-1",
+  "serviceType": "HUE",
+  "serviceConfigs": [
+    {
+      "name": "database_host",
+      "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+    }, {
+      "name": "database_type",
+      "value": "{{ databases.hue.type }}"
+    }, {
+      "name": "database_name",
+      "value": "{{ databases.hue.name }}"
+    }, {
+      "name": "database_user",
+      "value": "{{ databases.hue.user }}"
+    }, {
+      "name": "database_password",
+      "value": "{{ databases.hue.pass }}"
+    }, {
+      "name": "oozie_service",
+      "ref": "OOZIE-1"
+    }, {
+      "name": "impala_service",
+      "ref": "IMPALA-1"
+    }, {
+      "name": "hive_service",
+      "ref": "HIVE-1"
+    }, {
+      "name": "sentry_service",
+      "ref": "SENTRY-1"
+    }, {
+      "name": "hue_service_safety_valve",
+      "value": "[impala]\nserver_port=21051\n\n[beeswax]\ndownload_cell_limit=10"
+    }, {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    }, {
+      "name": "hue_webhdfs",
+      "ref": "HDFS-HTTPFS-1"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "HUE-1-HUE_SERVER-BASE",
+      "roleType": "HUE_SERVER",
+      "configs": [],
+      "base": true
+    }
+    {% if (krb5_kdc_type == 'ad') or (krb5_kdc_type == 'mit') %}
+     , {
+      "refName": "HUE-1-KT_RENEWER-BASE",
+      "roleType": "KT_RENEWER",
+      "configs": [],
+      "base": true
+    }
+    {% endif %}
+  ]
+}

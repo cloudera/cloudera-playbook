@@ -1,0 +1,126 @@
+{
+  "refName": "HDFS-1",
+  "serviceType": "HDFS",
+  "serviceConfigs": [
+    {
+      "name": "dfs_namenode_acls_enabled",
+      "value": "true"
+    }, {
+      "name": "hadoop_security_authorization",
+      "value": "true"
+    }, {
+      "name": "hadoop_security_authentication",
+      {% if (krb5_kdc_type == 'ad') or (krb5_kdc_type == 'mit') %}
+      "value": "kerberos"
+      {% else %}
+      "value": "simple"
+      {% endif %}
+    }, {
+      "name": "dfs_ha_fencing_methods",
+      "value": "shell(true)"
+    }, {
+      "name": "hadoop_secure_web_ui",
+      "value": "true"
+    }, {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "HDFS-1-FAILOVERCONTROLLER-BASE",
+      "roleType": "FAILOVERCONTROLLER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HDFS-1-DATANODE-BASE",
+      "roleType": "DATANODE",
+      "configs": [
+        {
+          "name": "dfs_data_dir_list",
+          "variable": "DFS_DATA_DIR_LIST"
+        }
+        {% if (krb5_kdc_type == 'ad') or (krb5_kdc_type == 'mit') %}
+         , {
+          "name": "dfs_datanode_port",
+          "value": "1004"
+        }, {
+          "name": "dfs_datanode_http_port",
+          "value": "1006"
+        }
+        {% endif %}
+      ],
+      "base": true
+    }, {
+      "refName": "HDFS-1-SECONDARYNAMENODE-BASE",
+      "roleType": "SECONDARYNAMENODE",
+      "configs": [
+        {
+          "name": "fs_checkpoint_dir_list",
+          "variable": "FS_CHECKPOINT_DIR_LIST"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "HDFS-1-NAMENODE-BASE",
+      "roleType": "NAMENODE",
+      "configs": [
+        {
+          "name": "dfs_federation_namenode_nameservice",
+          "value": "nameservice1"
+        }, {
+          "name": "dfs_namenode_quorum_journal_name",
+          "value": "nameservice1"
+        }, {
+          "name": "autofailover_enabled",
+          "value": "true"
+        }, {
+          "name": "dfs_name_dir_list",
+          "variable": "DFS_NAME_DIR_LIST"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "HDFS-1-JOURNALNODE-BASE",
+      "roleType": "JOURNALNODE",
+      "configs": [
+        {
+          "name": "dfs_journalnode_edits_dir",
+          "variable": "DFS_JOURNALNODE_EDITS_DIR"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "HDFS-1-HTTPFS-BASE",
+      "roleType": "HTTPFS",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HDFS-1-NFSGATEWAY-BASE",
+      "roleType": "NFSGATEWAY",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HDFS-1-BALANCER-BASE",
+      "roleType": "BALANCER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HDFS-1-GATEWAY-BASE",
+      "roleType": "GATEWAY",
+      "configs": [
+        {
+          "name": "dfs_client_use_trash",
+          "value": "true"
+        }
+      ],
+      "base": true
+    }
+  ],
+  "roles": [
+    {
+      "refName": "HDFS-HTTPFS-1",
+      "roleType": "HTTPFS"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "clusterName" : "{{ cluster_display_name }}",
+  "hosts" : [
+    {% set host_joiner = joiner(",") %}
+    {% for host in groups['cdh_servers'] %}
+    {% if 'host_template' in hostvars[host] %}
+    {{ host_joiner() }}
+    {
+      "hostName" : "{{ scm_host_names[host] }}",
+      "hostTemplateRefName" : "{{ hostvars[host]['host_template'] }}"
+      {% if 'role_ref_names' in hostvars[host] %}
+      ,"roleRefNames" : [ "{{ hostvars[host]['role_ref_names'] }}" ]
+      {% endif %}
+    }
+    {% endif %}
+    {% endfor %}
+  ],
+  "variables" : [
+  {% set var_joiner = joiner(",") %}
+  {% for item in cdh_services %}
+    {% for (k,v) in item.iteritems() %}
+      {% if not k|lower == 'type' %}
+      {{ var_joiner() }}
+      {
+        "name": "{{ k|upper }}",
+        "value": "{{ v }}"
+      }
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  ]
+}

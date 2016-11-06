@@ -1,0 +1,8 @@
+---
+# https://cloudera.github.io/cm_api/docs/python-client/
+
+- name: Install Python PIP
+  yum: name=python-pip state=latest update_cache=yes
+
+- name: Install CM Python API Client
+  pip: name=cm-api

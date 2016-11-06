@@ -1,0 +1,28 @@
+{
+  "items" : [
+    {% if krb5_kdc_type != 'none' %}
+    {
+      "name" : "KDC_HOST",
+      "value" : "{{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}"
+    }, {
+      "name" : "KDC_TYPE",
+      {% if krb5_kdc_type == 'ad' %}
+      "value" : "Active Directory"
+      {% else %}
+      "value" : "MIT KDC"
+      {% endif %}
+    }, {
+      "name" : "SECURITY_REALM",
+      "value" : "{{ default_realm|upper }}"
+    }, {
+      "name" : "KRB_MANAGE_KRB5_CONF",
+      "value" : "false"
+    },
+    {% endif %}
+    {
+      "name" : "REMOTE_PARCEL_REPO_URLS",
+      "value" : {% set repo_j = joiner(",") %}
+      "{% for repo in scm_repositories %}{{ repo_j() }}{{ repo }}{% endfor %}"
+    }
+  ]
+}

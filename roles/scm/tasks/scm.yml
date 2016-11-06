@@ -1,0 +1,40 @@
+---
+
+- name: Prepare Cloudera Manager settings
+  template:
+    src: "scm.j2"
+    dest: "{{ tmp_dir }}/scm.json"
+  delegate_to: localhost
+
+# https://cloudera.github.io/cm_api/apidocs/v13/path__cm_config.html
+- name: Update Cloudera Manager settings
+  uri:
+    url: "{{ cm_api_url }}/cm/config"
+    method: PUT
+    body_format: json
+    body: "{{ lookup('file', ''+ tmp_dir + '/scm.json') }}"
+    status_code: 200
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  register: scm_resp
+  delegate_to: localhost
+- debug: var=scm_resp
+
+- file:
+    path: "{{ tmp_dir }}/scm.json"
+    state: absent
+  delegate_to: localhost
+
+# https://cloudera.github.io/cm_api/apidocs/v13/path__cm_commands_importAdminCredentials.html
+- name: Import KDC admin credentials
+  uri:
+    url: "{{ cm_api_url }}/cm/commands/importAdminCredentials?username={{ krb5_kdc_admin_user }}&password={{ krb5_kdc_admin_passwd }}"
+    method: POST
+    status_code: 200
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  when: krb5_kdc_type != 'none'

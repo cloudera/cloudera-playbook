@@ -1,0 +1,15 @@
+---
+# Handlers for Cloudera Manager Server.
+
+- name: restart cloudera-scm-server
+  service: name=cloudera-scm-server state=restarted
+  notify:
+    - wait cloudera-scm-server
+
+- name: wait cloudera-scm-server
+  wait_for:
+    host={{ hostvars[scm_hostname]['inventory_hostname'] }}
+    port={{ scm_port }}
+    delay=5
+    state=started
+    timeout=300

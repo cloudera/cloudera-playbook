@@ -1,0 +1,182 @@
+{
+  "name": "mgmt",
+  "type": "MGMT",
+  "roles": [
+    {
+      "name": "mgmt-SERVICEMONITOR",
+      "type": "SERVICEMONITOR",
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }, {
+      "name": "mgmt-ACTIVITYMONITOR",
+      "type": "ACTIVITYMONITOR",
+      "roleConfigGroupRef": {
+        "roleConfigGroupName": "mgmt-ACTIVITYMONITOR-BASE"
+      },
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }, {
+      "name": "mgmt-HOSTMONITOR",
+      "type": "HOSTMONITOR",
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }, {
+      "name": "mgmt-REPORTSMANAGER",
+      "type": "REPORTSMANAGER",
+      "roleConfigGroupRef": {
+        "roleConfigGroupName": "mgmt-REPORTSMANAGER-BASE"
+      },
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }, {
+      "name": "mgmt-EVENTSERVER",
+      "type": "EVENTSERVER",
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }, {
+      "name": "mgmt-ALERTPUBLISHER",
+      "type": "ALERTPUBLISHER",
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }, {
+      "name": "mgmt-NAVIGATOR",
+      "type": "NAVIGATOR",
+      "roleConfigGroupRef": {
+        "roleConfigGroupName": "mgmt-NAVIGATOR-BASE"
+      },
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }, {
+      "name": "mgmt-NAVIGATORMETASERVER",
+      "type": "NAVIGATORMETASERVER",
+      "roleConfigGroupRef": {
+        "roleConfigGroupName": "mgmt-NAVIGATORMETASERVER-BASE"
+      },
+      "hostRef": {
+        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+      }
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "name": "mgmt-ACTIVITYMONITOR-BASE",
+      "displayName": "Activity Monitor Default Group",
+      "roleType": "ACTIVITYMONITOR",
+      "base": true,
+      "serviceRef": {
+        "serviceName": "mgmt"
+      },
+      "config": {
+        "items": [
+          {
+            "name": "firehose_database_host",
+            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+          }, {
+            "name": "firehose_database_name",
+            "value": "{{ databases.amon.name }}"
+          }, {
+            "name": "firehose_database_password",
+            "value": "{{ databases.amon.pass }}"
+          }, {
+            "name": "firehose_database_type",
+            "value": "{{ databases.amon.type }}"
+          }, {
+            "name": "firehose_database_user",
+            "value": "{{ databases.amon.user }}"
+          }
+        ]
+      }
+    }, {
+      "name": "mgmt-REPORTSMANAGER-BASE",
+      "displayName": "Reports Manager Default Group",
+      "roleType": "REPORTSMANAGER",
+      "base": true,
+      "serviceRef": {
+        "serviceName": "mgmt"
+      },
+      "config": {
+        "items": [
+          {
+            "name": "headlamp_database_host",
+            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+          }, {
+            "name": "headlamp_database_name",
+            "value": "{{ databases.rman.name }}"
+          }, {
+            "name": "headlamp_database_password",
+            "value": "{{ databases.rman.pass }}"
+          }, {
+            "name": "headlamp_database_type",
+            "value": "{{ databases.rman.type }}"
+          }, {
+            "name": "headlamp_database_user",
+            "value": "{{ databases.rman.user }}"
+          }
+        ]
+      }
+    }, {
+      "name": "mgmt-NAVIGATOR-BASE",
+      "displayName": "Navigator Audit Server Default Group",
+      "roleType": "NAVIGATOR",
+      "base": true,
+      "serviceRef": {
+        "serviceName": "mgmt"
+      },
+      "config": {
+        "items": [
+          {
+            "name": "navigator_database_host",
+            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+          }, {
+            "name": "navigator_database_name",
+            "value": "{{ databases.nav.name }}"
+          }, {
+            "name": "navigator_database_password",
+            "value": "{{ databases.nav.pass }}"
+          }, {
+            "name": "navigator_database_type",
+            "value": "{{ databases.nav.type }}"
+          }, {
+            "name": "navigator_database_user",
+            "value": "{{ databases.nav.user }}"
+          }
+        ]
+      }
+    }, {
+      "name": "mgmt-NAVIGATORMETASERVER-BASE",
+      "displayName": "Navigator Metadata Server Default Group",
+      "roleType": "NAVIGATORMETASERVER",
+      "base": true,
+      "serviceRef": {
+        "serviceName": "mgmt"
+      },
+      "config": {
+        "items": [
+          {
+            "name": "nav_metaserver_database_host",
+            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+          }, {
+            "name": "nav_metaserver_database_name",
+            "value": "{{ databases.navms.name }}"
+          }, {
+            "name": "nav_metaserver_database_password",
+            "value": "{{ databases.navms.pass }}"
+          }, {
+            "name": "nav_metaserver_database_type",
+            "value": "{{ databases.navms.type }}"
+          }, {
+            "name": "nav_metaserver_database_user",
+            "value": "{{ databases.navms.user }}"
+          }
+        ]
+      }
+    }
+  ]
+}

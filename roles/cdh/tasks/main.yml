@@ -1,0 +1,62 @@
+---
+
+- include_vars: ../../../group_vars/cdh_servers
+- include_vars: ../../../group_vars/scm_server
+- include_vars: ../../../group_vars/db_server
+
+# Check whether cluster already exists
+# https://cloudera.github.io/cm_api/apidocs/v13/path__clusters.html
+- name: Check whether cluster exists
+  uri:
+    url: "{{ cm_api_url }}/clusters/{{ cluster_display_name }}"
+    method: GET
+    status_code: 200,404
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  register: clusters_resp
+
+- set_fact: cluster_exists={{ 'True' if clusters_resp.status == 200 else 'False' }}
+- debug: msg="Cluster '{{ cluster_display_name }}' exists - {{ cluster_exists }}"
+
+# https://www.cloudera.com/documentation/enterprise/latest/topics/install_cluster_template.html
+- name: Prepare cluster template
+  template:
+    src: "base.j2"
+    dest: "{{ tmp_dir }}/cluster.json"
+  when: cluster_exists == False
+  delegate_to: localhost
+
+# https://cloudera.github.io/cm_api/apidocs/v13/path__cm_importClusterTemplate.html
+- name: Import cluster template
+  uri:
+    url: "{{ cm_api_url }}/cm/importClusterTemplate?addRepositories=true"
+    method: POST
+    body_format: json
+    body: "{{ lookup('file', ''+ tmp_dir + '/cluster.json') }}"
+    status_code: 200
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  register: template_resp
+  when: cluster_exists == False
+  delegate_to: localhost
+
+- debug: var=template_resp
+  when: cluster_exists == False
+
+- set_fact: command_id="{{ template_resp.json.id }}"
+  when: cluster_exists == False
+
+- debug: msg="Import cluster template command ID - {{ command_id }}"
+  when: cluster_exists == False
+
+- debug: msg="Login to Cloudera Manager to monitor import progress - http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/cmf/commands/commands"
+  when: cluster_exists == False
+
+- file:
+    path: "{{ tmp_dir }}/cluster.json"
+    state: absent
+  delegate_to: localhost
