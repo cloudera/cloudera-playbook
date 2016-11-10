@@ -55,3 +55,9 @@
     - cdh
   tags: cluster_template
 
+- name: Install rngd
+  hosts: cdh_servers
+  roles:
+    - rngd
+  tags: rngd
+  
