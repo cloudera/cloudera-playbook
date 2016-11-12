@@ -3,11 +3,10 @@
 - name: ensure rng-tools is installed
   yum: name=rng-tools state=latest update_cache=yes
 
-- name: copy rngd config
-  shell: /usr/bin/cp /usr/lib/systemd/system/rngd.service /etc/systemd/system/
-
-- name: add entropy source to rngd config
-  shell: /usr/bin/sed -i -e 's/ExecStart=\/sbin\/rngd -f/ExecStart=\/sbin\/rngd -f -r \/dev\/urandom/' /etc/systemd/system/rngd.service
+- name: Create rngd configuration file
+  template: src=rngd.service.j2 dest=/etc/systemd/system/rngd.service
+  notify:
+    - restart rngd
 
 - name: ensure rngd is running
   service: name=rngd state=started enabled=yes
