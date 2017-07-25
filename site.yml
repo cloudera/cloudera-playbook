@@ -7,6 +7,12 @@
     - cm_repo
   tags: cm_repo
 
+- name: Install rngd
+  hosts: cdh_servers
+  roles:
+    - rngd
+  tags: rngd
+
 - name: Install Java
   hosts: cdh_servers
   roles:
