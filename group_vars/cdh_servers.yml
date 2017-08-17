@@ -31,4 +31,6 @@ cdh_services:
     yarn_nodemanager_log_dirs: /var/log/nm
 
   - type: zookeeper
+    dataDir: /var/lib/zookeeper/data
+    dataLogDir: /var/lib/zookeeper/log
     maxClientCnxns: 60
