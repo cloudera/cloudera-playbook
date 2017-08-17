@@ -1,6 +1,12 @@
 ---
 # Cloudera playbook
 
+- name: Configure Local Repository
+  hosts: scm_server
+  roles:
+    - local_repo
+  tags: local_repo
+
 - name: Configure Cloudera Manager Repository
   hosts: cdh_servers
   roles:

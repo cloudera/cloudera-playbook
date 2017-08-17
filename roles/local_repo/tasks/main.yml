@@ -1,0 +1,37 @@
+---
+# Local Repo plays
+
+- name: Install Apache HTTP Server for Local Repository
+  yum: name=httpd state=latest
+  tags: httpd
+  notify: restart httpd
+
+- name: Create CM and CDH directories
+  file:
+    path: /var/www/html/{{ item }}
+    state: directory
+    recurse: yes
+  with_items:
+    - cm5
+    - cdh5
+  tags: mkdir_cm_cdh
+
+- name: Download CM5 with check (md5)
+  get_url:
+    url: http://archive.cloudera.com/cm5/repo-as-tarball/5.12.0/cm5.12.0-centos7.tar.gz
+    dest: /tmp/
+    checksum: md5:4e5a5d16ec64be9a68fb97d5a34e04a0
+
+- name: Extract CM tar.gz /var/www/html/cm5/
+  unarchive:
+    src: /tmp/cm5.12.0-centos7.tar.gz
+    dest: /var/www/html/cm5/
+
+- name: Download CDH5
+  get_url:
+    url: http://archive.cloudera.com/cdh5/parcels/latest/{{ item }}
+    dest: /var/www/html/cdh5/
+  with_items:
+    - CDH-5.12.0-1.cdh5.12.0.p0.29-el7.parcel
+    - manifest.json
+
