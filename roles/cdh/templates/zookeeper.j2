@@ -11,7 +11,16 @@
     {
       "refName": "ZOOKEEPER-1-SERVER-BASE",
       "roleType": "SERVER",
-      "configs": [],
+      "configs": [
+         {
+           "name": "dataDir",
+           "variable": "DATADIR"
+         },
+         {
+           "name": "dataLogDir",
+           "variable": "DATALOGDIR"
+         }
+       ],
       "base": true
     }
   ]
