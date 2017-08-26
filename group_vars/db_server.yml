@@ -1,5 +1,7 @@
 ---
 
+# MariaDB Related Configuration Parameters
+
 mysql_datadir: /var/lib/mysql
 mysql_socket: /var/lib/mysql/mysql.sock
 mysql_port: 3306
@@ -7,51 +9,3 @@ mysql_log_bin: /var/lib/mysql/mysql_binary_log
 mysql_log: /var/log/mysqld.log
 mysql_pid_dir: /var/run/mysqld
 mysql_pid_file: "{{ mysql_pid_dir }}/mysqld.pid"
-mysql_root_password: changeme
-
-databases:
-  scm:
-    name: 'scm'
-    user: 'scm'
-    pass: 'scm_password'
-    type: 'mysql'
-  amon:
-    name: 'amon'
-    user: 'amon'
-    pass: 'amon_password'
-    type: 'mysql'
-  rman:
-    name: 'rman'
-    user: 'rman'
-    pass: 'rman_password'
-    type: 'mysql'
-  nav:
-    name: 'nav'
-    user: 'nav'
-    pass: 'nav_password'
-    type: 'mysql'
-  navms:
-    name: 'navms'
-    user: 'navms'
-    pass: 'navms_password'
-    type: 'mysql'
-  metastore:
-    name: 'metastore'
-    user: 'hive'
-    pass: 'hive_password'
-    type: 'mysql'
-  sentry:
-    name: 'sentry'
-    user: 'sentry'
-    pass: 'sentry_password'
-    type: 'mysql'
-  hue:
-    name: 'hue'
-    user: 'hue'
-    pass: 'hue_password'
-    type: 'mysql'
-  oozie:
-    name: 'oozie'
-    user: 'oozie'
-    pass: 'oozie_password'
-    type: 'mysql'

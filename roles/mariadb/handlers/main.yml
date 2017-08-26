@@ -1,5 +1,0 @@
----
-# Handlers for MariaDB.
-
-- name: restart mariadb
-  service: name=mariadb state=restarted

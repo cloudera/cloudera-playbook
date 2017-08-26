@@ -13,7 +13,7 @@
   command: /usr/share/cmf/schema/scm_prepare_database.sh
              -f
              --host {{ hostvars[db_hostname]['inventory_hostname'] }}
-             mysql {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
+               {{ database_type }} {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
   changed_when: False
 
 - name: Start the Cloudera Manager Server

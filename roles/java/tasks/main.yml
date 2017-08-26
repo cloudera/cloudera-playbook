@@ -1,46 +1,8 @@
 ---
+- include_vars: ../../../group_vars/java.yml
+- include_vars: ../../../group_vars/user_vars.yml
 
-- name: Install Oracle JDK
-  yum: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - oracle-j2sdk1.7
-    - unzip
-
-- stat: path="{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
-  register: jce_zip_exists
-
-- name: Download JCE unlimited policy
-  get_url:
-    url=http://download.oracle.com/otn-pub/java/jce/7/UnlimitedJCEPolicyJDK7.zip
-    dest="{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
-    headers="Cookie:oraclelicense=accept-securebackup-cookie"
-  when: jce_zip_exists.stat.exists == False
-
-- name: Unzip JCE unlimited policy files
-  unarchive:
-    src: "{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
-    dest: "{{ tmp_dir }}"
-    copy: no
-
-- name: Install local_policy.jar
-  copy:
-    src: "{{ tmp_dir }}/UnlimitedJCEPolicy/local_policy.jar"
-    dest: /usr/java/jdk1.7.0_67-cloudera/jre/lib/security/local_policy.jar
-    backup: yes
-    remote_src: True
-
-- name: Install US_export_policy.jar
-  copy:
-    src: "{{ tmp_dir }}/UnlimitedJCEPolicy/US_export_policy.jar"
-    dest: /usr/java/jdk1.7.0_67-cloudera/jre/lib/security/US_export_policy.jar
-    backup: yes
-    remote_src: True
-
-- name: Cleanup tmp files
-  file:
-    path="{{ tmp_dir }}/{{ item }}"
-    state=absent
-  with_items:
-    - UnlimitedJCEPolicy
-    - UnlimitedJCEPolicyJDK7.zip
-  ignore_errors: True
+- include: default_java.yml
+  when: (ansible_distribution|lower == "redhat") or (ansible_distribution|lower == "centos") and (not external_java)
+- include: external_java.yml
+  when: (ansible_distribution|lower == "redhat") or (ansible_distribution|lower == "centos") and (external_java)
