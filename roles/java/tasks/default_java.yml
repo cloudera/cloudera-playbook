@@ -1,0 +1,52 @@
+---
+# Installing Cloudera default JDK, Requires internet connection and
+# JDK to be copied either in local repo Or cloudera yum repo
+- name: Install Oracle JDK
+  yum: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - oracle-j2sdk1.7
+    - unzip
+
+# Check JCE policy files exists
+- stat: path="{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
+  register: jce_zip_exists
+
+# Download JCE policy files from oracle
+- name: Download JCE unlimited policy
+  get_url:
+    url=http://download.oracle.com/otn-pub/java/jce/7/UnlimitedJCEPolicyJDK7.zip
+    dest="{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
+    headers="Cookie:oraclelicense=accept-securebackup-cookie"
+
+# Unzip JCE policy files
+- name: Unzip JCE unlimited policy files
+  unarchive:
+    src: "{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
+    dest: "{{ tmp_dir }}"
+    copy: no
+
+# Install local_policy jars
+- name: Install local_policy.jar
+  copy:
+    src: "{{ tmp_dir }}/UnlimitedJCEPolicy/local_policy.jar"
+    dest: /usr/java/jdk1.7.0_67-cloudera/jre/lib/security/local_policy.jar
+    backup: yes
+    remote_src: True
+
+# Install US_export_policy jars
+- name: Install US_export_policy.jar
+  copy:
+    src: "{{ tmp_dir }}/UnlimitedJCEPolicy/US_export_policy.jar"
+    dest: /usr/java/jdk1.7.0_67-cloudera/jre/lib/security/US_export_policy.jar
+    backup: yes
+    remote_src: True
+
+# Cleaning up temp files
+- name: Cleanup tmp files
+  file:
+    path="{{ tmp_dir }}/{{ item }}"
+    state=absent
+  with_items:
+    - UnlimitedJCEPolicy
+    - UnlimitedJCEPolicyJDK7.zip
+  ignore_errors: True

@@ -1,0 +1,29 @@
+---
+- include_vars: ../../../group_vars/db_server.yml
+- name: Install MariaDB packages
+  yum: name={{ item }} state=installed
+  with_items:
+    - mariadb-server
+    - MySQL-python
+
+- name: Create MariaDB configuration file
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  notify:
+    - restart mariadb
+
+- name: Create MariaDB log file
+  file: path={{ mysql_log }} state=touch owner=mysql group=mysql mode=0775
+
+- name: Create MariaDB PID directory
+  file: path={{ mysql_pid_dir }} state=directory owner=mysql group=mysql mode=0775
+
+- name: Start MariaDB Service
+  service: name=mariadb state=started enabled=yes
+
+- include: mysql_secure_installation.yml
+
+
+- include: mysql_master_setup.yml
+  when: mysql_replication
+- include: mysql_slave_setup.yml
+  when: mysql_replication

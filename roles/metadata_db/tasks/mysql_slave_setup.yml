@@ -1,0 +1,84 @@
+---
+
+# Change Configuration File to Slave Configuration
+- name: Create MariaDB configuration file
+  template: src=my_slave.cnf.j2 dest=/etc/my.cnf
+  when: (inventory_hostname in groups['db_server'][1])
+  notify:
+    - restart mariadb
+
+# Get master binlog file name and binlog position
+- name: Check master replication status.
+  mysql_replication:
+    mode: getmaster
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  when: (inventory_hostname in groups['db_server'][0])
+  register: master
+
+
+- name: check replication slave status
+  mysql_replication:
+    mode: getslave
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  ignore_errors: true
+  when: (inventory_hostname in groups['db_server'][1])
+  register: slave
+
+# Start Replication on slave
+#- name: Stop replication.
+#  mysql_replication:
+#    mode: stopslave
+#    login_user: root
+#    login_password: "{{ mysql_root_password }}"
+#  when: (inventory_hostname in groups['db_server'][1]) and (slave.Is_Slave)
+
+#reset slave
+#- name: Reset replication.
+#  mysql_replication:
+#    mode: resetslave
+#    login_user: root
+#    login_password: "{{ mysql_root_password }}"
+#  when: (inventory_hostname in groups['db_server'][1]) and (slave.Is_Slave)
+
+- debug:
+   var=slave.Is_Slave
+
+#- set_fact:
+    #master_log_file={{ master.File }}
+   # master_log_pos={{ master.Is_Master }}
+
+#- debug:
+#    var: "{{ hostvars['db_server'][0]['inventory_hostname'] }}"
+
+# Change master to master server and use binary log with position
+- name: Configure replication on slave.
+  mysql_replication:
+    mode: changemaster
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    master_host: "{{ hostvars[groups['db_server'][0]]['inventory_hostname'] }}"
+    master_user: "{{ mysql_replication_user }}"
+    master_password: "{{ mysql_replication_password }}"
+   # master_log_file: "{{ master.File }}"
+   # master_log_pos: "{{ master.Position }}"
+  when: (inventory_hostname in groups['db_server'][1]) and (not slave.Is_Slave)
+ #delegate_to: "{{ hostvars[groups['db_server'][1]]['inventory_hostname'] }}"
+
+# Start Replication on slave
+- name: Start replication.
+  mysql_replication:
+    mode: startslave
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  when: (inventory_hostname in groups['db_server'][1])
+
+- name: check replication slave status and see waitng
+  mysql_replication:
+    mode: getslave
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  ignore_errors: true
+  when: (inventory_hostname in groups['db_server'][1])
+  register: slave_status

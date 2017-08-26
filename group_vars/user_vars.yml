@@ -1,0 +1,42 @@
+---
+# ---------------------------- cm repo related variables ------------------
+local_repo: false
+baseurl: "http://archive.cloudera.com/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/5/"
+cm_dwonload_link: "https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/5/RPMS/x86_64/"
+
+
+# --------------------------- Metadata DB variables -----------------------
+# Type of the Database postgresql,mysql (used in scm_prepare_database script and metadata_db->main.yml)
+database_type: mysql
+# Possible values true, false
+mysql_replication: false
+mysql_root_password: changeme
+mysql_replication_user: repl
+mysql_replication_password: changeme
+
+# PostgreSQl related configuration Parameters
+# For more info visit https://www.cloudera.com/documentation/enterprise/5-5-x/topics/cm_ig_extrnl_pstgrs.html
+# For large cluster , more than 50 Nodes shared_buffers_mb: 1024MB
+shared_buffers_mb: 256MB
+# For large cluster , more than 50 Nodes wal_buffers_mb: 16MB
+wal_buffers_mb: 8MB
+# For large cluster , more than 50 Nodes checkpoint_segments: 128
+checkpoint_segments: 32
+checkpoint_completion_target: 0.9
+
+# ------------------------- Java Related variables -------------------------
+#Install external Java if no internet connection or you want to use custom java
+external_java: true
+# Always use otn-pub link instead of otn link as otn link required login
+jdk_dwonload_link: "http://download.oracle.com/otn-pub/java/jdk/8u141-b15/336fa29ff2bb4ef291e347e091f7f4a7/jdk-8u141-linux-x64.rpm"
+
+
+# ------------------------ scm related variables ---------------------------
+
+scm_repositories:
+  - http://archive.cloudera.com/cdh5/parcels/5.8.3/
+  - https://archive.cloudera.com/cdh5/parcels/{latest_supported}/
+
+scm_products:
+  - product: CDH
+    version: 5.8.3-1.cdh5.8.3.p0.2

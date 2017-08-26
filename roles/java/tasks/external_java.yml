@@ -1,0 +1,44 @@
+---
+# Check Java rpm exist in SRC location.
+
+- name: Check Java RPM exists
+  stat:
+    path: "{{ src_java_path }}"
+  register: stat_result
+  delegate_to: 127.0.0.1
+
+- name: Download Java RPM
+  get_url:
+    url: "{{ jdk_dwonload_link }}"
+    dest: "{{ role_path }}/files"
+    headers: "Cookie:oraclelicense=accept-securebackup-cookie"
+  when: stat_result.stat.exists == False
+  delegate_to: 127.0.0.1
+# copy external java from custom location
+- name: copy custom JDK for installation
+  synchronize:
+   src: "{{ role_path }}/files/"
+   dest: "{{ dest_java_path }}"
+  # dest: "{{ cm_rpm_dest_dir }}"
+
+# Get JDK file name for installation
+- name: get jdk file name
+  find:
+    paths: "{{ dest_java_path }}"
+  register: jdk_file
+
+# Set path with filename
+- set_fact:
+    jdk_path: "{{ jdk_file.files.0.path }}"
+
+# Install RPM package
+- name: Install package.
+  yum:
+    name: "{{ jdk_path }}"
+    state: present
+
+- name: Cleanup tmp files
+  file:
+    path="{{ jdk_path }}"
+    state=absent
+  ignore_errors: True

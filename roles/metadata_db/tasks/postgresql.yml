@@ -1,0 +1,24 @@
+---
+
+- name: Install PostgreSQL packages
+  yum: name={{ item }} state=installed
+  with_items:
+    - postgresql-server
+    - python-psycopg2
+
+- name: initdb
+  command: postgresql-setup initdb creates=/var/lib/pgsql/data/pg_hba.conf
+  ignore_errors: yes
+
+- name: Create pg_hba.conf configuration file
+  template: src=pg_hba.conf.j2 dest=/var/lib/pgsql/data/pg_hba.conf
+  notify:
+    - restart pstgresql
+
+- name: Create postgresql.conf configuration file
+  template: src=postgresql.conf.j2 dest=/var/lib/pgsql/data/postgresql.conf
+  notify:
+    - restart pstgresql
+
+- name: Ensure the PostgreSQL service is running
+  service: name=postgresql state=started enabled=yes

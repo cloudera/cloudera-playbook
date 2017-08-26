@@ -1,0 +1,8 @@
+---
+- include_vars: ../../../group_vars/create_db.yml
+- include_vars: ../../../group_vars/user_vars.yml
+
+- include: mariadb.yml
+  when: database_type == "mysql"
+- include: postgresql.yml
+  when: database_type == "postgresql"

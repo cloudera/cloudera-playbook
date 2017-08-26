@@ -1,0 +1,38 @@
+---
+databases:
+  scm:
+    name: 'scm'
+    user: 'scm'
+    pass: 'scm_password'
+  amon:
+    name: 'amon'
+    user: 'amon'
+    pass: 'amon_password'
+  rman:
+    name: 'rman'
+    user: 'rman'
+    pass: 'rman_password'
+  nav:
+    name: 'nav'
+    user: 'nav'
+    pass: 'nav_password'
+  navms:
+    name: 'navms'
+    user: 'navms'
+    pass: 'navms_password'
+  metastore:
+    name: 'metastore'
+    user: 'hive'
+    pass: 'hive_password'
+  sentry:
+    name: 'sentry'
+    user: 'sentry'
+    pass: 'sentry_password'
+  hue:
+    name: 'hue'
+    user: 'hue'
+    pass: 'hue_password'
+  oozie:
+    name: 'oozie'
+    user: 'oozie'
+    pass: 'oozie_password'

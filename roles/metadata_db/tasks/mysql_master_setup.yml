@@ -1,0 +1,19 @@
+---
+# Change Configuration File to Master Configuration
+- name: Create MariaDB configuration file
+  template: src=my_master.cnf.j2 dest=/etc/my.cnf
+  when: (inventory_hostname in groups['db_server'][0])
+  notify:
+    - restart mariadb
+# Create Replication user in Master node
+- name: Create replication user
+  mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ mysql_replication_user }}"
+        password: "{{ mysql_replication_password }}"
+        update_password: always
+        priv: "*.*:REPLICATION SLAVE,REPLICATION CLIENT"
+        host: "%"
+        state: present
+  when: (inventory_hostname in groups['db_server'][0])

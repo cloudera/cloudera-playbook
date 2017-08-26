@@ -1,0 +1,11 @@
+---
+# Handlers for MariaDB.
+
+- name: restart mariadb
+  service: name=mariadb state=restarted
+
+
+# Handlers for MariaDB.
+
+- name: restart pstgresql
+  service: name=postgresql state=restarted

@@ -1,0 +1,14 @@
+---
+
+- name: Create databases
+  mysql_db: login_user=root login_password={{ mysql_root_password }}
+              name={{ item.value.name }} encoding=utf8 state=present
+  with_dict: "{{ databases }}"
+  when: inventory_hostname in groups['db_server'][0]
+
+- name: Create database users
+  mysql_user: login_user=root login_password={{ mysql_root_password }}
+                name={{ item.value.user }} password={{ item.value.pass }} update_password=always
+                priv={{ item.value.name }}.*:ALL host='%' state=present
+  with_dict: "{{ databases }}"
+  when: inventory_hostname in groups['db_server'][0]

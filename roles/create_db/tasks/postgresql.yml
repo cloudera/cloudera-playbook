@@ -1,0 +1,16 @@
+---
+
+- name: Create databases
+  postgresql_db: name={{ item.value.name }} encoding=utf8 state=present
+  with_dict: "{{ databases }}"
+  become: true
+  become_user: postgres
+  when: inventory_hostname in groups['db_server'][0]
+
+- name: Create database users
+  postgresql_user: name={{ item.value.user }} password={{ item.value.pass }} encrypted=true
+                   db={{ item.value.name }} priv=ALL state=present
+  with_dict: "{{ databases }}"
+  become: true
+  become_user: postgres
+  when: inventory_hostname in groups['db_server'][0]
