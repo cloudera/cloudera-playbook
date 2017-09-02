@@ -1,11 +1,10 @@
 ---
 # Cloudera playbook
-
-- name: Configure Local Repository
-  hosts: scm_server
-  roles:
-    - local_repo
-  tags: local_repo
+#- name: Configure Prerquisites
+#  hosts: cdh_servers
+#  roles:
+#    - prerequisites
+#  tags: prerequisites
 
 - name: Configure Cloudera Manager Repository
   hosts: cdh_servers
@@ -13,41 +12,29 @@
     - cm_repo
   tags: cm_repo
 
-- name: Install rngd
-  hosts: cdh_servers
-  roles:
-    - rngd
-  tags: rngd
-
 - name: Install Java
   hosts: cdh_servers
   roles:
     - java
   tags: java
 
-- name: Install MariaDB and create databases
+- name: Install MariaDB with Replication
   hosts: db_server
   roles:
-    - mariadb
-  tags: mysql
+    - metadata_db
+  tags: metadata_db
+
+- name: Create Metadata Databases
+  hosts: db_server
+  roles:
+    - create_db
+  tags: metadata_db
 
 - name: Install MySQL Connector
   hosts: utility_servers:master_servers
   roles:
     - mysql_connector
   tags: mysql
-
-- name: Install MIT KDC Server
-  hosts: krb5_server
-  roles:
-    - { role: krb5_server, when: krb5_kdc_type == 'mit' }
-  tags: krb5
-
-- name: Configure EPEL Repository
-  hosts: scm_server
-  roles:
-    - epel
-  tags: epel
 
 - name: Install Cloudera Manager Agents
   hosts: cdh_servers
@@ -60,10 +47,3 @@
   roles:
     - scm
   tags: cluster_template
-
-- name: Install CDH
-  hosts: scm_server
-  roles:
-    - cdh
-  tags: cluster_template
-
