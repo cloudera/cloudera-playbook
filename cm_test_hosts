@@ -1,0 +1,24 @@
+# Note for AWS: 'Public DNS' name is too long for ansible_host, use 'Public IP' (https://github.com/ansible/ansible/issues/11536)
+
+[scm_server]
+utsav-1.gce.cloudera.com        license_file=/path/to/cloudera_license.txt
+
+[db_server]
+utsav-1.gce.cloudera.com
+utsav-2.gce.cloudera.com
+
+
+[utility_servers:children]
+scm_server
+db_server
+
+[worker_servers]
+utsav-2.gce.cloudera.com
+utsav-1.gce.cloudera.com
+
+[cdh_servers:children]
+utility_servers
+worker_servers
+
+[all:vars]
+ansible_user=root
