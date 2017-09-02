@@ -1,6 +1,17 @@
 # Cloudera Playbook 
 
-An Ansible Playbook that installs the Cloudera stack on RHEL/CentOS
+An Ansible Playbook that installs the Cloudera stack on RHEL/CentOS. There are various customization options available such as below
+
+Install Cloudera Manager with 
+
+    Metadata Database as Postgresql,Mariadb(with or without replication)
+
+    Create custom cloudera manager repository
+
+    Install specific version of Java or Default Java
+
+
+see the section user variables.
 
 # Running the playbook
 
@@ -81,12 +92,103 @@ ansible_user=ec2-user
 
 AWS users can use Ansible’s ``--private-key`` option to authenticate using a PEM file instead of SSH keys.
 
+# User Variables
+
+Playbook can be customize according to user needs.
+
+one has to change below file for Customization.
+
+1. To Install CM & CDH with Postgresql as metadata DB.
+
+    ```
+    database_type: postgresql
+    ```
+2. To Enable Replication(Only for MariaDB as time of writing)
+
+    ```
+    database_type: mysql
+    mysql_replication: true
+    ```
+3. To Install Custom Java Version (Copy Oracle JDK version link from             http://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase8-2177648.html)
+
+    ```
+    external_java: true
+    # Always use otn-pub link instead of otn link as otn link required login
+    jdk_dwonload_link: "http://download.oracle.com/otn-pub/java/jdk/8u141-b15/336fa29ff2bb4ef291e347e091f7f4a7/jdk-8u141-linux-x64.rpm"
+    ```
+
+4. To Create Local Cloudera Manager Repository
+
+    ```
+    local_repo: true
+    ```
+
+
+#Running Playbook overriding variables (Examples)
+
+```
+ansible-playbook -i cm_hosts site.yml -e "{'local_repo': 'true', 'database_type': 'postgresql'}"
+
+ansible-playbook -i cm_test_hosts site.yml -e "{'local_repo': 'false', 'database_type': 'mysql', 'mysql_replication' : 'true'}"
+
+ansible-playbook -i cm_test_hosts site.yml -e "{'local_repo': 'false', 'database_type': 'mysql', 'mysql_replication' : 'true','krb5_kdc_type': 'none' }"
+
+```
+
+
+
+```
+---
+# ---------------------------- cm repo related variables ------------------
+local_repo: false
+baseurl: "http://archive.cloudera.com/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/5/"
+cm_dwonload_link: "https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/5/RPMS/x86_64/"
+
+
+# --------------------------- Metadata DB variables -----------------------
+# Type of the Database postgresql,mysql (used in scm_prepare_database script and metadata_db->main.yml)
+database_type: mysql
+# Possible values true, false
+mysql_replication: false
+mysql_root_password: changeme
+mysql_replication_user: repl
+mysql_replication_password: changeme
+
+# PostgreSQl related configuration Parameters
+# For more info visit https://www.cloudera.com/documentation/enterprise/5-5-x/topics/cm_ig_extrnl_pstgrs.html
+# For large cluster , more than 50 Nodes shared_buffers_mb: 1024MB
+shared_buffers_mb: 256MB
+# For large cluster , more than 50 Nodes wal_buffers_mb: 16MB
+wal_buffers_mb: 8MB
+# For large cluster , more than 50 Nodes checkpoint_segments: 128
+checkpoint_segments: 32
+checkpoint_completion_target: 0.9
+
+# ------------------------- Java Related variables -------------------------
+#Install external Java if no internet connection or you want to use custom java
+external_java: true
+# Always use otn-pub link instead of otn link as otn link required login
+jdk_dwonload_link: "http://download.oracle.com/otn-pub/java/jdk/8u141-b15/336fa29ff2bb4ef291e347e091f7f4a7/jdk-8u141-linux-x64.rpm"
+
+
+# ------------------------ scm related variables ---------------------------
+
+scm_repositories:
+  - http://archive.cloudera.com/cdh5/parcels/5.8.3/
+  - https://archive.cloudera.com/cdh5/parcels/{latest_supported}/
+
+scm_products:
+  - product: CDH
+    version: 5.8.3-1.cdh5.8.3.p0.2
+
+```
+
 # Enabling Kerberos
 
 The playbook can install a local MIT KDC and configure Hadoop Security. To enable Hadoop Security:
 
 * Specify the '[krb5_server]' host in the inventory (see above)
-* Set 'krb5_kdc_type' to 'mit' in ``group_vars/krb5_server.yml``
+* Set 'krb5_kdc_type' to 'mit' in ``group_vars/krb5_server``
 
 # Overriding CDH service/role configuration
 
