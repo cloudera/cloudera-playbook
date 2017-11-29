@@ -4,7 +4,10 @@ An Ansible Playbook that installs the Cloudera stack on RHEL/CentOS
 
 # Running the playbook
 
-* Setup an [Ansible Control Machine](http://docs.ansible.com/ansible/intro_installation.html) 
+On the host that you will designate as the Cloudera Manager sever:
+
+* Setup an [Ansible Control Machine](http://docs.ansible.com/ansible/intro_installation.html)
+* Clone this Git repository
 * Create Ansible configuration (optional):
 
 ```ini
@@ -61,6 +64,8 @@ master_servers
 worker_servers
 ```
     
+Note that the host you specify under [scm_server] must be the same host from which you are running the playbook.
+	
 * Run playbook
  
 ```shell
