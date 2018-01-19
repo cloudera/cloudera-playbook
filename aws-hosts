@@ -1,0 +1,42 @@
+# Note for AWS: 'Public DNS' name is too long for ansible_host, use 'Public IP' (https://github.com/ansible/ansible/issues/11536)
+
+[scm_server]
+rarana-ansible-1.vpc.cloudera.com        license_file=/opt/cloudera/cloudera_license.txt
+
+[db_server]
+rarana-ansible-1.vpc.cloudera.com
+
+[krb5_server]
+rarana-ansible-1.vpc.cloudera.com        default_realm=CLOUDERA.COM
+
+[utility_servers:children]
+scm_server
+db_server
+krb5_server
+
+[gateway_servers]
+#rarana-ansible-5.vpc.cloudera.com        host_template=HostTemplate-Gateway role_ref_names=HDFS-HTTPFS-1
+rarana-ansible-7.vpc.cloudera.com        host_template=HostTemplate-Gateway role_ref_names=HDFS-HTTPFS-1
+
+
+[master_servers]
+rarana-ansible-1.vpc.cloudera.com        host_template=HostTemplate-Master1
+rarana-ansible-2.vpc.cloudera.com        host_template=HostTemplate-Master2
+rarana-ansible-3.vpc.cloudera.com        host_template=HostTemplate-Master3
+
+[worker_servers]
+rarana-ansible-4.vpc.cloudera.com
+rarana-ansible-5.vpc.cloudera.com
+rarana-ansible-6.vpc.cloudera.com
+
+[worker_servers:vars]
+host_template=HostTemplate-Workers
+
+[cdh_servers:children]
+utility_servers
+gateway_servers
+master_servers
+worker_servers
+
+[all:vars]
+ansible_user=root

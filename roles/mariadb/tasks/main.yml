@@ -6,6 +6,13 @@
     - mariadb-server
     - MySQL-python
 
+- name: Ensure service is started
+  service:
+    name: "{{ mariadb_service }}"
+    state: started
+    enabled: yes
+
+
 - name: Create MariaDB configuration file
   template: src=my.cnf.j2 dest=/etc/my.cnf
   notify:
