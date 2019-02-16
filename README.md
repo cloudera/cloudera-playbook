@@ -152,9 +152,8 @@ With the ad-hoc command feature you can run the same Linux command on all hosts.
 
 ```
 ansible all --list-hosts
-ansible Balaton -m command -o -a "id -Gn yarn" -k
-ansible Cluster-1 -m command -o -a date -k
-ansible -m ping all -o -k
+ansible Balaton -m command -o -a "id -Gn yarn" -k -u root
+ansible -m ping all -o -k -u root
 ```
 
 Documentation of Ansible Ad-Hoc commands:
