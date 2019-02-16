@@ -151,10 +151,10 @@ dynamic_inventory_cm --list
 With the ad-hoc command feature you can run the same Linux command on all hosts. For example if you debug an issue, this can help. Example Ansible Ad-Hoc commands:
 
 ```
-ansible all -i dynamic_inventory_cm --list-hosts
-ansible Balaton -i dynamic_inventory_cm -m command -o -a "id -Gn yarn" -k
-ansible Cluster-1 -i dynamic_inventory_cm -m command -o -a date -k
-ansible -i dynamic_inventory_cm -m ping all -o -k
+ansible all --list-hosts
+ansible Balaton -m command -o -a "id -Gn yarn" -k
+ansible Cluster-1 -m command -o -a date -k
+ansible -m ping all -o -k
 ```
 
 Documentation of Ansible Ad-Hoc commands:
