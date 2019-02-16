@@ -128,6 +128,10 @@ Cloudera Manager specific dynamic inventory script has been created for easy int
 ```
 export CM_URL=https://cm_host_fqdn1:7183,https://cm_host_fqdn2:7183
 export CM_USERNAME=username
+```
+
+**Set up default ansible inventory**
+```
 sudo mkdir /etc/ansible
 cd /etc/ansible
 sudo ln -s /path/to/dynamic_inventory_cm hosts
@@ -167,7 +171,7 @@ http://docs.ansible.com/ansible/latest/intro_adhoc.html
 ```
 yum install ansible -y
 ```
-**Set up default ansible inventory with remote host(s), e.g.:**
+**Set up default ansible inventory**
 ```
 sudo mkdir /etc/ansible
 cd /etc/ansible
