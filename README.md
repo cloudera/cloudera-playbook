@@ -140,13 +140,22 @@ sudo ln -s /path/to/dynamic_inventory_cm hosts
 **Set up passwordless ssh for remote host(s)**
 ```
 cat /dev/zero | ssh-keygen -q -N "" > /dev/null
-```
-```
 ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
 ```
+
+If only the root user exists then please use this instead:
+```
+ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" -k -u root
+```
+
 Test remote host connectivity(optional)
 ```
 ansible all -m ping
+```
+
+If only the root user exists then please use this instead:
+```
+ansible all -m ping -u root
 ```
 
 **Other optional configuration parameters**
@@ -193,15 +202,13 @@ sudo ln -s /path/to/dynamic_inventory_cm hosts
 **Set up passwordless ssh for remote host(s)**
 ```
 cat /dev/zero | ssh-keygen -q -N "" > /dev/null
-```
-```
-ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
+ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" -k -u root
 ```
 Test remote host connectivity(optional)
 ```
-ansible all -m ping
+ansible all -m ping -u root
 ```
-**Edit default variables in** ```vim ./group_vars/all```
+**Edit default variables in** ```vim ./group_vars/all (this is an example configuration)```
 ```
 krb5_realm: AD.SEC.CLOUDERA.COM
 ad_domain: "{{ krb5_realm.lower() }}"
@@ -212,18 +219,18 @@ admin_server: w2k8-1.ad.sec.cloudera.com
 ```
 **Enable kerberos on the hosts**
 ```
-ansible-playbook enable_kerberos.yaml
+ansible-playbook -u root enable_kerberos.yaml
 ```
 **Join the host(s) to realm**
 ```
-ansible-playbook realm_join.yaml
-bind user: morhidi
+ansible-playbook -u root realm_join.yaml
+bind user: AD_admin
 bind password:
 ```
 
 **Remove the host(s) from realm**
 ```
-ansible-playbook realm_leave.yaml
+ansible-playbook -u root realm_leave.yaml
 ```
 
 # How to contribute
