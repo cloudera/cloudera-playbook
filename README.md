@@ -170,7 +170,7 @@ With the ad-hoc command feature you can run the same Linux command on all hosts.
 
 ```
 ansible Balaton -m command -o -a "id -Gn yarn"
-ansible Balaton -m command -o -a "date"
+ansible all -m command -o -a "date"
 ```
 
 Documentation of Ansible Ad-Hoc commands:
