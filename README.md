@@ -137,6 +137,18 @@ cd /etc/ansible
 sudo ln -s /path/to/dynamic_inventory_cm hosts
 ```
 
+**Set up passwordless ssh for remote host(s)**
+```
+cat /dev/zero | ssh-keygen -q -N "" > /dev/null
+```
+```
+ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
+```
+Test remote host connectivity(optional)
+```
+ansible all -m ping
+```
+
 ## Other optional configuration parameters
 
 ```
@@ -152,12 +164,13 @@ You can list the available Cloudera Manager clusters (Ansible groups) with this 
 dynamic_inventory_cm --list
 ```
 
+## Example Ansible Ad-Hoc commands:
+
 With the ad-hoc command feature you can run the same Linux command on all hosts. For example if you debug an issue, this can help. Example Ansible Ad-Hoc commands:
 
 ```
-ansible all --list-hosts
-ansible Balaton -m command -o -a "id -Gn yarn" -k -u root
-ansible -m ping all -o -k -u root
+ansible Balaton -m command -o -a "id -Gn yarn"
+ansible Balaton -m command -o -a "date"
 ```
 
 Documentation of Ansible Ad-Hoc commands:
