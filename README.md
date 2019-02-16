@@ -123,7 +123,7 @@ Cloudera Manager specific dynamic inventory script has been created for easy int
 * Multi Cloudera Manager support
 * SSL friendly because you can disable or enable the root CA check
 
-## Configuration
+**Configuration**
 
 ```
 export CM_URL=https://cm_host_fqdn1:7183,https://cm_host_fqdn2:7183
@@ -149,7 +149,7 @@ Test remote host connectivity(optional)
 ansible all -m ping
 ```
 
-## Other optional configuration parameters
+**Other optional configuration parameters**
 
 ```
 export CM_CACHE_TIME_SEC=3600
@@ -164,7 +164,7 @@ You can list the available Cloudera Manager clusters (Ansible groups) with this 
 dynamic_inventory_cm --list
 ```
 
-## Example Ansible Ad-Hoc commands:
+**Example Ansible Ad-Hoc commands**
 
 With the ad-hoc command feature you can run the same Linux command on all hosts. For example if you debug an issue, this can help. Example Ansible Ad-Hoc commands:
 
@@ -177,7 +177,7 @@ Documentation of Ansible Ad-Hoc commands:
 
 http://docs.ansible.com/ansible/latest/intro_adhoc.html
 
-# SSSD setup with ansible
+# SSSD setup with Ansible
 (works on RHEL7/CentOS7 only)
 
 **Install sssd**
