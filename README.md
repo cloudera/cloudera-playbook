@@ -114,6 +114,102 @@ For example ``roles/cdh/templates/hdfs.j2``:
 }
 ```
 
+# Dynamic inventory script for Cloudera Manager
+
+Cloudera Manager specific dynamic inventory script has been created for easy integration. These are the main advantages:
+
+* Cache management for better performance
+* HTTP cookie handling
+* Multi Cloudera Manager support
+* SSL friendly because you can disable or enable the root CA check
+
+## Configuration
+
+```
+export CM_URL=https://cm_host_fqdn1:7183,https://cm_host_fqdn2:7183
+export CM_USERNAME=username
+sudo mkdir /etc/ansible
+cd /etc/ansible
+sudo ln -s /path/to/dynamic_inventory_cm hosts
+```
+
+## Other optional configuration parameters
+
+```
+export CM_CACHE_TIME_SEC=3600
+export CM_DISABLE_CA_CHECK=True
+export CM_TIMEOUT_SEC=60
+export CM_DEBUG=False
+```
+
+You can list the available Cloudera Manager clusters (Ansible groups) with this command:
+
+```
+dynamic_inventory_cm --list
+```
+
+With the ad-hoc command feature you can run the same Linux command on all hosts. For example if you debug an issue, this can help. Example Ansible Ad-Hoc commands:
+
+```
+ansible all -i dynamic_inventory_cm --list-hosts
+ansible Balaton -i dynamic_inventory_cm -m command -o -a "id -Gn yarn" -k
+ansible Cluster-1 -i dynamic_inventory_cm -m command -o -a date -k
+ansible -i dynamic_inventory_cm -m ping all -o -k
+```
+
+Documentation of Ansible Ad-Hoc commands:
+
+http://docs.ansible.com/ansible/latest/intro_adhoc.html
+
+# SSSD setup with ansible
+(works on RHEL7/CentOS7 only)
+
+**Install sssd**
+```
+yum install ansible -y
+```
+**Set up default ansible inventory with remote host(s), e.g.:**
+```
+sudo mkdir /etc/ansible
+cd /etc/ansible
+sudo ln -s /path/to/dynamic_inventory_cm hosts
+```
+**Set up passwordless ssh for remote host(s)**
+```
+cat /dev/zero | ssh-keygen -q -N "" > /dev/null
+```
+```
+ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
+```
+Test remote host connectivity(optional)
+```
+ansible all -m ping
+```
+**Edit default variables in** ```vim ./group_vars/all```
+```
+krb5_realm: AD.SEC.CLOUDERA.COM
+ad_domain: "{{ krb5_realm.lower() }}"
+computer_ou: ou=Hosts,ou=morhidi,ou=HadoopClusters,ou=morhidi,dc=ad,dc=sec,dc=cloudera,dc=com
+domain: vpc.cloudera.com
+kdc: w2k8-1.ad.sec.cloudera.com
+admin_server: w2k8-1.ad.sec.cloudera.com
+```
+**Enable kerberos on the hosts**
+```
+ansible-playbook enable_kerberos.yaml
+```
+**Join the host(s) to realm**
+```
+ansible-playbook realm_join.yaml
+bind user: morhidi
+bind password:
+```
+
+**Remove the host(s) from realm**
+```
+ansible-playbook realm_leave.yaml
+```
+
 # How to contribute
 
 * Fork the repo and create a topic branch

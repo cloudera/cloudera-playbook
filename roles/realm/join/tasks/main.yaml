@@ -1,0 +1,42 @@
+---
+  - name: install packages
+    yum: name={{ item }} state=present
+    with_items:
+      - adcli
+      - samba-common
+      - sssd
+      - realmd
+      - oddjob
+      - oddjob-mkhomedir
+      - samba-common-tools
+      - python-pip
+      
+  - name: restarting messagebus otherwise realmd won't start
+    command: systemctl restart messagebus
+
+  - name: pexpect is required to handle pwd prompt
+    pip: name=pexpect
+
+  - name: copy realmd.conf
+    template: src=realmd.conf.j2 dest=/etc/realmd.conf mode=0644 owner=root group=root
+
+  - name: restart realmd
+    command: systemctl restart realmd
+
+  - name: Join using realmd
+    expect:
+      command: /bin/bash -c "/usr/sbin/realm join {{ ad_domain }} -U {{ bind_user }}"
+      responses:
+        Password for .*: "{{ bind_password }}"
+
+  - name: copy sssd.conf
+    template: src=sssd.conf.j2 dest=/etc/sssd/sssd.conf mode=0600 owner=root group=root
+
+  - name: restart sssd
+    command: systemctl restart sssd
+
+  - name: copy nscd.conf
+    template: src=nscd.conf.j2 dest=/etc/nscd.conf mode=0644 owner=root group=root
+
+  - name: restart nscd
+    command: systemctl restart nscd
