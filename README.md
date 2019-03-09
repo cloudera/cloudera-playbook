@@ -130,6 +130,11 @@ export CM_URL=https://cm_host_fqdn1:7183,https://cm_host_fqdn2:7183
 export CM_USERNAME=username
 ```
 
+**Install sssd**
+```
+yum install ansible -y
+```
+
 **Set up default ansible inventory**
 ```
 sudo mkdir /etc/ansible
@@ -137,9 +142,9 @@ cd /etc/ansible
 sudo ln -s /path/to/dynamic_inventory_cm hosts
 ```
 
-**Set up passwordless ssh for remote host(s)**
+**Set up SSH public key authentication for remote host(s)**
+If you do not have ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files then you need to generate them with the ssh-keygen command before this:
 ```
-cat /dev/zero | ssh-keygen -q -N "" > /dev/null
 ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
 ```
 
@@ -186,27 +191,8 @@ Documentation of Ansible Ad-Hoc commands:
 
 http://docs.ansible.com/ansible/latest/intro_adhoc.html
 
-# SSSD setup with Ansible
-(works on RHEL7/CentOS7 only)
+# SSSD setup with Ansible (works on RHEL7/CentOS7 only)
 
-**Install sssd**
-```
-yum install ansible -y
-```
-**Set up default ansible inventory**
-```
-sudo mkdir /etc/ansible
-cd /etc/ansible
-sudo ln -s /path/to/dynamic_inventory_cm hosts
-```
-**Set up passwordless ssh for remote host(s)**
-```
-cat /dev/zero | ssh-keygen -q -N "" > /dev/null
-ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" -k -u root
-```
-Test remote host connectivity(optional)
-```
-ansible all -m ping -u root
 ```
 **Edit default variables in** ```vim ./group_vars/all (this is an example configuration)```
 ```
@@ -224,7 +210,7 @@ ansible-playbook -u root enable_kerberos.yaml
 **Join the host(s) to realm**
 ```
 ansible-playbook -u root realm_join.yaml
-bind user: AD_admin
+bind user: administrator
 bind password:
 ```
 
