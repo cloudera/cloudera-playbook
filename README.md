@@ -194,7 +194,12 @@ http://docs.ansible.com/ansible/latest/intro_adhoc.html
 # SSSD setup with Ansible (works on RHEL7/CentOS7 only)
 
 ```
-**Edit default variables in** ```vim ./group_vars/all (this is an example configuration)```
+**Edit default variables in ./group_vars/all** 
+
+```
+vim ./group_vars/all (this is an example configuration)
+```
+
 ```
 krb5_realm: AD.SEC.CLOUDERA.COM
 ad_domain: "{{ krb5_realm.lower() }}"
