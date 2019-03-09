@@ -143,6 +143,7 @@ sudo ln -s /path/to/dynamic_inventory_cm hosts
 ```
 
 **Set up SSH public key authentication for remote host(s)**
+
 If you do not have ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files then you need to generate them with the ssh-keygen command before this:
 ```
 ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
