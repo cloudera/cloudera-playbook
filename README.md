@@ -193,7 +193,6 @@ http://docs.ansible.com/ansible/latest/intro_adhoc.html
 
 # SSSD setup with Ansible (works on RHEL7/CentOS7 only)
 
-```
 **Edit default variables in ./group_vars/all** 
 
 ```
