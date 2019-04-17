@@ -8,3 +8,8 @@ computer_ou: ou=Hosts,ou=morhidi,ou=HadoopClusters,ou=morhidi,dc=ad,dc=sec,dc=cl
 domain: vpc.cloudera.com
 kdc: w2k8-1.ad.sec.cloudera.com
 admin_server: w2k8-1.ad.sec.cloudera.com
+
+cdh_version: 5.8.3
+scm_version: 5.8.3
+
+cloudera_mirror: https://archive.cloudera.com
