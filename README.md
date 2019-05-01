@@ -206,7 +206,6 @@ ad_domain: "{{ krb5_realm.lower() }}"
 computer_ou: ou=Hosts,ou=morhidi,ou=HadoopClusters,ou=morhidi,dc=ad,dc=sec,dc=cloudera,dc=com
 domain: vpc.cloudera.com
 kdc: w2k8-1.ad.sec.cloudera.com
-admin_server: w2k8-1.ad.sec.cloudera.com
 ```
 **Enable kerberos on the hosts**
 ```
