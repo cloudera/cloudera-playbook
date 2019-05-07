@@ -5,8 +5,8 @@
 - name: Install Cloudera Manager Agents
   yum: name={{ item }} state=installed
   with_items:
-    - cloudera-manager-daemons
-    - cloudera-manager-agent
+    - cloudera-manager-daemons-{{ scm_version }}
+    - cloudera-manager-agent-{{ scm_version }}
 
 - name: Configure Cloudera Manager Agent 'server_host'
   lineinfile: dest=/etc/cloudera-scm-agent/config.ini regexp=^server_host line=server_host={{ hostvars[scm_hostname]['inventory_hostname'] }}

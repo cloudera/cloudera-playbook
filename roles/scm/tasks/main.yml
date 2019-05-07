@@ -5,9 +5,9 @@
 - name: Install the Cloudera Manager Server Packages
   yum: name={{ item }} state=installed
   with_items:
-    - cloudera-manager-daemons
-    - cloudera-manager-server
-    - cloudera-manager-agent
+    - cloudera-manager-daemons-{{ scm_version }}
+    - cloudera-manager-server-{{ scm_version }}
+    - cloudera-manager-agent-{{ scm_version }}
 
 - name: Prepare Cloudera Manager Server External Database
   command: /usr/share/cmf/schema/scm_prepare_database.sh
