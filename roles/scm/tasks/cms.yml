@@ -6,12 +6,8 @@
   pause:
     seconds: 30
 
-# Prepare CMS template
-- name: Prepare CMS template
-  template:
-    src: "cms_base.j2"
-    dest: "{{ tmp_dir }}/cms_base.json"
-  delegate_to: localhost
+- set_fact:
+    cms_config_json: "{{ lookup('template', 'cms_base.j2', convert_data=False) }}"
 
 # https://cloudera.github.io/cm_api/apidocs/v12/path__cm_service.html#PUT
 - name: Setup the Cloudera Management Services (CMS)
@@ -19,7 +15,7 @@
     url: "{{ cm_api_url }}/cm/service"
     method: PUT
     body_format: json
-    body: "{{ lookup('file', ''+ tmp_dir + '/cms_base.json') }}"
+    body: "{{ cms_config_json|to_json }}"
     status_code: 200,400
     force_basic_auth: yes
     user: "{{ scm_default_user }}"
@@ -29,7 +25,6 @@
   failed_when:
     - "'MGMT' not in cms_resp.content"
     - "'CMS instance already exists' not in cms_resp.content"
-  delegate_to: localhost
 
 - debug:
     var: cms_resp
