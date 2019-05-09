@@ -4,7 +4,7 @@
   "serviceConfigs": [
     {
       "name": "sentry_server_database_host",
-      "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+      "value": "{{ hostvars[db_hostname][hostname_var] }}"
     }, {
       "name": "sentry_server_database_type",
       "value": "{{ databases.sentry.type }}"
