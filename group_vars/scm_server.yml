@@ -5,7 +5,7 @@ scm_default_user: admin
 scm_default_pass: admin
 
 scm_repositories:
-  - "{{ cloudera_mirror }}/cdh5/parcels/{{ cdh_version }}"
+  - "{{ scm_parcel_repository }}"
 
 scm_products:
   - product: CDH
