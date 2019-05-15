@@ -9,49 +9,52 @@ mysql_pid_dir: /var/run/mysqld
 mysql_pid_file: "{{ mysql_pid_dir }}/mysqld.pid"
 mysql_root_password: changeme
 
+# Supported database types: mysql,postgresql,...
+database_type: mysql
+
 databases:
   scm:
     name: 'scm'
     user: 'scm'
     pass: 'scm_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   amon:
     name: 'amon'
     user: 'amon'
     pass: 'amon_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   rman:
     name: 'rman'
     user: 'rman'
     pass: 'rman_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   nav:
     name: 'nav'
     user: 'nav'
     pass: 'nav_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   navms:
     name: 'navms'
     user: 'navms'
     pass: 'navms_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   metastore:
     name: 'metastore'
     user: 'hive'
     pass: 'hive_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   sentry:
     name: 'sentry'
     user: 'sentry'
     pass: 'sentry_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   hue:
     name: 'hue'
     user: 'hue'
     pass: 'hue_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
   oozie:
     name: 'oozie'
     user: 'oozie'
     pass: 'oozie_password'
-    type: 'mysql'
+    type: '{{ database_type }}'
