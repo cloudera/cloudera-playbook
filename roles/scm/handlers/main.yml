@@ -8,7 +8,7 @@
 
 - name: wait cloudera-scm-server
   wait_for:
-    host={{ hostvars[scm_hostname][hostname_var] }}
+    host={{ scm_hostname }}
     port={{ scm_port }}
     delay=5
     state=started
