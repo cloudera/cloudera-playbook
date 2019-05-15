@@ -40,7 +40,9 @@
   register: template_resp
   when: cluster_exists == False
 
-- debug: var=template_resp
+- debug: 
+    var: template_resp
+    verbosity: 1
   when: cluster_exists == False
 
 - set_fact: command_id="{{ template_resp.json.id }}"
