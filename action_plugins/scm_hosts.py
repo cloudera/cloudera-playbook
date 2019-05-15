@@ -52,7 +52,9 @@ class ActionModule(ActionBase):
         api = self.get_api_handle(scm_host, scm_port, scm_user, scm_pass)
         scm_host_list = api.get_all_hosts()
         display.vv("Retrieved %d host(s) from SCM" % len(scm_host_list))
-
+        for scm_host in scm_host_list:
+            display.vv("Retrieved host: name='%s',id='%s'" % (scm_host.hostname, scm_host.hostId) )
+            
         if len(scm_host_list) == 0:
             result['failed'] = True
             result['msg'] = "No hosts defined in SCM"
@@ -67,6 +69,10 @@ class ActionModule(ActionBase):
                         found_host = True
                     elif scm_host.ipAddress == task_vars["hostvars"][host]["inventory_hostname"]:
                         found_host = True
+                    elif scm_host.hostname == task_vars["hostvars"][host]["ansible_hostname"]:
+                        found_host = True      
+                    elif scm_host.hostname == task_vars["hostvars"][host]["ansible_fqdn"]:
+                        found_host = True                                            
                     elif "private_ip" in task_vars["hostvars"][host]:
                         if scm_host.ipAddress == task_vars["hostvars"][host]["private_ip"]:
                             found_host = True
