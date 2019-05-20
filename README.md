@@ -223,8 +223,30 @@ bind password:
 ansible-playbook -u root realm_leave.yaml
 ```
 
-# How to contribute
+# How do I contribute code?
+You need to first sign and return an
+[ICLA](https://github.com/cloudera/native-toolchain/blob/icla/Cloudera%20ICLA_25APR2018.pdf)
+and
+[CCLA](https://github.com/cloudera/native-toolchain/blob/icla/Cloudera%20CCLA_25APR2018.pdf)
+before we can accept and redistribute your contribution. Once these are submitted you are
+free to start contributing to cloudera-playbook. Submit these to CLA@cloudera.com.
 
+# Main steps
 * Fork the repo and create a topic branch
 * Push commits to your repo
 * Create a pull request!
+
+## Find
+We use Github issues to track bugs for this project. Find an issue that you would like to
+work on (or file one if you have discovered a new issue!). If no-one is working on it,
+assign it to yourself only if you intend to work on it shortly.
+
+## Fix
+
+Please write a good, clear commit message, with a short, descriptive title and
+a message that is exactly long enough to explain what the problem was, and how it was
+fixed.
+
+License
+-----------
+[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
