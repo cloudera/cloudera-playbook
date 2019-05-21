@@ -1,9 +1,5 @@
 ---
 
-- include_vars: ../../../group_vars/cdh_servers.yml
-- include_vars: ../../../group_vars/scm_server.yml
-- include_vars: ../../../group_vars/db_server.yml
-
 # Check whether cluster already exists
 # https://cloudera.github.io/cm_api/apidocs/v13/path__clusters.html
 - name: Check whether cluster exists

@@ -1,7 +1,5 @@
 ---
 
-- include_vars: ../../../group_vars/db_server.yml
-
 - name: Install the Cloudera Manager Server Packages
   yum: name={{ item }} state=installed
   with_items:
