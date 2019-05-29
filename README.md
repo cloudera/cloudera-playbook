@@ -25,13 +25,13 @@ scp_if_ssh = True
 $ vi ~/ansible_hosts
 
 [scm_server]
-<host>        license_file=/path/to/cloudera_license.txt
+host1.example.com        license_file=/path/to/cloudera_license.txt
 
 [db_server]
-<host>
+host2.example.com
 
 [krb5_server]
-<host>        default_realm=<REALM>
+host3.example.com        default_realm=<REALM>
 
 [utility_servers:children]
 scm_server
@@ -39,17 +39,17 @@ db_server
 krb5_server
 
 [gateway_servers]
-<host>        host_template=HostTemplate-Gateway role_ref_names=HDFS-HTTPFS-1
+host4.example.com        host_template=HostTemplate-Gateway role_ref_names=HDFS-HTTPFS-1
 
 [master_servers]
-<host>        host_template=HostTemplate-Master1
-<host>        host_template=HostTemplate-Master2
-<host>        host_template=HostTemplate-Master3
+host5.example.com        host_template=HostTemplate-Master1
+host6.example.com        host_template=HostTemplate-Master2
+host7.example.com        host_template=HostTemplate-Master3
 
 [worker_servers]
-<host>
-<host>
-<host>
+host8.example.com
+host9.example.com
+host10.example.com
 
 [worker_servers:vars]
 host_template=HostTemplate-Workers
@@ -60,7 +60,9 @@ gateway_servers
 master_servers
 worker_servers
 ```
-    
+
+Important: fully qualified domain name (FQDN) is mandatory in the ansible_hosts file
+   
 * Run playbook
  
 ```shell
