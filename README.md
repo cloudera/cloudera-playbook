@@ -61,7 +61,7 @@ master_servers
 worker_servers
 ```
 
-Important: fully qualified domain name (FQDN) is mandatory in the ansible_hosts file
+**Important**: fully qualified domain name (FQDN) is mandatory in the ansible_hosts file
    
 * Run playbook
  
