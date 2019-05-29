@@ -12,7 +12,7 @@
 - name: Prepare Cloudera Manager Server External Database
   command: /usr/share/cmf/schema/scm_prepare_database.sh
              -f
-             --host {{ hostvars[db_hostname]['inventory_hostname'] }}
+             --host {{ hostvars[db_hostname][hostname_var] }}
              mysql {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
   changed_when: False
 
@@ -29,7 +29,7 @@
 
 - name: Get Cloudera Manager API version
   uri:
-    url: http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/api/version
+    url: http://{{ scm_hostname }}:{{ scm_port }}/api/version
     method: GET
     status_code: 200
     user: "{{ scm_default_user }}"
@@ -39,7 +39,7 @@
   register: result
 
 # Set base CM API URL
-- set_fact: cm_api_url="http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/api/{{ result.content }}"
+- set_fact: cm_api_url="http://{{ scm_hostname }}:{{ scm_port }}/api/{{ result.content }}"
 - debug: var=cm_api_url
 
 # Install Cloudera Manager Python API

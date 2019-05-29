@@ -7,3 +7,6 @@ ad_domain: "{{ krb5_realm.lower() }}"
 computer_ou: ou=Hosts,ou=morhidi,ou=HadoopClusters,ou=morhidi,dc=ad,dc=sec,dc=cloudera,dc=com
 domain: vpc.cloudera.com
 kdc: w2k8-1.ad.sec.cloudera.com
+
+# hostname_var can be set to 'ansible_fqdn' (to use the internal hostname) or 'inventory_hostname' (default, uses the public/inventory hostname)
+hostname_var: 'inventory_hostname'

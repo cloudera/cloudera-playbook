@@ -77,7 +77,7 @@
         "items": [
           {
             "name": "firehose_database_host",
-            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+            "value": "{{ hostvars[db_hostname][hostname_var] }}"
           }, {
             "name": "firehose_database_name",
             "value": "{{ databases.amon.name }}"
@@ -105,7 +105,7 @@
         "items": [
           {
             "name": "headlamp_database_host",
-            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+            "value": "{{ hostvars[db_hostname][hostname_var] }}"
           }, {
             "name": "headlamp_database_name",
             "value": "{{ databases.rman.name }}"
@@ -133,7 +133,7 @@
         "items": [
           {
             "name": "navigator_database_host",
-            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+            "value": "{{ hostvars[db_hostname][hostname_var] }}"
           }, {
             "name": "navigator_database_name",
             "value": "{{ databases.nav.name }}"
@@ -161,7 +161,7 @@
         "items": [
           {
             "name": "nav_metaserver_database_host",
-            "value": "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+            "value": "{{ hostvars[db_hostname][hostname_var] }}"
           }, {
             "name": "nav_metaserver_database_name",
             "value": "{{ databases.navms.name }}"

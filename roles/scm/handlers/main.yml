@@ -8,8 +8,9 @@
 
 - name: wait cloudera-scm-server
   wait_for:
-    host={{ hostvars[scm_hostname]['inventory_hostname'] }}
+    host={{ scm_hostname }}
     port={{ scm_port }}
     delay=5
     state=started
     timeout=300
+    

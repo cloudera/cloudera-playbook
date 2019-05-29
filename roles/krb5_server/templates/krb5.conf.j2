@@ -16,8 +16,8 @@
 
 [realms]
   {{ default_realm|upper }} = {
-    kdc = {{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}
-    admin_server = {{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}
+    kdc = {{ hostvars[groups['krb5_server'][0]][hostname_var] }}
+    admin_server = {{ hostvars[groups['krb5_server'][0]][hostname_var] }}
     default_domain = {{ ansible_fqdn.split('.')[1:]|join('.') }}
   }
 

@@ -9,7 +9,7 @@
     - cloudera-manager-agent
 
 - name: Configure Cloudera Manager Agent 'server_host'
-  lineinfile: dest=/etc/cloudera-scm-agent/config.ini regexp=^server_host line=server_host={{ hostvars[scm_hostname]['inventory_hostname'] }}
+  lineinfile: dest=/etc/cloudera-scm-agent/config.ini regexp=^server_host line=server_host={{ hostvars[scm_hostname][hostname_var] }}
 
 - name: Restart Cloudera Manager Agents
   service: name=cloudera-scm-agent state=restarted enabled=yes

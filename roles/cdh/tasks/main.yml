@@ -53,7 +53,7 @@
 - debug: msg="Import cluster template command ID - {{ command_id }}"
   when: cluster_exists == False
 
-- debug: msg="Login to Cloudera Manager to monitor import progress - http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/cmf/commands/commands"
+- debug: msg="Login to Cloudera Manager to monitor import progress - http://{{ hostvars[scm_hostname][hostname_var] }}:{{ scm_port }}/cmf/commands/commands"
   when: cluster_exists == False
 
 - file:

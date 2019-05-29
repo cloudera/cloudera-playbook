@@ -3,7 +3,7 @@
     {% if krb5_kdc_type != 'none' %}
     {
       "name" : "KDC_HOST",
-      "value" : "{{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}"
+      "value" : "{{ hostvars[groups['krb5_server'][0]][hostname_var] }}"
     }, {
       "name" : "KDC_TYPE",
       {% if krb5_kdc_type == 'ad' %}
