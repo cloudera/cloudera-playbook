@@ -174,7 +174,7 @@ $ dynamic_inventory_cm --list
 **Step 5**: Installation of the Ansible package:
 
 ```
-yum install ansible
+# yum install ansible
 ```
 
 **Step 6**: Setup the SSH public key authentication for remote hosts:
@@ -254,7 +254,7 @@ roles/realm/join/templates/nscd.conf.j2
 and run this command to apply it on the managed hosts:
 
 ```
-ansible-playbook -u root realm_join.yaml
+$ ansible-playbook -u root realm_join.yaml
 bind user: administrator
 bind password:
 ```
@@ -262,7 +262,7 @@ bind password:
 Removing hosts from the realm can be done via:
 
 ```
-ansible-playbook -u root realm_leave.yaml
+$ ansible-playbook -u root realm_leave.yaml
 ```
 
 # How do I contribute code?
