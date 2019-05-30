@@ -125,9 +125,14 @@ Cloudera Manager specific dynamic inventory script has been created for easy int
 * Multi Cloudera Manager support
 * SSL friendly as the root CA check of Cloudera Manager server can be disabled or enabled
 
-![High level architecture of Ansible dynamic inventory vs. Cloudera Managers](images/figure_1_ansible_inventory.png)
+<p align="center">
+<img alt="High level architecture of Ansible dynamic inventory vs. Cloudera Managers"  width="400" height="455" src="images/figure_1_ansible_inventory.png"><br/>
+High level architecture of Ansible dynamic inventory vs. Cloudera Managers
+</p>
 
-**Configuration**
+
+
+## Configuration
 
 **Step 1**: Configuration of the related Cloudera Manager(s)
 
@@ -145,13 +150,13 @@ $ export CM_TIMEOUT_SEC=60
 $ export CM_DEBUG=False
 ```
 
-**Step 2**: Clone the git repository [2]:
+**Step 2**: Clone the git repository:
 
 ```
 $ git clone https://github.com/cloudera/cloudera-playbook
 ```
 
-**Step 3**: Setup the default Ansible inventory and other useful Ansible parameter(s):
+**Step 3**: Setup the default Ansible inventory and other useful Ansible [parameters](https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg):
 
 ```
 $ vi $HOME/.ansible.cfg
@@ -210,7 +215,7 @@ For further information about dynamic inventory and Ad-Hoc commands can be found
 * [Developing Dynamic Inventory](http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
 * [Documentation of Ansible Ad-Hoc commands](http://docs.ansible.com/ansible/latest/intro_adhoc.html)
 
-# SSSD setup with Ansible (this only works on RHEL 7 / CentOS 7)
+## SSSD setup with Ansible (this only works on RHEL 7 / CentOS 7)
 
 **Step 1**: Edit the default variables in group_vars/all:
 
