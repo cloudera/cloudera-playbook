@@ -4,6 +4,6 @@ ansible_become: true
 tmp_dir: /tmp
 krb5_realm: AD.SEC.CLOUDERA.COM
 ad_domain: "{{ krb5_realm.lower() }}"
-computer_ou: ou=Hosts,ou=morhidi,ou=HadoopClusters,ou=morhidi,dc=ad,dc=sec,dc=cloudera,dc=com
-domain: vpc.cloudera.com
-kdc: w2k8-1.ad.sec.cloudera.com
+computer_ou: OU=computer_hosts,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
+domain: ad.sec.example.com
+kdc: ad.example.com

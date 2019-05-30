@@ -120,107 +120,142 @@ For example ``roles/cdh/templates/hdfs.j2``:
 
 Cloudera Manager specific dynamic inventory script has been created for easy integration. These are the main advantages:
 
-* Cache management for better performance
-* HTTP cookie handling
+* Cache management of inventory for better performance
+* Cloudera Manager’s HTTP cookie handling   
 * Multi Cloudera Manager support
-* SSL friendly because you can disable or enable the root CA check
+* SSL friendly as the root CA check of Cloudera Manager server can be disabled or enabled
+
+![High level architecture of Ansible dynamic inventory vs. Cloudera Managers](images/figure_1_ansible_inventory.png)
 
 **Configuration**
 
-```
-export CM_URL=https://cm_host_fqdn1:7183,https://cm_host_fqdn2:7183
-export CM_USERNAME=username
-```
-
-**Install sssd**
-```
-yum install ansible -y
-```
-
-**Set up default ansible inventory**
-```
-sudo mkdir /etc/ansible
-cd /etc/ansible
-sudo ln -s /path/to/dynamic_inventory_cm hosts
-```
-
-**Set up SSH public key authentication for remote host(s)**
-
-If you do not have ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files then you need to generate them with the ssh-keygen command before this:
-```
-ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
-```
-
-If only the root user exists then please use this instead:
-```
-ANSIBLE_HOST_KEY_CHECKING=False ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" -k -u root
-```
-
-Test remote host connectivity(optional)
-```
-ansible all -m ping
-```
-
-If only the root user exists then please use this instead:
-```
-ansible all -m ping -u root
-```
-
-**Other optional configuration parameters**
+**Step 1**: Configuration of the related Cloudera Manager(s)
 
 ```
-export CM_CACHE_TIME_SEC=3600
-export CM_DISABLE_CA_CHECK=True
-export CM_TIMEOUT_SEC=60
-export CM_DEBUG=False
+$ export CM_URL=https://cm1.example.com:7183,https://cm2.example.com:7183
+$ export CM_USERNAME=username
 ```
 
-You can list the available Cloudera Manager clusters (Ansible groups) with this command:
+Other optional configuration parameters:
 
 ```
-dynamic_inventory_cm --list
+$ export CM_CACHE_TIME_SEC=3600
+$ export CM_DISABLE_CA_CHECK=True
+$ export CM_TIMEOUT_SEC=60
+$ export CM_DEBUG=False
 ```
 
-**Example Ansible Ad-Hoc commands**
-
-With the ad-hoc command feature you can run the same Linux command on all hosts. For example if you debug an issue, this can help. Example Ansible Ad-Hoc commands:
+**Step 2**: Clone the git repository [2]:
 
 ```
-ansible Balaton -m command -o -a "id -Gn yarn"
-ansible all -m command -o -a "date"
+$ git clone https://github.com/cloudera/cloudera-playbook
 ```
 
-Documentation of Ansible Ad-Hoc commands:
-
-http://docs.ansible.com/ansible/latest/intro_adhoc.html
-
-# SSSD setup with Ansible (works on RHEL7/CentOS7 only)
-
-**Edit default variables in ./group_vars/all** 
+**Step 3**: Setup the default Ansible inventory and other useful Ansible parameter(s):
 
 ```
-vim ./group_vars/all (this is an example configuration)
+$ vi $HOME/.ansible.cfg
+[defaults]
+inventory = /path/to/dynamic_inventory_cm
+host_key_checking = False
 ```
 
+**Step 4**: The available Cloudera Manager clusters (Ansible groups) can be listed with the following command:
+
 ```
-krb5_realm: AD.SEC.CLOUDERA.COM
+$ dynamic_inventory_cm --list
+```
+
+**Step 5**: Installation of the Ansible package:
+
+```
+yum install ansible
+```
+
+**Step 6**: Setup the SSH public key authentication for remote hosts:
+
+If  ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts:
+
+```
+$ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
+```
+
+root user can be used with the following example:
+
+```
+$ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" -k -u root
+```
+
+**Step 7**: Test remote host connectivity (optional):
+
+```
+$ ansible all -m ping
+```
+
+root user can be used with the following example:
+
+```
+$ ansible all -m ping -u root
+```
+
+**Step 8**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. For example, it can be used to troubleshoot slow group resolution issues. Example Ansible Ad-Hoc commands:
+
+```
+$ ansible Balaton -m command -o -a "time id -Gn testuser" 
+$ ansible all -m command -o -a "date"
+```
+
+For further information about dynamic inventory and Ad-Hoc commands can be found here:
+
+* [Developing Dynamic Inventory](http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
+* [Documentation of Ansible Ad-Hoc commands](http://docs.ansible.com/ansible/latest/intro_adhoc.html)
+
+# SSSD setup with Ansible (this only works on RHEL 7 / CentOS 7)
+
+**Step 1**: Edit the default variables in group_vars/all:
+
+```
+krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
-computer_ou: ou=Hosts,ou=morhidi,ou=HadoopClusters,ou=morhidi,dc=ad,dc=sec,dc=cloudera,dc=com
-domain: vpc.cloudera.com
-kdc: w2k8-1.ad.sec.cloudera.com
+computer_ou: OU=computer_hosts,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
+domain: ad.sec.example.com
+kdc: ad.example.com
 ```
-**Enable kerberos on the hosts**
+
+**Step 2**: Enable kerberos on the hosts:
+
+If necessary update this template file:
+
 ```
-ansible-playbook -u root enable_kerberos.yaml
+roles/krb-client/templates/krb5.conf.j2
 ```
-**Join the host(s) to realm**
+
+and run this command to apply it on the managed hosts:
+
+```
+$ ansible-playbook -u root enable_kerberos.yaml
+```
+
+**Step 3**: Join the host(s) to realm:
+
+If necessary update this template file:
+
+```
+roles/realm/join/templates/sssd.conf.j2
+roles/realm/join/templates/realmd.conf.j2
+roles/realm/join/templates/nscd.conf.j2
+```
+
+and run this command to apply it on the managed hosts:
+
 ```
 ansible-playbook -u root realm_join.yaml
 bind user: administrator
 bind password:
 ```
 
-**Remove the host(s) from realm**
+Removing hosts from the realm can be done via:
+
 ```
 ansible-playbook -u root realm_leave.yaml
 ```
