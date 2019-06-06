@@ -5,3 +5,4 @@
 .DS_Store
 site.retry
 enable_kerberos.retry
+realm_join.retry

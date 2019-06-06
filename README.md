@@ -220,11 +220,11 @@ For further information about dynamic inventory and Ad-Hoc commands can be found
 **Step 1**: Edit the default variables in group_vars/all:
 
 ```
-krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
-computer_ou: OU=computer_hosts,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
-domain: ad.sec.example.com
-kdc: ad.example.com
+cluster_domain: gce.example.com
+kdc: w2k8-1.ad.sec.example.com
+ad_site: Default-First-Site-Name
+computer_ou: ou=computer_hosts,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
 ```
 
 **Step 2**: Enable kerberos on the hosts:
