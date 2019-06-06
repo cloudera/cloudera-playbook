@@ -9,14 +9,13 @@ An Ansible Playbook that installs the Cloudera stack on RHEL/CentOS
 
 ```ini
 $ vi ~/.ansible.cfg
+
 [defaults]
-inventory = /path/to/dynamic_inventory_cm
-# Do not gather the host information (facts) by default. This can give significant speedups for large clusters.
-gathering = explicit
-# Disable key check if host is not initially in 'known_hosts'
+# disable key check if host is not initially in 'known_hosts'
 host_key_checking = False
+
 [ssh_connection]
-# If it is True, make ansible use scp if the connection type is ssh (default is sftp)
+# if True, make ansible use scp if the connection type is ssh (default is sftp)
 scp_if_ssh = True
 ```
 
@@ -137,14 +136,14 @@ High level architecture of Ansible dynamic inventory vs. Cloudera Managers
 
 **Step 1**: Configuration of the related Cloudera Manager(s)
 
-```
+```ini
 $ export CM_URL=https://cm1.example.com:7183,https://cm2.example.com:7183
 $ export CM_USERNAME=username
 ```
 
 Other optional configuration parameters:
 
-```
+```ini
 $ export CM_CACHE_TIME_SEC=3600
 $ export CM_DISABLE_CA_CHECK=True
 $ export CM_TIMEOUT_SEC=60
@@ -159,11 +158,17 @@ $ git clone https://github.com/cloudera/cloudera-playbook
 
 **Step 3**: Setup the default Ansible inventory and other useful Ansible [parameters](https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg):
 
-```
+```ini
 $ vi $HOME/.ansible.cfg
 [defaults]
 inventory = /path/to/dynamic_inventory_cm
+# Do not gather the host information (facts) by default. This can give significant speedups for large clusters.
+gathering = explicit
+# Disable key check if host is not initially in 'known_hosts'
 host_key_checking = False
+[ssh_connection]
+# If it is True, make ansible use scp if the connection type is ssh (default is sftp)
+scp_if_ssh = True
 ```
 
 **Step 4**: The available Cloudera Manager clusters (Ansible groups) can be listed with the following command:
@@ -220,7 +225,7 @@ For further information about dynamic inventory and Ad-Hoc commands can be found
 
 **Step 1**: Edit the default variables in group_vars/all:
 
-```
+```ini
 krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
 cluster_domain: gce.example.com
