@@ -225,7 +225,7 @@ For further information about dynamic inventory and Ad-Hoc commands can be found
 
 **Step 1**: Edit the default variables in group_vars/all:
 
-```ini
+```
 krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
 cluster_domain: gce.example.com
