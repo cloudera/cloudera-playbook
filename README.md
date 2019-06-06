@@ -9,13 +9,14 @@ An Ansible Playbook that installs the Cloudera stack on RHEL/CentOS
 
 ```ini
 $ vi ~/.ansible.cfg
-
 [defaults]
-# disable key check if host is not initially in 'known_hosts'
+inventory = /path/to/dynamic_inventory_cm
+# Do not gather the host information (facts) by default. This can give significant speedups for large clusters.
+gathering = explicit
+# Disable key check if host is not initially in 'known_hosts'
 host_key_checking = False
-
 [ssh_connection]
-# if True, make ansible use scp if the connection type is ssh (default is sftp)
+# If it is True, make ansible use scp if the connection type is ssh (default is sftp)
 scp_if_ssh = True
 ```
 
