@@ -216,6 +216,13 @@ $ ansible Balaton -m command -o -a "time id -Gn testuser"
 $ ansible all -m command -o -a "date"
 ```
 
+root user can be used with the following example:
+
+```
+$ ansible Balaton -m command -o -a "time id -Gn testuser" -u root
+$ ansible all -m command -o -a "date" -u root
+```
+
 For further information about dynamic inventory and Ad-Hoc commands can be found here:
 
 * [Developing Dynamic Inventory](http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
