@@ -237,7 +237,6 @@ krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
 cluster_domain: gce.example.com
 kdc: w2k8-1.ad.sec.example.com
-ad_site: Default-First-Site-Name
 computer_ou: ou=computer_hosts,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
 ```
 
