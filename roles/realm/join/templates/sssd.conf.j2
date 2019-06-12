@@ -34,11 +34,13 @@ ldap_id_mapping = true
 
 # The override_gid will be the primary group of all domain users. 
 # This gid must be changed later to a valid one that all users belong to
+
 # override_gid = 574066993
 
 # A new option auto_private_groups was added in SSSD 1.16.1. If this option 
 # is enabled, SSSD will automatically create user private groups based on user’s 
 # UID number. The GID number is ignored in this case. 
+
 # auto_private_groups = true
  
 full_name_format = %1$s
@@ -52,11 +54,15 @@ chpass_provider = ad
 auth_provider = ad
 
 access_provider = simple
-# Setting this simple_allow_groups limits to ONLY that group being allowed to log in, use with caution
+
+# Setting this simple_allow_groups limit access to ONLY that group being
+# allowed to log in, use with caution
+
 # simple_allow_groups = hadoop_admin, hadoop_users
 
 # To override the site autodiscovery, specify the AD site to which you want the 
 # client to connect by using the ad_site option
+
 # ad_site = Default-First-Site-Name
 
 case_sensitive = false
@@ -69,10 +75,12 @@ ldap_access_order = filter,expire
 ldap_account_expire_policy = ad
 
 # If you know that your users and groups will be limited to a specific subsection of the directory, you can limit lookups using the ldap_group_search_base and ldap_user_search_base parameters. This can give significant speedups for large directories.
+
 # ldap_group_search_base = ou=groups,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
 # ldap_user_search_base = ou=users,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
 
-# uncomment the following if deploying on Azure, which has no reverse DNS or in any environment which has DNS managed by AD.
+# Uncomment the following if deploying on Azure, which has no reverse DNS or in any environment which has DNS managed by AD.
+
 # dyndns_update = true
 # dyndns_refresh_interval = 43200
 # dyndns_update_ptr = true
@@ -81,8 +89,10 @@ ldap_account_expire_policy = ad
 ldap_use_tokengroups = false
 
 # krb5_validate = false will prevent unnecessary pac processing and validating if the tgt can get a service ticket for the logged in host
+
 krb5_validate = false
 
 # In environments with large number of users and groups you'll also need to set the idmap range 
+
 # ldap_idmap_range_size = 2000000
 
