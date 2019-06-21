@@ -150,6 +150,8 @@ $ export CM_TIMEOUT_SEC=60
 $ export CM_DEBUG=False
 ```
 
+Note: it is recommended to add these environment variables to the startup file of your shell, for example: $HOME/.bashrc
+
 **Step 2**: Installation of the git package:
 
 ```
