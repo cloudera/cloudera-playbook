@@ -150,13 +150,19 @@ $ export CM_TIMEOUT_SEC=60
 $ export CM_DEBUG=False
 ```
 
-**Step 2**: Clone the git repository:
+**Step 2**: Installation of the git package:
+
+```
+# yum install git
+```
+
+**Step 3**: Clone the git repository:
 
 ```
 $ git clone https://github.com/cloudera/cloudera-playbook
 ```
 
-**Step 3**: Setup the default Ansible inventory and other useful Ansible [parameters](https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg):
+**Step 4**: Setup the default Ansible inventory and other useful Ansible [parameters](https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg):
 
 ```ini
 $ vi $HOME/.ansible.cfg
@@ -171,36 +177,36 @@ host_key_checking = False
 scp_if_ssh = True
 ```
 
-**Step 4**: The available Cloudera Manager clusters (Ansible groups) can be listed with the following command:
+**Step 5**: The available Cloudera Manager clusters (Ansible groups) can be listed with the following command:
 
 ```
 $ dynamic_inventory_cm --list
 ```
 
-**Step 5**: Installation of the Ansible package:
+**Step 6**: Installation of the Ansible package:
 
 ```
 # yum install ansible
 ```
 
-**Step 6**: Setup the SSH public key authentication for remote hosts:
+**Step 7**: Setup the SSH public key authentication for remote hosts:
 
 If  ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts:
 
 ```
-$ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" -k
+$ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" --ask-pass -u $USER --become-user $USER
 ```
 
 root user can be used with the following example:
 
 ```
-$ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" -k -u root
+$ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" --ask-pass -u root
 ```
 
-**Step 7**: Test remote host connectivity (optional):
+**Step 8**: Test remote host connectivity (optional):
 
 ```
-$ ansible all -m ping
+$ ansible all -m ping -u $USER --become-user $USER
 ```
 
 root user can be used with the following example:
@@ -209,11 +215,11 @@ root user can be used with the following example:
 $ ansible all -m ping -u root
 ```
 
-**Step 8**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. For example, it can be used to troubleshoot slow group resolution issues. Example Ansible Ad-Hoc commands:
+**Step 9**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. For example, it can be used to troubleshoot slow group resolution issues. Example Ansible Ad-Hoc commands:
 
 ```
-$ ansible Balaton -m command -o -a "time id -Gn testuser" 
-$ ansible all -m command -o -a "date"
+$ ansible Balaton -u $USER --become-user $USER -m command -o -a "time id -Gn $USER" 
+$ ansible all -u $USER --become-user $USER -m command -o -a "date"
 ```
 
 root user can be used with the following example:
