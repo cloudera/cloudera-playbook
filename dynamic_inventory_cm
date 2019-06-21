@@ -96,10 +96,10 @@ class ClouderaManagerInventory:
         self.json_path = os.path.join(os.environ["HOME"], ".cm_inventory.json")
         self.api_version = ""
 
-        cache_time_sec = os.getenv("CM_CACHE_TIME_SEC").strip()
-        disable_ca_check = os.getenv("CM_DISABLE_CA_CHECK").strip()
-        timeout_sec = os.getenv("CM_TIMEOUT_SEC").strip()
-        debug = os.getenv("CM_DEBUG").strip()
+        cache_time_sec = os.getenv("CM_CACHE_TIME_SEC")
+        disable_ca_check = os.getenv("CM_DISABLE_CA_CHECK")
+        timeout_sec = os.getenv("CM_TIMEOUT_SEC")
+        debug = os.getenv("CM_DEBUG")
 
         if cache_time_sec == None:
             self.cache_time_sec = default_cache_time_sec
