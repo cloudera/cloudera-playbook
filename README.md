@@ -156,18 +156,26 @@ $ export CM_DEBUG=False
 # yum install git
 ```
 
-**Step 3**: Clone the git repository:
+**Step 3**: Installation of the Ansible package:
+
+```
+# yum install ansible
+```
+
+**Step 4**: Clone the cloudera-playbook git repository:
 
 ```
 $ git clone https://github.com/cloudera/cloudera-playbook
 ```
 
-**Step 4**: Setup the default Ansible inventory and other useful Ansible [parameters](https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg):
+Note: The cloudera-playbook git repository is not officially supported by Cloudera, but its use is recommended.
+
+**Step 5**: Setup the default Ansible inventory and other useful Ansible [parameters](https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg):
 
 ```ini
 $ vi $HOME/.ansible.cfg
 [defaults]
-inventory = /path/to/dynamic_inventory_cm
+inventory = $HOME/cloudera-playbook/dynamic_inventory_cm
 # Do not gather the host information (facts) by default. This can give significant speedups for large clusters.
 gathering = explicit
 # Disable key check if host is not initially in 'known_hosts'
@@ -177,19 +185,27 @@ host_key_checking = False
 scp_if_ssh = True
 ```
 
-**Step 5**: The available Cloudera Manager clusters (Ansible groups) can be listed with the following command:
+Note: please update the inventory path of the dynamic_inventory_cm if it is necessary
+
+**Step 6**: Change the working directory to cloudera-playbook
 
 ```
-$ dynamic_inventory_cm --list
+$ cd cloudera-playbook
 ```
 
-**Step 6**: Installation of the Ansible package:
+**Step 7**: The available Cloudera Manager clusters (Ansible groups, for example: Cluster_1, Balaton) can be listed with the following command:
 
 ```
-# yum install ansible
+$ ./dynamic_inventory_cm --list
 ```
 
-**Step 7**: Setup the SSH public key authentication for remote hosts:
+Note: the inventory cache can be refreshed in the following way if the CM_URL changed:
+
+```
+$ ./dynamic_inventory_cm --refresh-cache
+```
+
+**Step 8**: Setup the SSH public key authentication for remote hosts:
 
 If  ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts:
 
@@ -203,7 +219,7 @@ root user can be used with the following example:
 $ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" --ask-pass -u root
 ```
 
-**Step 8**: Test remote host connectivity (optional):
+**Step 9**: Test remote host connectivity (optional):
 
 ```
 $ ansible all -m ping -u $USER --become-user $USER
@@ -215,7 +231,9 @@ root user can be used with the following example:
 $ ansible all -m ping -u root
 ```
 
-**Step 9**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. For example, it can be used to troubleshoot slow group resolution issues. Example Ansible Ad-Hoc commands:
+**Step 10**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. For example, it can be used to troubleshoot slow group resolution issues. 
+
+Example Ansible Ad-Hoc commands (in this example Balaton is a group of hosts which is a cluster in Cloudera Manager):
 
 ```
 $ ansible Balaton -u $USER --become-user $USER -m command -o -a "time id -Gn $USER" 
