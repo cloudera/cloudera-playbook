@@ -205,14 +205,14 @@ class ClouderaManagerInventory:
                 clusters = json.loads(clusters_response)
                 for cluster in clusters["items"]:
                     cluster_name = cluster.get("displayName")
-                    cluster_name_updated = cluster_name.replace(" ", "-")
+                    cluster_name_updated = cluster_name.replace(" ", "_")
                     hosts = {"hosts" : []}
                     i = 2
                     while self.inventory.has_key(cluster_name_updated):
-                       if self.inventory.has_key(cluster_name_updated + "-" + str(i)):
+                       if self.inventory.has_key(cluster_name_updated + "_" + str(i)):
                           i = i + 1
                        else:
-                          cluster_name_updated = cluster_name_updated + "-" + str(i)
+                          cluster_name_updated = cluster_name_updated + "_" + str(i)
                           break
                     self.inventory[cluster_name_updated] = hosts
                     clusters_hosts_url = url + "/api/" + self.api_version + "/clusters/" + cluster_name + "/hosts"
