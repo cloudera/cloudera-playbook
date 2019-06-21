@@ -233,9 +233,9 @@ root user can be used with the following example:
 $ ansible all -m ping -u root
 ```
 
-**Step 10**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. For example, it can be used to troubleshoot slow group resolution issues. 
+**Step 10**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. It can be used to troubleshoot slow group resolution issues. 
 
-Example Ansible Ad-Hoc commands (in this example Balaton is a group of hosts which is a cluster in Cloudera Manager):
+Example Ansible Ad-Hoc commands (Balaton is a group of hosts which is a cluster in Cloudera Manager):
 
 ```
 $ ansible Balaton -u $USER --become-user $USER -m command -o -a "time id -Gn $USER" 
