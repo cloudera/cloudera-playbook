@@ -282,7 +282,7 @@ $ ansible-playbook -u root enable_kerberos.yaml
 
 **Step 3**: Join the host(s) to realm:
 
-If necessary update this template file:
+If necessary update these template files:
 
 ```
 roles/realm/join/templates/sssd.conf.j2
