@@ -92,14 +92,18 @@ class ClouderaManagerInventory:
 
     def __init__(self):
         self.inventory = {"_meta" : { "hostvars": {} }}
-        self.cookie_path = os.path.join(os.environ["HOME"], ".cm_cookie")
-        self.json_path = os.path.join(os.environ["HOME"], ".cm_inventory.json")
+        self.cookie_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_cookie"
+        self.json_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_inventory.json"
         self.api_version = ""
 
         cache_time_sec = os.getenv("CM_CACHE_TIME_SEC")
         disable_ca_check = os.getenv("CM_DISABLE_CA_CHECK")
         timeout_sec = os.getenv("CM_TIMEOUT_SEC")
         debug = os.getenv("CM_DEBUG")
+
+        if not os.path.exists(os.environ["HOME"] + os.sep + ".cm"):
+           os.makedirs(os.environ["HOME"] + os.sep + ".cm")
+           os.chmod(os.environ["HOME"] + os.sep + ".cm", 0700)
 
         if cache_time_sec == None:
             self.cache_time_sec = default_cache_time_sec
