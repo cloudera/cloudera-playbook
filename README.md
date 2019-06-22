@@ -209,7 +209,24 @@ $ ./dynamic_inventory_cm --refresh-cache
 
 **Step 8**: Setup the SSH public key authentication for remote hosts:
 
-If  ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts:
+The big advantage of this is that by the case of Ad-hoc commands, you do not need to enter your password each time you run the command, but only the first time you enter the private key password.
+
+If  ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts.
+
+Adding SSH private key into the SSH authentication agent:
+
+```
+$ ssh-agent bash
+$ ssh-add ~/.ssh/id_rsa
+```
+
+Validation:
+
+```
+$ ssh-add -L
+```
+
+Uploading the SSH public key to the managed hosts:
 
 ```
 $ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" --ask-pass -u $USER --become-user $USER
@@ -220,6 +237,8 @@ root user can be used with the following example:
 ```
 $ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" --ask-pass -u root
 ```
+
+Note: if you do not want to use the SSH public key authentication, please add the --ask-pass parameter each time you run the Ansible command. 
 
 **Step 9**: Test remote host connectivity (optional):
 
