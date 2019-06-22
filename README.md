@@ -213,7 +213,7 @@ The big advantage of this is that by the case of Ad-hoc commands, you do not nee
 
 If  ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts.
 
-Adding SSH private key into the SSH authentication agent:
+Adding the SSH private key into the SSH authentication agent (use this child shell by each command):
 
 ```
 $ ssh-agent bash
@@ -226,7 +226,7 @@ Validation:
 $ ssh-add -L
 ```
 
-Uploading the SSH public key to the managed hosts:
+Uploading the SSH public key (id_rsa.pub) to the managed hosts:
 
 ```
 $ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" --ask-pass -u $USER --become-user $USER
