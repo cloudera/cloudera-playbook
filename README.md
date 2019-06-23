@@ -126,7 +126,7 @@ Cloudera Manager specific dynamic inventory script has been created for easy int
 * SSL friendly as the root CA check of Cloudera Manager server can be disabled or enabled
 
 <p align="center">
-<img alt="High level architecture of Ansible dynamic inventory vs. Cloudera Managers"  width="400" height="455" src="images/figure_1_ansible_inventory.png"><br/>
+<img alt="High level architecture of Ansible dynamic inventory vs. Cloudera Managers"  width="500" height="413" src="images/figure_1_ansible_inventory-v2.png"><br/>
 High level architecture of Ansible dynamic inventory vs. Cloudera Managers
 </p>
 
