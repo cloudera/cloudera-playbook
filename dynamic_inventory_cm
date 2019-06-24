@@ -71,6 +71,8 @@ default_timeout_sec = 60
 # Debug mode
 default_debug = False
 
+# https://stackoverflow.com/questions/13030095/how-to-save-requests-python-cookies-to-a-file
+
 def save_cookies_lwp(cookiejar, filename):
     lwp_cookiejar = cookielib.LWPCookieJar()
     for c in cookiejar:
