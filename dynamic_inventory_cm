@@ -18,33 +18,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 =============================================================================
-Example Ansible dynamic inventory script for Cloudera Manager
+Ansible Dynamic Inventory Script for Cloudera Manager
 =============================================================================
 
-Developing Dynamic Inventory:
-
-http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html
-
-Example Cloudera Manager URLs:
-
-https://host-10-17-101-73.coe.cloudera.com:7183/api/v6/hosts
-https://host-10-17-101-73.coe.cloudera.com:7183/api/v6/clusters
-https://host-10-17-101-73.coe.cloudera.com:7183/api/v6/clusters/Balaton/hosts
-
-You can list the available Cloudera Manager clusters (Ansible groups) with this command:
+The available Cloudera Manager clusters (Ansible groups, for example: Cluster_1, Balaton)
+can be listed with the following command:
 
 dynamic_inventory_cm --list
 
-Example Ansible Ad-Hoc commands:
+Example Ansible ad-hoc commands:
 
-ansible all -i dynamic_inventory_cm --list-hosts
-ansible Balaton -i dynamic_inventory_cm -m command -o -a "id -Gn yarn" -k
-ansible Cluster-1 -i dynamic_inventory_cm -m command -o -a date -k
-ansible -i dynamic_inventory_cm -m ping all -o -k
-
-Documentation of Ansible Ad-Hoc commands:
-
-http://docs.ansible.com/ansible/latest/intro_adhoc.html
+ansible all -u $USER --become-user $USER -i dynamic_inventory_cm --list-hosts
+ansible Balaton -u $USER --become-user $USER -i dynamic_inventory_cm -m command -o -a "id -Gn yarn" -k
+ansible Cluster_1 -u $USER --become-user $USER -i dynamic_inventory_cm -m command -o -a "date" -k
+ansible -u $USER --become-user $USER -i dynamic_inventory_cm -m ping all -o -k
 '''
 
 import os
@@ -140,7 +127,7 @@ class ClouderaManagerInventory:
         elif disable_ca_check.lower() == "false":
             self.disable_ca_check = False
         else:
-            sys.stderr.write("Unknown value by CM_DISABLE_CA_CHECK: " + disable_ca_check  + ". It can be only True or False\n")
+            sys.stderr.write("Unknown value by CM_DISABLE_CA_CHECK: " + disable_ca_check  + ". Valid value: True or False\n")
             sys.exit(-1)
 
         if debug == None:
@@ -150,7 +137,7 @@ class ClouderaManagerInventory:
         elif debug.lower() == "false":
             self.debug = False
         else:
-            sys.stderr.write("Unknown value by CM_DEBUG: " + debug + ". It can be only True or False\n")
+            sys.stderr.write("Unknown value by CM_DEBUG: " + debug + ". Valid value: True or False\n")
             sys.exit(-1)
 
         self.read_args()
@@ -243,7 +230,7 @@ class ClouderaManagerInventory:
              elif "CERTIFICATE_VERIFY_FAILED" in str(e):
                  sys.stderr.write("URL: " + url + "\n")
                  sys.stderr.write(str(e) + "\n")
-                 sys.stderr.write("\nYou can disable the CA check with this: export CM_DISABLE_CA_CHECK=True\n")
+                 sys.stderr.write("\nThe root CA check of Cloudera Manager server(s) can be disabled or enabled with this: export CM_DISABLE_CA_CHECK=True\n")
                  sys.exit(-1)
              else:
                  sys.stderr.write("URL: " + url + "\n")
@@ -254,7 +241,7 @@ class ClouderaManagerInventory:
         parser = argparse.ArgumentParser()
         parser.add_argument("--list", help = "List the clusters and the hosts", action = "store_true")
         parser.add_argument("--host", help = "", action = "store")
-        parser.add_argument("--refresh-cache", help = "Refresh the cache" , action = "store_true")
+        parser.add_argument("--refresh-cache", help = "Refresh the cache of Cloudera Manager inventory" , action = "store_true")
         self.args = parser.parse_args()
 
         if self.args.refresh_cache:
@@ -282,13 +269,13 @@ class ClouderaManagerInventory:
         password = ""
 
         if cm_urls == None:
-           sys.stderr.write("CM_URL shell variable is empty, please set the Cloudera Manager's URL. Examples:\n\n")
+           sys.stderr.write("CM_URL shell variable is empty, set the Cloudera Manager's URL. Examples:\n\n")
            sys.stderr.write("https://host-10-17-101-73.coe.cloudera.com:7183\n")
            sys.stderr.write("https://host-10-17-101-73.coe.cloudera.com:7183,http://nightly512-1.vpc.cloudera.com:7180\n\n")
            sys.exit(-1)
 
         if username == None:
-           sys.stderr.write("\nCM_USERNAME shell variable is empty, please set the Cloudera Manager's username\n\n")
+           sys.stderr.write("\nCM_USERNAME shell variable is empty, set the Cloudera Manager's username\n\n")
            sys.exit(-1)
 
         urls = cm_urls.split(",")
