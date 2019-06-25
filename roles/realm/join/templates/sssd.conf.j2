@@ -73,6 +73,10 @@ ldap_purge_cache_timeout = 0
 ldap_access_order = filter,expire
 ldap_account_expire_policy = ad
 
+# subdomains_provider = none can help to resolve significant delays in case of multiple AD domains
+# There is a known issue by Red Hat Enterprise Linux 6, further information about this : https://bugzilla.redhat.com/show_bug.cgi?id=1221358
+# subdomains_provider = none
+
 # If you know that your users and groups will be limited to a specific subsection of the directory, you can limit lookups using the ldap_group_search_base and ldap_user_search_base parameters. This can give significant speedups for large directories.
 
 # ldap_group_search_base = ou=groups,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
