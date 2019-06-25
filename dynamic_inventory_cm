@@ -29,7 +29,7 @@ dynamic_inventory_cm --list
 Example Ansible ad-hoc commands:
 
 ansible all -u $USER --become-user $USER -i dynamic_inventory_cm --list-hosts
-ansible Balaton -u $USER --become-user $USER -i dynamic_inventory_cm -m command -o -a "id -Gn yarn" -k
+ansible Balaton -u $USER --become-user $USER -i dynamic_inventory_cm -m command -o -a "time id -Gn $USER" -k
 ansible Cluster_1 -u $USER --become-user $USER -i dynamic_inventory_cm -m command -o -a "date" -k
 ansible -u $USER --become-user $USER -i dynamic_inventory_cm -m ping all -o -k
 '''
