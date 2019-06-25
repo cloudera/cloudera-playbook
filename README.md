@@ -116,21 +116,19 @@ For example ``roles/cdh/templates/hdfs.j2``:
 }
 ```
 
-# Dynamic inventory script for Cloudera Manager
-
-Cloudera Manager specific dynamic inventory script has been created for easy integration. These are the main advantages:
+# Dynamic Inventory Script for Cloudera Manager
+ 
+To make integration easier, Gabor Roczei created a dynamic inventory script that allows Ansible to gather data from Cloudera Manager. It's main advantages are:
 
 * Cache management of inventory for better performance
 * Cloudera Manager’s HTTP cookie handling   
-* Multi Cloudera Manager support
+* Support for multiple Cloudera Manager instances
 * SSL friendly as the root CA check of Cloudera Manager server can be disabled or enabled
 
 <p align="center">
 <img alt="High level architecture of Ansible dynamic inventory vs. Cloudera Managers"  width="500" height="413" src="images/figure_1_ansible_inventory-v2.png"><br/>
 High level architecture of Ansible dynamic inventory vs. Cloudera Managers
 </p>
-
-
 
 ## Configuration
 
@@ -150,7 +148,7 @@ $ export CM_TIMEOUT_SEC=60
 $ export CM_DEBUG=False
 ```
 
-Note: it is recommended to add these environment variables to the startup file of your shell, for example: $HOME/.bashrc
+Note: We recommend adding these environment variables to the startup file of your shell, for example: $HOME/.bashrc
 
 **Step 2**: Installation of the git package:
 
@@ -170,7 +168,7 @@ Note: it is recommended to add these environment variables to the startup file o
 $ git clone https://github.com/cloudera/cloudera-playbook
 ```
 
-Note: The cloudera-playbook git repository is not officially supported by Cloudera, but its use is recommended.
+Note: The cloudera-playbook git repository is not officially supported by Cloudera, but the authors recommend using it.
 
 **Step 5**: Setup the default Ansible inventory and other useful Ansible [parameters](https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg):
 
@@ -201,7 +199,7 @@ $ cd cloudera-playbook
 $ ./dynamic_inventory_cm --list
 ```
 
-Note: the inventory cache can be refreshed in the following way if the CM_URL changed:
+Note: the cache of Cloudera Manager inventory can be refreshed in the following way:
 
 ```
 $ ./dynamic_inventory_cm --refresh-cache
@@ -209,9 +207,9 @@ $ ./dynamic_inventory_cm --refresh-cache
 
 **Step 8**: Setup the SSH public key authentication for remote hosts:
 
-The big advantage of this is that by the case of Ad-hoc commands, you do not need to enter your password each time you run the command, but only the first time you enter the private key password.
+The big advantage of this is that with ad-hoc commands, you do not need to enter your password each time you run the command, but only the first time you enter the private key password.
 
-If  ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts.
+If the ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts.
 
 Adding the SSH private key into the SSH authentication agent (use this child shell by each command):
 
@@ -254,7 +252,7 @@ $ ansible all -m ping -u root
 
 **Step 10**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. It can be used to troubleshoot slow group resolution issues. 
 
-Example Ansible Ad-Hoc commands (Balaton is a group of hosts which is a cluster in Cloudera Manager):
+Example Ansible ad-hoc commands (Balaton is a group of hosts which is a cluster in Cloudera Manager):
 
 ```
 $ ansible Balaton -u $USER --become-user $USER -m command -o -a "time id -Gn $USER" 
@@ -268,10 +266,10 @@ $ ansible Balaton -m command -o -a "time id -Gn testuser" -u root
 $ ansible all -m command -o -a "date" -u root
 ```
 
-For further information about dynamic inventory and Ad-Hoc commands can be found here:
+For further information about dynamic inventory and ad-hoc commands can be found here:
 
 * [Developing Dynamic Inventory](http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
-* [Documentation of Ansible Ad-Hoc commands](http://docs.ansible.com/ansible/latest/intro_adhoc.html)
+* [Documentation of Ansible ad-hoc commands](http://docs.ansible.com/ansible/latest/intro_adhoc.html)
 
 ## SSSD setup with Ansible (applicable for RHEL 7 / CentOS 7) 
 
@@ -309,7 +307,7 @@ roles/realm/join/templates/realmd.conf.j2
 roles/realm/join/templates/nscd.conf.j2
 ```
 
-and run this command to apply it on the managed hosts:
+Run this command to apply it on all managed hosts:
 
 ```
 $ ansible-playbook -u root realm_join.yaml
@@ -317,7 +315,15 @@ bind user: administrator
 bind password:
 ```
 
-Removing hosts from the realm can be done via:
+Run this command to apply it on a cluster (for example: Balaton):
+
+```
+$ ansible-playbook --limit Balaton -u root realm_join.yaml
+bind user: administrator
+bind password:
+```
+
+Removing all hosts from the realm can be done via:
 
 ```
 $ ansible-playbook -u root realm_leave.yaml
