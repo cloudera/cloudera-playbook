@@ -243,7 +243,9 @@ For example, you can use the root user:
 $ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" --ask-pass -u root
 ```
 
-Note: If you do not want to use SSH public key authentication, add the --ask-pass parameter each time you run the Ansible command. 
+Note: If you do not want to use SSH public key authentication, add the --ask-pass parameter each time you run the Ansible command.
+
+ 
 **Step 9**: Test remote host connectivity (optional):
 
 ```
