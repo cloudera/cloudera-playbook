@@ -118,7 +118,7 @@ For example ``roles/cdh/templates/hdfs.j2``:
 
 # Dynamic Inventory Script for Cloudera Manager
  
-To make integration easier, Gabor Roczei created a dynamic inventory script that allows Ansible to gather data from Cloudera Manager. Its main advantages are:
+To make integration easier, Gabor Roczei created a dynamic inventory [script](https://github.com/cloudera/cloudera-playbook/blob/master/dynamic_inventory_cm) that allows Ansible to gather data from Cloudera Manager. Its main advantages are:
 
 * Cache management of inventory for better performance
 * Cloudera Manager’s HTTP cookie handling   
