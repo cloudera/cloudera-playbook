@@ -1,5 +1,13 @@
 ---
-- name: Converge
+- name: Pre-reqs
   hosts: all
-  roles:
-    - role: cloudera-playbook
+  tasks:
+    - name: openjdk8
+      package:
+        name: java-1.8.0-openjdk
+  #roles:
+  # - role: cloudera-playbook
+
+- name: Converge
+  # Note: To override the repo's "playbook group_vars" it's easier to use a "vars:" block here, as inventory vars have lower precedence!
+  import_playbook: ../../site.yml

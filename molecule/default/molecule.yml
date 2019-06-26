@@ -5,13 +5,77 @@ driver:
   name: docker
 lint:
   name: yamllint
+# Using geerlingguy's image that provides centos7 with ansible AND systemd
 platforms:
-  - name: instance
-    image: centos:7
+  - name: "${MOLECULE_DISTRO:-centos7}-cdh01.local"
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+    pre_build_image: True
+    privileged: True
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/usr/sbin/init"
+    groups:
+      - cdh_master
+      - cdh
+      # following groups required by the role's site.yml playbook
+      - cdh_servers
+      - db_server
+      - scm_server # group used during 'scm' role
+      - master_servers # group used to install mysql-connector
+    # networks:
+    #   - name: molecule_cdh
+    # network_mode: bridge
+
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      gathering: smart
+      fact_caching: jsonfile
+      fact_caching_connection: /tmp/facts_cache
+    ssh_connection:
+      pipelining: True
+
+  options:
+    diff: true
+    v: True
+  inventory:
+    group_vars:
+      # Note: 'all' inventory group_vars will be overriden by the 'all' playbook group_vars, but not specific groups
+      cdh_servers:
+        # we install our own openjdk-8 (as the role only supports JDK7)
+        cdh_install_java: false
+        # for molecule tests it's enough to use the builtin Mysql
+        cdh_install_mysql: true
+        cdh_install_rngd: false
+        cdh_install_groups_users: false
+        cdh_install_cluster: false
+
+        # Ensure that the master node is the first in the list (not guaranteed in 'groups.kdcs')
+        kerberos_server_kdcs: "{{ groups.cdh_master }}"
+        kerberos_server_kadmin_host: "{{ groups.cdh_master[0] }}"
+        kerberos_server_realm_name: EXAMPLE.COM
+        kerberos_server_domain: "local"
+        # To make molecule tests work, need to disable keberos reverse DNS, because docker builtin DNS is inconsistent
+        # Details: Returned PTR were suffixed with the network name, except for the own host (resolved by /etc/hosts)
+        kerberos_server_rdns: "false"
+
   lint:
     name: ansible-lint
+scenario:
+  name: default
+  test_sequence:
+    # - lint
+    #- destroy
+    - dependency
+    - syntax
+    - create
+    - prepare
+    - converge
+    #- idempotence
+    # - side_effect
+    - verify
+    #- destroy
 verifier:
   name: testinfra
   lint:
