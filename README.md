@@ -118,12 +118,12 @@ For example ``roles/cdh/templates/hdfs.j2``:
 
 # Dynamic Inventory Script for Cloudera Manager
  
-To make integration easier, Gabor Roczei created a dynamic inventory script that allows Ansible to gather data from Cloudera Manager. It's main advantages are:
+To make integration easier, Gabor Roczei created a dynamic inventory script that allows Ansible to gather data from Cloudera Manager. Its main advantages are:
 
 * Cache management of inventory for better performance
 * Cloudera Manager’s HTTP cookie handling   
 * Support for multiple Cloudera Manager instances
-* SSL friendly as the root CA check of Cloudera Manager server can be disabled or enabled
+* SSL-friendly, as the root CA check of the Cloudera Manager server can be disabled or enabled
 
 <p align="center">
 <img alt="High level architecture of Ansible dynamic inventory vs. Cloudera Managers"  width="500" height="413" src="images/figure_1_ansible_inventory-v2.png"><br/>
@@ -148,7 +148,7 @@ $ export CM_TIMEOUT_SEC=60
 $ export CM_DEBUG=False
 ```
 
-Note: We recommend adding these environment variables to the startup file of your shell, for example: $HOME/.bashrc
+Note: We recommend adding these environment variables to the startup file of your shell. For example: $HOME/.bashrc
 
 **Step 2**: Installation of the git package:
 
@@ -185,7 +185,7 @@ host_key_checking = False
 scp_if_ssh = True
 ```
 
-Note: please update the inventory path of the dynamic_inventory_cm if it is necessary
+Note: Update the inventory path of the dynamic_inventory_cm if necessary
 
 **Step 6**: Change the working directory to cloudera-playbook
 
@@ -193,13 +193,13 @@ Note: please update the inventory path of the dynamic_inventory_cm if it is nece
 $ cd cloudera-playbook
 ```
 
-**Step 7**: The available Cloudera Manager clusters (Ansible groups, for example: Cluster_1, Balaton) can be listed with the following command:
+**Step 7**: The available Cloudera Manager clusters (Ansible groups, such as Cluster_1, Balaton) can be listed with the following command:
 
 ```
 $ ./dynamic_inventory_cm --list
 ```
 
-Note: the cache of Cloudera Manager inventory can be refreshed in the following way:
+Note: The cache of the Cloudera Manager inventory can be refreshed with the following command:
 
 ```
 $ ./dynamic_inventory_cm --refresh-cache
@@ -209,67 +209,73 @@ $ ./dynamic_inventory_cm --refresh-cache
 
 The big advantage of this is that with ad-hoc commands, you do not need to enter your password each time you run the command, but only the first time you enter the private key password.
 
-If the ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated using the ssh-keygen command prior to attempting connection to the managed hosts.
+If the ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa files do not exist, they need to be generated with the ssh-keygen command prior to connecting to the managed hosts.
 
-Adding the SSH private key into the SSH authentication agent (use this child shell by each command):
+Launch a subshell with the following command: 
 
 ```
 $ ssh-agent bash
+```
+
+Execute the following commands, through Step 10, in the subshell. 
+
+Add the SSH private key into the SSH authentication agent: 
+
+```
 $ ssh-add ~/.ssh/id_rsa
 ```
 
-Validation:
+Validate:
 
 ```
 $ ssh-add -L
 ```
 
-Uploading the SSH public key (id_rsa.pub) to the managed hosts:
+Upload the SSH public key (id_rsa.pub) to the managed hosts:
 
 ```
 $ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=$USER" --ask-pass -u $USER --become-user $USER
 ```
 
-root user can be used with the following example:
+For example, you can use the root user:
 
 ```
 $ ansible all -m authorized_key -a key="{{ lookup('file', '~/.ssh/id_rsa.pub') }} user=root" --ask-pass -u root
 ```
 
-Note: if you do not want to use the SSH public key authentication, add the --ask-pass parameter each time you run the Ansible command. 
-
+Note: If you do not want to use SSH public key authentication, add the --ask-pass parameter each time you run the Ansible command. 
 **Step 9**: Test remote host connectivity (optional):
 
 ```
 $ ansible all -m ping -u $USER --become-user $USER
 ```
 
-root user can be used with the following example:
+For example, you can execute the command with the root user:
 
 ```
 $ ansible all -m ping -u root
 ```
 
-**Step 10**: Ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. It can be used to troubleshoot slow group resolution issues. 
+**Step 10**: The ad-hoc command feature enables running single and arbitrary Linux commands on all hosts. You can use this to troubleshoot slow group resolution issues. 
 
-Example Ansible ad-hoc commands (Balaton is a group of hosts which is a cluster in Cloudera Manager):
+The following commands are example ad-hoc commands where Balaton is a group of hosts that is a cluster in Cloudera Manager: 
 
 ```
 $ ansible Balaton -u $USER --become-user $USER -m command -o -a "time id -Gn $USER" 
 $ ansible all -u $USER --become-user $USER -m command -o -a "date"
 ```
 
-root user can be used with the following example:
+The following example uses the root user:
 
 ```
 $ ansible Balaton -m command -o -a "time id -Gn testuser" -u root
 $ ansible all -m command -o -a "date" -u root
 ```
 
-For further information about dynamic inventory and ad-hoc commands can be found here:
+Further information about dynamic inventory and ad-hoc commands can be found in the Ansible documentation:
 
 * [Developing Dynamic Inventory](http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
-* [Documentation of Ansible ad-hoc commands](http://docs.ansible.com/ansible/latest/intro_adhoc.html)
+* [Documentation of Ansible Ad-Hoc commands](http://docs.ansible.com/ansible/latest/intro_adhoc.html)
 
 ## SSSD setup with Ansible (applicable for RHEL 7 / CentOS 7) 
 
@@ -281,17 +287,19 @@ ad_domain: "{{ krb5_realm.lower() }}"
 cluster_domain: gce.example.com
 kdc: w2k8-1.ad.sec.example.com
 computer_ou: ou=computer_hosts,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
+ldap_group_search_base: OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
+ldap_user_search_base: DC=ad,DC=sec,DC=example,DC=com?subtree?(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)
 ```
 
 **Step 2**: Enable kerberos on the hosts:
 
-If necessary update this template file:
+If necessary, update this template file (See the Ansible [Templating (Jinja2)](https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html) documentation for more information):
 
 ```
 roles/krb-client/templates/krb5.conf.j2
 ```
 
-and run this command to apply it on the managed hosts:
+Run this command to apply it on the managed hosts:
 
 ```
 $ ansible-playbook -u root enable_kerberos.yaml
@@ -299,7 +307,7 @@ $ ansible-playbook -u root enable_kerberos.yaml
 
 **Step 3**: Join the host(s) to realm:
 
-If necessary update these template files:
+If necessary, update these template files (See the Ansible [Templating (Jinja2)](https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html) documentation for more information):
 
 ```
 roles/realm/join/templates/sssd.conf.j2
@@ -315,7 +323,7 @@ bind user: administrator
 bind password:
 ```
 
-Run this command to apply it on a cluster (for example: Balaton):
+Run this command to apply it on a cluster (for example: Balaton) (See the Ansible [Best Practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html) documentation for more information):
 
 ```
 $ ansible-playbook --limit Balaton -u root realm_join.yaml
@@ -323,10 +331,16 @@ bind user: administrator
 bind password:
 ```
 
-Removing all hosts from the realm can be done via:
+Remove all hosts from the realm with this command: 
 
 ```
 $ ansible-playbook -u root realm_leave.yaml
+```
+
+Remove the Balaton hosts from the realm with this command (See the Ansible [Best Practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html) documentation for more information): 
+
+```
+$ ansible-playbook --limit Balaton -u root realm_leave.yaml
 ```
 
 # How do I contribute code?
