@@ -214,7 +214,8 @@ class ClouderaManagerInventory:
              elif "CERTIFICATE_VERIFY_FAILED" in str(e):
                  sys.stderr.write("URL: " + url + "\n")
                  sys.stderr.write(str(e) + "\n")
-                 sys.stderr.write("\nThe root CA check for Cloudera Manager server(s) can be disabled or enabled with this: export CM_DISABLE_CA_CHECK=True\n")
+                 sys.stderr.write("\nThe root CA check for Cloudera Manager server(s) can be disabled or enabled with this:\n\n")
+                 sys.stderr.write("export CM_DISABLE_CA_CHECK=True\n\n")
                  sys.exit(-1)
              else:
                  sys.stderr.write("URL: " + url + "\n")
@@ -259,7 +260,7 @@ class ClouderaManagerInventory:
            sys.exit(-1)
 
         if username == None:
-           sys.stderr.write("\nCM_USERNAME shell variable has not been set, configure the Cloudera Manager's username\n\n")
+           sys.stderr.write("\nCM_USERNAME shell variable has not been set, configure the Cloudera Manager's username. Example:\n\n")
            sys.stderr.write("export CM_USERNAME=username\n\n")
            sys.exit(-1)
 
