@@ -6,4 +6,7 @@ krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
 cluster_domain: gce.example.com
 kdc: w2k8-1.ad.sec.example.com
-computer_ou: ou=computer_hosts,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
+computer_ou: OU=computer_hosts,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
+ldap_group_search_base: OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
+ldap_user_search_base: DC=ad,DC=sec,DC=example,DC=com?subtree?(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)
+

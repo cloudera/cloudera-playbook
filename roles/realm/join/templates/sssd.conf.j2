@@ -52,12 +52,10 @@ id_provider = ad
 chpass_provider = ad
 auth_provider = ad
 
-access_provider = simple
-
-# Setting this simple_allow_groups limit access to ONLY that group being
-# allowed to log in, use with caution
-
-# simple_allow_groups = hadoop_admin, hadoop_users
+# Setting this ad_access_filter limit access to ONLY that group being 
+# allowed to log in, use with caution 
+access_provider = ad
+# ad_access_filter = (|(memberOf=memberOf=CN=hadoop_admins,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com))
 
 # To override the site autodiscovery, specify the AD site to which you want the 
 # client to connect by using the ad_site option
@@ -70,7 +68,6 @@ ldap_schema = ad
 ldap_user_principal = nosuchattr
 ldap_force_upper_case_realm = true
 ldap_purge_cache_timeout = 0
-ldap_access_order = filter,expire
 ldap_account_expire_policy = ad
 
 # subdomains_provider = none can help to resolve significant delays in case of multiple AD domains
@@ -79,8 +76,8 @@ ldap_account_expire_policy = ad
 
 # If you know that your users and groups will be limited to a specific subsection of the directory, you can limit lookups using the ldap_group_search_base and ldap_user_search_base parameters. This can give significant speedups for large directories.
 
-# ldap_group_search_base = ou=groups,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
-# ldap_user_search_base = ou=users,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
+ldap_group_search_base = {{ ldap_group_search_base }}
+ldap_user_search_base = {{ ldap_user_search_base }}
 
 # Uncomment the following if deploying on Azure, which has no reverse DNS or in any environment which has DNS managed by AD.
 
