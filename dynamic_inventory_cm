@@ -255,12 +255,12 @@ class ClouderaManagerInventory:
 
         if cm_urls == None:
            sys.stderr.write("CM_URL shell variable has not been set, configure the Cloudera Manager's URL. Examples:\n\n")
-           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.cloudera.com:7183\n")
-           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.cloudera.com:7183,http://nightly512-1.vpc.cloudera.com:7180\n\n")
+           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.example.com:7183\n")
+           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.example.com:7183,http://nightly512-1.vpc.example.com:7180\n\n")
            sys.exit(-1)
 
         if username == None:
-           sys.stderr.write("\nCM_USERNAME shell variable has not been set, configure the Cloudera Manager's username. Example:\n\n")
+           sys.stderr.write("CM_USERNAME shell variable has not been set, configure the Cloudera Manager's username. Example:\n\n")
            sys.stderr.write("export CM_USERNAME=username\n\n")
            sys.exit(-1)
 
