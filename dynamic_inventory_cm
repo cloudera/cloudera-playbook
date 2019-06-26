@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Author: Gabor Roczei <roczei@cloudera.com>
+Created by Gabor Roczei <roczei@cloudera.com>
 
 =============================================================================
 Ansible Dynamic Inventory Script for Cloudera Manager
