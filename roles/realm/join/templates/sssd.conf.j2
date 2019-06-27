@@ -35,7 +35,7 @@ ldap_id_mapping = true
 
 # When override_gid is enabled, the primary group of all the users in the domain is set to the value of override_gid. You must change the override_gid default value. 
 
-# override_gid = 999999
+override_gid = {{ override_gid }}
 
 # The auto_private_groups option was added in SSSD 1.16.1. If this option is set to true, each user’s GID will be changed to match their UID. Do not enable override_gid and auto_private_groups at the same time.  
 
@@ -55,7 +55,7 @@ auth_provider = ad
 
 access_provider = ad
 
-# ad_access_filter = (|(memberOf=memberOf=CN=hadoop_admins,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com))
+# ad_access_filter = (|(memberOf=CN=hadoop_admins,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com))
 
 # If you do not want to use Active Directory Site autodiscovery, use the ad_site option to specify the Active Directory that you want the client to connect to.
 
