@@ -217,7 +217,7 @@ Launch a subshell with the following command:
 $ ssh-agent bash
 ```
 
-Execute the following commands, through Step 10, in the subshell. 
+You will execute the rest of the commands in this How-To article in the subshell. 
 
 Add the SSH private key into the SSH authentication agent: 
 
