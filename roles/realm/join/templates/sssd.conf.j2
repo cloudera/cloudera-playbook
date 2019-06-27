@@ -31,6 +31,8 @@ ad_enable_gc = false
 cache_credentials = true
 ldap_id_mapping = true
 
+# The domain users group is usually the primary group ID. If you correctly override it with override_gid, it should not appear unless you have specifically added the users to that group. If your group filter is correct, it does not search the organization unit where domain users exist and it will be filtered out.
+
 # When override_gid is enabled, the primary group of all the users in the domain is set to the value of override_gid. You must change the override_gid default value. 
 
 # override_gid = 999999
