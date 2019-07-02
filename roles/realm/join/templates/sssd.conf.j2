@@ -57,7 +57,7 @@ access_provider = ad
 
 # ad_access_filter = (|(memberOf=CN=hadoop_admins,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com))
 
-# Cloudera recommends to have ad_site specified. It gives you the benefit of discovering all valid AD servers for the given site, updates server list automatically when the ad servers change, do not have to hardcode the servers with ad_server and limits the servers used to those of a particular site which is reachable. Update the default value of ad_site if necessary.
+# Cloudera recommends to have ad_site specified. It gives you the benefit of discovering all valid AD servers for the given site, updates server list automatically when the AD servers change, do not have to hardcode the servers with ad_server and limits the servers used to those of a particular site which is reachable. Update the default value of ad_site if necessary.
  
 ad_site = {{ ad_site }} 
 
