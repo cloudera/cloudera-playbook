@@ -1,5 +1,5 @@
 ---
-  - name: install packages
+  - name: Install packages
     yum:
        name:
          - adcli
@@ -12,16 +12,16 @@
          - python-pip
        state: present
       
-  - name: restarting messagebus otherwise realmd won't start
+  - name: Restart the messagebus service, otherwise the realmd service will not start
     command: systemctl restart messagebus
 
   - name: pexpect is required to handle pwd prompt
     pip: name=pexpect
 
-  - name: copy realmd.conf
+  - name: Copy realmd.conf
     template: src=realmd.conf.j2 dest=/etc/realmd.conf mode=0644 owner=root group=root backup=yes force=yes
 
-  - name: restart realmd
+  - name: Restart the realmd service
     command: systemctl restart realmd
 
   - name: Join using realmd
@@ -30,14 +30,14 @@
       responses:
         Password for .*: "{{ bind_password }}"
 
-  - name: copy sssd.conf
+  - name: Copy sssd.conf
     template: src=sssd.conf.j2 dest=/etc/sssd/sssd.conf mode=0600 owner=root group=root backup=yes force=yes
 
-  - name: restart sssd
+  - name: Restart the sssd service
     command: systemctl restart sssd
 
-  - name: copy nscd.conf
+  - name: Copy nscd.conf
     template: src=nscd.conf.j2 dest=/etc/nscd.conf mode=0644 owner=root group=root backup=yes force=yes
 
-  - name: restart nscd
+  - name: Restart the nscd service
     command: systemctl restart nscd
