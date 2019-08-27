@@ -5,4 +5,6 @@
 .DS_Store
 site.retry
 enable_kerberos.retry
+realm_join.retry
+realm_leave.retry
 action_plugins/*.pyc
