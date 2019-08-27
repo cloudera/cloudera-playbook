@@ -21,12 +21,9 @@
 - debug: msg="Cluster '{{ cluster_display_name }}' exists - {{ cluster_exists }}"
 
 # https://www.cloudera.com/documentation/enterprise/latest/topics/install_cluster_template.html
-- name: Prepare cluster template
-  template:
-    src: "base.j2"
-    dest: "{{ tmp_dir }}/cluster.json"
+- set_fact:
+    cluster_template_json: "{{ lookup('template', 'base.j2', convert_data=False) }}"
   when: cluster_exists == False
-  delegate_to: localhost
 
 # https://cloudera.github.io/cm_api/apidocs/v13/path__cm_importClusterTemplate.html
 - name: Import cluster template
@@ -34,7 +31,7 @@
     url: "{{ cm_api_url }}/cm/importClusterTemplate?addRepositories=true"
     method: POST
     body_format: json
-    body: "{{ lookup('file', ''+ tmp_dir + '/cluster.json') }}"
+    body: "{{ cluster_template_json|to_json }}"
     status_code: 200
     force_basic_auth: yes
     user: "{{ scm_default_user }}"
@@ -42,9 +39,10 @@
     return_content: yes
   register: template_resp
   when: cluster_exists == False
-  delegate_to: localhost
 
-- debug: var=template_resp
+- debug: 
+    var: template_resp
+    verbosity: 1
   when: cluster_exists == False
 
 - set_fact: command_id="{{ template_resp.json.id }}"
@@ -55,8 +53,3 @@
 
 - debug: msg="Login to Cloudera Manager to monitor import progress - http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/cmf/commands/commands"
   when: cluster_exists == False
-
-- file:
-    path: "{{ tmp_dir }}/cluster.json"
-    state: absent
-  delegate_to: localhost
