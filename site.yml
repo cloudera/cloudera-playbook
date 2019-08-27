@@ -26,7 +26,7 @@
   tags: mysql
 
 - name: Install MySQL Connector
-  hosts: utility_servers:master_servers
+  hosts: cdh_servers
   roles:
     - mysql_connector
   tags: mysql
