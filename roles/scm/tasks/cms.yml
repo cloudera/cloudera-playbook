@@ -31,7 +31,7 @@
     - "'CMS instance already exists' not in cms_resp.content"
   delegate_to: localhost
 
-- debug: 
+- debug:
     var: cms_resp
     verbosity: 1
 
@@ -48,6 +48,6 @@
   register: start_resp
   failed_when: "'startTime' not in start_resp.content"
 
-- debug: 
+- debug:
     var: start_resp
     verbosity: 1

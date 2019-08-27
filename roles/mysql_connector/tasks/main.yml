@@ -1,4 +1,6 @@
 ---
 
 - name: Install MySQL JDBC Connector
-  yum: name=mysql-connector-java state=installed
+  yum:
+    name: mysql-connector-java
+    state: installed

@@ -1,20 +1,24 @@
 ---
 
 - name: Install Oracle JDK
-  yum: name={{ item }} state=latest update_cache=yes
-  with_items:
+  yum:
+    name:
     - oracle-j2sdk1.7
     - unzip
+    state: installed
+    update_cache: yes
 
-- stat: path="{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
+- stat:
+    path: "{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
   register: jce_zip_exists
 
 - name: Download JCE unlimited policy
   get_url:
-    url=http://download.oracle.com/otn-pub/java/jce/7/UnlimitedJCEPolicyJDK7.zip
-    dest="{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
-    headers="Cookie:oraclelicense=accept-securebackup-cookie"
-  when: jce_zip_exists.stat.exists == False
+    url: "http://download.oracle.com/otn-pub/java/jce/7/UnlimitedJCEPolicyJDK7.zip"
+    dest: "{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
+    headers:
+      Cookie: oraclelicense=accept-securebackup-cookie
+  when: not jce_zip_exists.stat.exists
 
 - name: Unzip JCE unlimited policy files
   unarchive:
@@ -38,8 +42,8 @@
 
 - name: Cleanup tmp files
   file:
-    path="{{ tmp_dir }}/{{ item }}"
-    state=absent
+    path: "{{ tmp_dir }}/{{ item }}"
+    state: absent
   with_items:
     - UnlimitedJCEPolicy
     - UnlimitedJCEPolicyJDK7.zip

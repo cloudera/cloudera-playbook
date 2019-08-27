@@ -16,7 +16,7 @@
     return_content: yes
   register: scm_resp
 
-- debug: 
+- debug:
     var: scm_resp
     verbosity: 1
 

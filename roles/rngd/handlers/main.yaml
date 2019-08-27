@@ -1,5 +1,7 @@
 ---
-# Handlers for engd.
+# Handlers for rngd.
 
 - name: restart rngd
-  service: name=rngd state=restarted
+  service:
+    name: rngd
+    state: restarted

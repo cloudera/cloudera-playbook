@@ -1,35 +1,50 @@
 ---
 
 - name: Install KRB5 workstation
-  yum: name=krb5-workstation state=latest
+  yum:
+    name: krb5-workstation
+    state: installed
   delegate_to: "{{ item }}"
   with_items: "{{ groups['cdh_servers'] }}"
 
 - name: Set krb5.conf
-  template: src=krb5.conf.j2 dest=/etc/krb5.conf backup=yes
+  template:
+    src: krb5.conf.j2
+    dest: /etc/krb5.conf
+    backup: yes
   delegate_to: "{{ item }}"
   with_items: "{{ groups['cdh_servers'] }}"
 
 - name: Install KRB5 server
-  yum: name={{ item }} state=latest
-  with_items:
+  yum:
+    name:
     - krb5-libs
     - krb5-server
+    state: installed
 
 - name: Set kdc.conf
-  template: src=kdc.conf.j2 dest=/var/kerberos/krb5kdc/kdc.conf backup=yes
+  template:
+    src: kdc.conf.j2
+    dest: /var/kerberos/krb5kdc/kdc.conf
+    backup: yes
 
 - name: Create KDC database
   command: /usr/sbin/kdb5_util create -s -P {{ krb5_kdc_master_passwd }} creates=/var/kerberos/krb5kdc/principal
 
 - name: Set kadm5.acl
-  template: src=kadm5.acl.j2 dest=/var/kerberos/krb5kdc/kadm5.acl backup=yes
+  template:
+    src: kadm5.acl.j2
+    dest: /var/kerberos/krb5kdc/kadm5.acl
+    backup: yes
 
-- name: Create Cloudera Manager admin princ
+- name: Create Cloudera Manager admin principal
   command: /usr/sbin/kadmin.local -q "addprinc -pw {{ krb5_kdc_admin_passwd }} {{ krb5_kdc_admin_user }}"
 
 - name: Start Kerberos
-  service: name={{ item }} state=restarted enabled=yes
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
   with_items:
     - krb5kdc
     - kadmin
