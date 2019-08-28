@@ -1,13 +1,11 @@
 ---
 
-scm_version: 5.16.2
 scm_port: 7180
 scm_default_user: admin
 scm_default_pass: admin
 
 scm_repositories:
-  - https://archive.cloudera.com/cdh5/parcels/5.16.2/
-  - https://archive.cloudera.com/cdh5/parcels/{latest_supported}/
+  - https://archive.cloudera.com/cdh5/parcels/{{cluster_version_cdh}}/
 
 scm_products:
   - product: CDH
