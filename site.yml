@@ -23,13 +23,17 @@
   hosts: db_server
   roles:
     - mariadb
-  tags: mysql
+  tags:
+    - mysql
+    - mysql_server
 
 - name: Install MySQL Connector
   hosts: cdh_servers
   roles:
     - mysql_connector
-  tags: mysql
+  tags:
+    - mysql
+    - mysql_client
 
 - name: Install MIT KDC Server
   hosts: krb5_server
