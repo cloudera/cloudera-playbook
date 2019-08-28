@@ -3,11 +3,12 @@
 - include_vars: ../../../group_vars/db_server.yml
 
 - name: Install the Cloudera Manager Server Packages
-  yum: name={{ item }} state=installed
-  with_items:
+  yum:
+    name:
     - cloudera-manager-daemons
     - cloudera-manager-server
     - cloudera-manager-agent
+    state: installed
 
 - name: Prepare Cloudera Manager Server External Database
   command: /usr/share/cmf/schema/scm_prepare_database.sh
@@ -17,7 +18,10 @@
   changed_when: False
 
 - name: Start the Cloudera Manager Server
-  service: name={{ item }} state=restarted enabled=yes
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
   notify:
     - wait cloudera-scm-server
   with_items:
@@ -39,8 +43,12 @@
   register: result
 
 # Set base CM API URL
-- set_fact: cm_api_url="http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/api/{{ result.content }}"
-- debug: var=cm_api_url
+- set_fact:
+    cm_api_url: "http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/api/{{ result.content }}"
+
+- debug:
+    var: cm_api_url
+    verbosity: 1
 
 # Install Cloudera Manager Python API
 - include: api.yml
@@ -50,11 +58,19 @@
   action: scm_hosts
   register: scm_hosts_result
 
-- set_fact: scm_host_ids="{{ scm_hosts_result.host_ids }}"
-- debug: var=scm_host_ids
+- set_fact:
+    scm_host_ids: "{{ scm_hosts_result.host_ids }}"
 
-- set_fact: scm_host_names="{{ scm_hosts_result.host_names }}"
-- debug: var=scm_host_names
+- debug:
+    var: scm_host_ids
+    verbosity: 1
+
+- set_fact:
+    scm_host_names: "{{ scm_hosts_result.host_names }}"
+
+- debug:
+    var: scm_host_names
+    verbosity: 1
 
 - include: license.yml
 - include: scm.yml

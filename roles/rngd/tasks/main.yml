@@ -1,12 +1,20 @@
 ---
 
 - name: ensure rng-tools is installed
-  yum: name=rng-tools state=latest update_cache=yes
+  yum:
+    name: rng-tools
+    state: installed
+    update_cache: yes
 
 - name: Create rngd configuration file
-  template: src=rngd.service.j2 dest=/etc/systemd/system/rngd.service
+  template:
+    src: rngd.service.j2
+    dest: /etc/systemd/system/rngd.service
   notify:
     - restart rngd
 
 - name: ensure rngd is running
-  service: name=rngd state=started enabled=yes
+  service:
+    name: rngd
+    state: started
+    enabled: yes

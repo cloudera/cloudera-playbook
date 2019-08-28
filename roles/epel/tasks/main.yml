@@ -1,9 +1,12 @@
 ---
 
 - name: Add EPEL GPG key
-  rpm_key: key=http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 state=present
+  rpm_key:
+    key: http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+    state: present
 
-- stat: path=/etc/yum.repos.d/epel.repo
+- stat:
+    path: /etc/yum.repos.d/epel.repo
   register: epel_exists
 
 - name: Add EPEL yum repository
@@ -11,8 +14,7 @@
     name: epel
     description: Extra Packages for Enterprise Linux $releasever
     mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
-    # baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
     failovermethod: priority
     gpgcheck: yes
     enabled: yes
-  when: epel_exists.stat.exists == False
+  when: not epel_exists.stat.exists
