@@ -7,6 +7,9 @@ cdh_version: 5.16.2
 cluster_display_name: cluster_1
 
 cdh_services:
+
+  - type: hbase
+
   - type: hdfs
     dfs_data_dir_list: /dfs/dn
     fs_checkpoint_dir_list: /dfs/snn
