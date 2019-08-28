@@ -17,6 +17,7 @@ ad_site: Default-First-Site-Name
 ## 
 cluster_version_cdh: 5.16.2
 cluster_version_cm:  5.16.2
+cluster_version_cds: 2.4.0.cloudera2
 
 ##
 ## Java installation options

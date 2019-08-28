@@ -17,6 +17,20 @@
              {{ database_type }} {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
   changed_when: False
 
+- name: Create CSD directory
+  file:
+    path: /opt/cloudera/csd
+    state: directory
+    owner: cloudera-scm
+    group: cloudera-scm
+    mode: 0755
+
+- name: Download Spark 2 CSD
+  get_url:
+    url: "https://archive.cloudera.com/spark2/csd/SPARK2_ON_YARN-{{ cluster_version_cds }}.jar"
+    dest: /opt/cloudera/csd
+    mode: 0644
+
 - name: Start the Cloudera Manager Server
   service:
     name: "{{ item }}"

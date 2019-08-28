@@ -28,6 +28,8 @@ cdh_services:
 
   - type: spark
 
+  - type: spark2
+
   - type: yarn
     yarn_nodemanager_local_dirs: /tmp/nm
     yarn_nodemanager_log_dirs: /var/log/nm
