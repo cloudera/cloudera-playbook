@@ -1,50 +1,88 @@
 ---
 
-- name: Install Oracle JDK
-  yum:
+- name: Copy Java RPM file to temp directory
+  copy: 
+    src: "{{ java_rpm_location }}"
+    dest: "{{ tmp_dir }}/jdk.rpm"
+    remote_src: "{{ java_rpm_remote_src }}"
+  when: java_installation_strategy == 'rpm'
+
+- name: Install Java from RPM
+  package:
     name:
-    - oracle-j2sdk1.7
-    - unzip
+    - "{{ tmp_dir }}/jdk.rpm"
+    state: installed
+  when: java_installation_strategy == 'rpm'
+
+- name: Install Java from package repository
+  package:
+    name:
+    - "{{ java_package }}"
     state: installed
     update_cache: yes
+  when: java_installation_strategy == 'package'
 
-- stat:
-    path: "{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
-  register: jce_zip_exists
+- name: Add missing symlinks (if installed from Cloudera repo)
+  block:
+    - name: Find Java home directory
+      find:
+        paths: /usr/java
+        patterns: 'jdk*-cloudera'
+        file_type: directory
+        recurse: no
+      register: cloudera_jdk_home
+    - name: Create alternatives symlink for java
+      alternatives:
+        name: java 
+        link: /usr/bin/java
+        path: "{{ cloudera_jdk_home.files[0].path}}/bin/java"
+      when: cloudera_jdk_home.matched
+    - name: Create default symlink for Java home directory
+      file:
+        src: "{{ cloudera_jdk_home.files[0].path}}" 
+        dest: /usr/java/default
+        state: link
+      when: cloudera_jdk_home.matched
+  when: java_installation_strategy != 'none'
 
-- name: Download JCE unlimited policy
-  get_url:
-    url: "http://download.oracle.com/otn-pub/java/jce/7/UnlimitedJCEPolicyJDK7.zip"
-    dest: "{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
-    headers:
-      Cookie: oraclelicense=accept-securebackup-cookie
-  when: not jce_zip_exists.stat.exists
+- name: Capture installed Java provider
+  raw: /usr/bin/java -version 2>&1 | egrep -o 'Java\(TM\)|OpenJDK' | sed 's/Java(TM)/Oracle/' | tr '[A-Z]' '[a-z]' | head -1
+  register: provider
+  when: java_installation_strategy != 'none'
 
-- name: Unzip JCE unlimited policy files
-  unarchive:
-    src: "{{ tmp_dir }}/UnlimitedJCEPolicyJDK7.zip"
-    dest: "{{ tmp_dir }}"
-    copy: no
+- name: Capture installed Java version
+  raw: /usr/bin/java -version 2>&1 | grep version | tr -d '"' | tr "_" " " | awk '{print $3"\n"$4}'
+  register: version
+  when: java_installation_strategy != 'none'
 
-- name: Install local_policy.jar
-  copy:
-    src: "{{ tmp_dir }}/UnlimitedJCEPolicy/local_policy.jar"
-    dest: /usr/java/jdk1.7.0_67-cloudera/jre/lib/security/local_policy.jar
-    backup: yes
-    remote_src: True
+- set_fact:
+    installed_jdk_provider: "{{ provider.stdout_lines[0] }}" 
+    installed_jdk_version: "{{ version.stdout_lines[0] }}"
+    installed_jdk_update: "{{ version.stdout_lines[1] }}"
+  when: java_installation_strategy != 'none'
 
-- name: Install US_export_policy.jar
-  copy:
-    src: "{{ tmp_dir }}/UnlimitedJCEPolicy/US_export_policy.jar"
-    dest: /usr/java/jdk1.7.0_67-cloudera/jre/lib/security/US_export_policy.jar
-    backup: yes
-    remote_src: True
+- name: Enable Unlimited Strength Policy (Oracle JDK7)
+  include_tasks: install_jce_from_zip.yml
+  vars: 
+    java_home: /usr/java/default
+    unarchived_directory: UnlimitedJCEPolicy
+  when: java_installation_strategy != 'none' and installed_jdk_provider == 'oracle' and installed_jdk_version == '1.7.0'
 
-- name: Cleanup tmp files
-  file:
-    path: "{{ tmp_dir }}/{{ item }}"
-    state: absent
-  with_items:
-    - UnlimitedJCEPolicy
-    - UnlimitedJCEPolicyJDK7.zip
-  ignore_errors: True
+- name: Enable Unlimited Strength Policy (Oracle JDK8 before u151)
+  include_tasks: install_jce_from_zip.yml
+  vars: 
+    java_home: /usr/java/default
+    unarchived_directory: UnlimitedJCEPolicyJDK8
+  when: java_installation_strategy != 'none' and installed_jdk_provider == 'oracle' and installed_jdk_version == '1.8.0' and installed_jdk_update|int < 151
+
+- name: Enable Unlimited Strength Policy (Oracle JDK8 after u151)
+  include_tasks: install_jce_from_config.yml
+  vars: 
+    java_home: /usr/java/default
+  when: java_installation_strategy != 'none' and installed_jdk_provider == 'oracle' and installed_jdk_version == '1.8.0' and installed_jdk_update|int >= 151
+
+- name: Enable Unlimited Strength Policy (OpenJDK)
+  include_tasks: install_jce_from_config.yml
+  vars: 
+    java_home: /usr/lib/jvm
+  when: java_installation_strategy != 'none' and installed_jdk_provider == 'openjdk'
