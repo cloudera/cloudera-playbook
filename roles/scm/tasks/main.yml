@@ -25,11 +25,12 @@
     group: cloudera-scm
     mode: 0755
 
-- name: Download Spark 2 CSD
+- name: Download CSDs
   get_url:
-    url: "https://archive.cloudera.com/spark2/csd/SPARK2_ON_YARN-{{ cluster_version_cds }}.jar"
+    url: "{{ item }}"
     dest: /opt/cloudera/csd
     mode: 0644
+  with_items: "{{ scm_csds }}"
 
 - name: Start the Cloudera Manager Server
   service:
