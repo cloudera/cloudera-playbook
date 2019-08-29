@@ -1,0 +1,6 @@
+---
+
+- lineinfile:
+    path: "{{ java_home }}/jre/lib/security/java.security"
+    regexp: '#?crypto.policy='
+    line: crypto.policy=unlimited
