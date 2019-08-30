@@ -1,7 +1,6 @@
 ---
 
 - include_vars: ../../../group_vars/cdh_servers.yml
-- include_vars: ../../../group_vars/scm_server.yml
 - include_vars: ../../../group_vars/db_server.yml
 
 # Check whether cluster already exists
@@ -32,7 +31,7 @@
     return_content: yes
   register: manifests
   with_items: 
-    - "{{ scm_repositories }}"
+    - "{{ scm_parcel_repositories }}"
 
 - set_fact:
     scm_products: "{{ manifests.results | map(attribute='json') | list | json_query('[*].parcels[0].parcelName') | map('regex_replace', '-[a-z0-9]+.parcel$','') | list }}"
@@ -71,11 +70,37 @@
   when: not cluster_exists
 
 - debug:
-    msg: "Import cluster template command ID - {{ command_id }}"
+    msg: "Login to Cloudera Manager to monitor import progress - http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/cmf/command/{{ command_id }}/details"
     verbosity: 1
   when: not cluster_exists
 
+- name: Wait for import cluster template command to complete
+  uri: 
+    url: "{{ cm_api_url }}/commands/{{ command_id }}"
+    body_format: json
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  register: result
+  until: not result.json.active
+  retries: 10
+  delay: 60
+  when: not cluster_exists
+
 - debug:
-    msg: "Login to Cloudera Manager to monitor import progress - http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/cmf/commands/commands"
-    verbosity: 1
+    var: result
+  when: not cluster_exists
+
+- name: Restart Cloudera Management Service
+  uri:
+    url: "{{ cm_api_url }}/cm/service/commands/restart"
+    method: POST
+    status_code: 200
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  register: start_resp
+  failed_when: "'startTime' not in start_resp.content"
   when: not cluster_exists

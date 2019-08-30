@@ -22,7 +22,7 @@
     {
       "name" : "REMOTE_PARCEL_REPO_URLS",
       "value" : {% set repo_j = joiner(",") %}
-      "{% for repo in scm_repositories %}{{ repo_j() }}{{ repo }}{% endfor %}"
+      "{% for repo in scm_parcel_repositories %}{{ repo_j() }}{{ repo }}{% endfor %}"
     }
   ]
 }

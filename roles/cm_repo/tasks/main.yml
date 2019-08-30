@@ -4,8 +4,8 @@
   yum_repository:
     name: cloudera-manager
     description: Cloudera Manager
-    baseurl: "{{ cloudera_repository_baseurl }}"
-    gpgkey: "{{ cloudera_repository_gpgkey }}"
+    baseurl: "{{ scm_repo_url }}"
+    gpgkey: "{{ scm_repo_gpgkey }}"
     gpgcheck: yes
     enabled: yes
   when: 
