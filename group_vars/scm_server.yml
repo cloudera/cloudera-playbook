@@ -5,7 +5,7 @@ scm_default_user: admin
 scm_default_pass: admin
 
 scm_repositories:
-  - https://archive.cloudera.com/cdh5/parcels/{{cluster_version_cdh}}/
+  - "{{ scm_parcel_repository }}"
   - https://archive.cloudera.com/spark2/parcels/{{cluster_version_cds}}/
 
 #FIXME duplicated version numbers -- auto-detect product version strings

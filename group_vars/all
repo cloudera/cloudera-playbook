@@ -29,4 +29,26 @@ java_rpm_remote_src: no
 java_jce_location: /tmp/jce_policy-8.zip
 java_jce_remote_src: no
 
+# Only the latest CDH minor version is available in the official repo
+#cdh_version: 5.8.3
+#cdh_version: 5.16.1
+cdh_version: 6.2.0
+cdh_major_version: "{{ cdh_version.split('.')[0] }}"
+scm_version: "{{ cdh_version }}"
+
+cloudera_mirror: https://archive.cloudera.com
+configs_by_version:
+  "5":
+    repo_url: "{{ cloudera_mirror }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/5/"
+    scm_parcel_repository: "{{ cloudera_mirror }}/cdh5/parcels/{{ cdh_version }}"
+    scm_prepare_database_script_path: "/usr/share/cmf/schema/scm_prepare_database.sh"
+  "6":
+    repo_url: "{{ cloudera_mirror }}/cm6/{{ cdh_version }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_parcel_repository: "{{ cloudera_mirror }}/cdh6/{{ cdh_version }}/parcels"
+    scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
+
+cloudera_repository_baseurl:        "{{ configs_by_version[cdh_major_version].repo_url }}"
+cloudera_repository_gpgkey:         "{{ configs_by_version[cdh_major_version].repo_url }}/RPM-GPG-KEY-cloudera"
+scm_prepare_database_script_path:   "{{ configs_by_version[cdh_major_version].scm_prepare_database_script_path }}"
+scm_parcel_repository:              "{{ configs_by_version[cdh_major_version].scm_parcel_repository }}"
 
