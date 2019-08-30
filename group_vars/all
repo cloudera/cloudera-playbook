@@ -12,6 +12,13 @@ ldap_user_search_base: DC=ad,DC=sec,DC=example,DC=com?subtree?(memberOf=CN=hadoo
 override_gid: 999999
 ad_site: Default-First-Site-Name
 
+## 
+## Cluster software versions
+## 
+cluster_version_cdh: 5.16.2
+cluster_version_cm:  5.16.2
+cluster_version_cds: 2.4.0.cloudera2
+
 ##
 ## Java installation options
 ##
@@ -21,3 +28,5 @@ java_rpm_location: /tmp/jdk-8u181-linux-x64.rpm
 java_rpm_remote_src: no
 java_jce_location: /tmp/jce_policy-8.zip
 java_jce_remote_src: no
+
+

@@ -13,7 +13,10 @@ db_server
 krb5_server
 
 [gateway_servers]
-<host>        host_template=HostTemplate-Gateway role_ref_names=HDFS-HTTPFS-1
+<host>        host_template=HostTemplate-Gateway
+
+[edge_servers]
+<host>        host_template=HostTemplate-Edge    role_ref_names=HDFS-HTTPFS-1
 
 [master_servers]
 <host>        host_template=HostTemplate-Master1

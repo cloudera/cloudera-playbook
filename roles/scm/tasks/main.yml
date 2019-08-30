@@ -17,6 +17,21 @@
              {{ database_type }} {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
   changed_when: False
 
+- name: Create CSD directory
+  file:
+    path: /opt/cloudera/csd
+    state: directory
+    owner: cloudera-scm
+    group: cloudera-scm
+    mode: 0755
+
+- name: Download CSDs
+  get_url:
+    url: "{{ item }}"
+    dest: /opt/cloudera/csd
+    mode: 0644
+  with_items: "{{ scm_csds }}"
+
 - name: Start the Cloudera Manager Server
   service:
     name: "{{ item }}"
