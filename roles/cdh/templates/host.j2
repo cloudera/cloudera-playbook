@@ -56,7 +56,9 @@
     "IMPALA-1-CATALOGSERVER-BASE",
     "IMPALA-1-STATESTORE-BASE",
     "SPARK_ON_YARN-1-SPARK_YARN_HISTORY_SERVER-BASE",
+    {% if cluster_version_cdh_major < 6 %}
     "SPARK2_ON_YARN-1-SPARK2_YARN_HISTORY_SERVER-BASE",
+    {% endif %}
     "YARN-1-JOBHISTORY-BASE",
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
@@ -68,6 +70,8 @@
     "HIVE-1-GATEWAY-BASE",
     "IMPALA-1-IMPALAD-BASE",
     "SPARK_ON_YARN-1-GATEWAY-BASE",
+    {% if cluster_version_cdh_major < 6 %}
     "SPARK2_ON_YARN-1-GATEWAY-BASE",
+    {% endif %}
     "YARN-1-NODEMANAGER-BASE" ]
 } ]

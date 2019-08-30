@@ -4,8 +4,10 @@
   yum_repository:
     name: cloudera-manager
     description: Cloudera Manager
-    baseurl: http://archive.cloudera.com/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/
-    gpgkey: http://archive.cloudera.com/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/RPM-GPG-KEY-cloudera
+    baseurl: "{{ scm_repo_url }}"
+    gpgkey: "{{ scm_repo_gpgkey }}"
     gpgcheck: yes
     enabled: yes
-  when: (ansible_distribution|lower == "redhat") or (ansible_distribution|lower == "centos")
+  when: 
+  - ansible_os_family|lower == "redhat"
+  

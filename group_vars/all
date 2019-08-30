@@ -12,21 +12,58 @@ ldap_user_search_base: DC=ad,DC=sec,DC=example,DC=com?subtree?(memberOf=CN=hadoo
 override_gid: 999999
 ad_site: Default-First-Site-Name
 
-## 
-## Cluster software versions
-## 
-cluster_version_cdh: 5.16.2
-cluster_version_cm:  5.16.2
+## ------------------------------------------------------------------------------------------------------------
+## Cluster software installation options
+## ------------------------------------------------------------------------------------------------------------
+
+# Version of CDH to install
+cluster_version_cdh: 6.3.0
+
+# Version of Cloudera Manager to install
+cluster_version_cm:  "{{ cluster_version_cdh }}"
+
+# Version of CDS Powered by Apache Spark (note: not installed if CDH6 is also selected)
 cluster_version_cds: 2.4.0.cloudera2
 
-##
+# Helper variables for major and minor versions
+cluster_version_cdh_major: "{{ cluster_version_cdh.split('.')[0] }}"
+cluster_version_cdh_minor: "{{ cluster_version_cdh.split('.')[1] }}"
+cluster_version_cm_major: "{{ cluster_version_cm.split('.')[0] }}"
+cluster_version_cm_minor: "{{ cluster_version_cm.split('.')[1] }}"
+
+cloudera_archive: https://archive.cloudera.com
+
+configs_by_version:
+  "5":
+    scm_repo_url: "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/"
+    scm_parcel_repositories: 
+      - "{{ cloudera_archive }}/cdh5/parcels/{{ cluster_version_cdh }}/"
+      - "{{ cloudera_archive }}/spark2/parcels/{{ cluster_version_cds }}/"
+    scm_csds:
+      - "{{ cloudera_archive }}/spark2/csd/SPARK2_ON_YARN-{{cluster_version_cds}}.jar"
+    scm_prepare_database_script_path: "/usr/share/cmf/schema/scm_prepare_database.sh"
+  "6":
+    scm_repo_url: "{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_parcel_repositories: 
+      - "{{ cloudera_archive }}/cdh6/{{ cluster_version_cdh }}/parcels"
+    scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
+
+scm_default_user: admin
+scm_default_pass: admin
+scm_port: 7180
+scm_parcel_repositories:            "{{ configs_by_version[cluster_version_cdh_major].scm_parcel_repositories }}"
+scm_prepare_database_script_path:   "{{ configs_by_version[cluster_version_cm_major].scm_prepare_database_script_path }}"
+scm_repo_url:                       "{{ configs_by_version[cluster_version_cm_major].scm_repo_url }}"
+scm_repo_gpgkey:                    "{{ scm_repo_url }}/RPM-GPG-KEY-cloudera"
+
+## ------------------------------------------------------------------------------------------------------------
 ## Java installation options
-##
+## ------------------------------------------------------------------------------------------------------------
+
 java_installation_strategy: package       # can be set to 'none', 'package' or 'rpm'
+
 java_package: java-1.8.0-openjdk
 java_rpm_location: /tmp/jdk-8u181-linux-x64.rpm
 java_rpm_remote_src: no
 java_jce_location: /tmp/jce_policy-8.zip
 java_jce_remote_src: no
-
-

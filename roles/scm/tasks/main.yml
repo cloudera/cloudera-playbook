@@ -11,10 +11,10 @@
     state: installed
 
 - name: Prepare Cloudera Manager Server External Database
-  command: /usr/share/cmf/schema/scm_prepare_database.sh
-             -f
-             --host {{ hostvars[db_hostname]['inventory_hostname'] }}
-             {{ database_type }} {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
+  command: |
+    {{ scm_prepare_database_script_path }}  -f
+    --host {{ hostvars[db_hostname]['inventory_hostname'] }}
+    {{ database_type }} {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
   changed_when: False
 
 - name: Create CSD directory
@@ -31,6 +31,7 @@
     dest: /opt/cloudera/csd
     mode: 0644
   with_items: "{{ scm_csds }}"
+  when: scm_csds is defined
 
 - name: Start the Cloudera Manager Server
   service:

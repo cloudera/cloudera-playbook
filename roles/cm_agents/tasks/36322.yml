@@ -131,6 +131,7 @@
     home: /var/lib/sqoop2
     shell: /sbin/nologin
     system: yes
+  when: cluster_version_cdh_major == 5
 
 - name: Create user 'yarn'
   user:
