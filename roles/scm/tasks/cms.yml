@@ -3,7 +3,8 @@
 # Wait for agents to send heartbeats in case SCM has just been restarted
 # Adding CMS will fail if host details haven't been reported in
 - name: Wait for agent heartbeats
-  pause: seconds=30
+  pause:
+    seconds: 30
 
 # Prepare CMS template
 - name: Prepare CMS template
@@ -30,7 +31,9 @@
     - "'CMS instance already exists' not in cms_resp.content"
   delegate_to: localhost
 
-- debug: var=cms_resp
+- debug:
+    var: cms_resp
+    verbosity: 1
 
 # https://cloudera.github.io/cm_api/apidocs/v12/path__cm_service_commands_start.html
 - name: Start Cloudera Management Services (CMS)
@@ -45,9 +48,6 @@
   register: start_resp
   failed_when: "'startTime' not in start_resp.content"
 
-- debug: var=start_resp
-
-- file:
-    path: "{{ tmp_dir }}/cms_base.json"
-    state: absent
-  delegate_to: localhost
+- debug:
+    var: start_resp
+    verbosity: 1

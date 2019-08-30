@@ -1,7 +1,7 @@
 {
-  "cdhVersion" : "{{ cdh_version }}",
+  "cdhVersion" : "{{ cluster_version_cdh }}",
   "displayName" : "{{ cluster_display_name }}",
-  "cmVersion" : "{{ scm_version }}",
+  "cmVersion" : "{{ cluster_version_cm }}",
   "products" : [
     {% set prod_j = joiner(",") %}
     {% for product in scm_products %}

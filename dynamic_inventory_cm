@@ -2,49 +2,23 @@
 # -*- coding: utf-8 -*-
 
 '''
-Copyright (c) 2019, Gabor Roczei <roczei@cloudera.com>
-Copyright (c) 2019, Cloudera, Inc.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Created by Gabor Roczei <roczei@cloudera.com>
 
 =============================================================================
-Example Ansible dynamic inventory script for Cloudera Manager
+Ansible Dynamic Inventory Script for Cloudera Manager
 =============================================================================
 
-Developing Dynamic Inventory:
-
-http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html
-
-Example Cloudera Manager URLs:
-
-https://host-10-17-101-73.coe.cloudera.com:7183/api/v6/hosts
-https://host-10-17-101-73.coe.cloudera.com:7183/api/v6/clusters
-https://host-10-17-101-73.coe.cloudera.com:7183/api/v6/clusters/Balaton/hosts
-
-You can list the available Cloudera Manager clusters (Ansible groups) with this command:
+The available Cloudera Manager clusters (Ansible groups, for example: Cluster_1, Balaton)
+can be listed with the following command:
 
 dynamic_inventory_cm --list
 
-Example Ansible Ad-Hoc commands:
+Example Ansible ad-hoc commands:
 
-ansible all -i dynamic_inventory_cm --list-hosts
-ansible Balaton -i dynamic_inventory_cm -m command -o -a "id -Gn yarn" -k
-ansible Cluster-1 -i dynamic_inventory_cm -m command -o -a date -k
-ansible -i dynamic_inventory_cm -m ping all -o -k
-
-Documentation of Ansible Ad-Hoc commands:
-
-http://docs.ansible.com/ansible/latest/intro_adhoc.html
+ansible all -u $USER --become-user $USER -i dynamic_inventory_cm --list-hosts
+ansible Balaton --ask-pass -u $USER --become-user $USER -i dynamic_inventory_cm -o -m command -a "time id -Gn $USER"
+ansible Cluster_1 --ask-pass -u $USER --become-user $USER -i dynamic_inventory_cm -o -m command -a "date"
+ansible --ask-pass -u $USER --become-user $USER -i dynamic_inventory_cm -o -m ping all
 '''
 
 import os
@@ -59,47 +33,50 @@ import getpass
 import cookielib
 from urlparse import urlparse
 
-# Cache time (second)
+# Cache time (seconds)
 default_cache_time_sec = 30 * 24 * 60 * 60
 
 # Disabling SSL CA check
 default_disable_ca_check = False
 
-# Cloudera Manager API timeout (second)
+# Cloudera Manager API timeout (seconds)
 default_timeout_sec = 60
 
 # Debug mode
 default_debug = False
 
-def save_cookies_lwp(cookiejar, filename):
+def save_cookie(cookiejar, filename):
     lwp_cookiejar = cookielib.LWPCookieJar()
-    for c in cookiejar:
-        args = dict(vars(c).items())
-        args["rest"] = args["_rest"]
-        del args["_rest"]
-        c = cookielib.Cookie(**args)
-        lwp_cookiejar.set_cookie(c)
+    for cookie in cookiejar:
+        parameters = dict(vars(cookie).items())
+        parameters["rest"] = parameters["_rest"]
+        del parameters["_rest"]
+        cookie = cookielib.Cookie(**parameters)
+        lwp_cookiejar.set_cookie(cookie)
     lwp_cookiejar.save(filename, ignore_discard = True)
     os.chmod(filename, 0600)
 
-def load_cookies_from_lwp(filename):
+def load_cookie(filename):
     lwp_cookiejar = cookielib.LWPCookieJar()
     lwp_cookiejar.load(filename, ignore_discard = True)
     return lwp_cookiejar
-
 
 class ClouderaManagerInventory:
 
     def __init__(self):
         self.inventory = {"_meta" : { "hostvars": {} }}
-        self.cookie_path = os.path.join(os.environ["HOME"], ".cm_cookie")
-        self.json_path = os.path.join(os.environ["HOME"], ".cm_inventory.json")
+        self.cookie_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_cookie"
+        self.json_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_inventory.json"
         self.api_version = ""
 
-        cache_time_sec = os.getenv("CM_CACHE_TIME_SEC").strip()
-        disable_ca_check = os.getenv("CM_DISABLE_CA_CHECK").strip()
-        timeout_sec = os.getenv("CM_TIMEOUT_SEC").strip()
-        debug = os.getenv("CM_DEBUG").strip()
+        cache_time_sec = os.getenv("CM_CACHE_TIME_SEC")
+        disable_ca_check = os.getenv("CM_DISABLE_CA_CHECK")
+        timeout_sec = os.getenv("CM_TIMEOUT_SEC")
+        debug = os.getenv("CM_DEBUG")
+
+        if not os.path.exists(os.environ["HOME"] + os.sep + ".cm"):
+           os.makedirs(os.environ["HOME"] + os.sep + ".cm")
+           os.chmod(os.environ["HOME"] + os.sep + ".cm", 0700)
 
         if cache_time_sec == None:
             self.cache_time_sec = default_cache_time_sec
@@ -108,7 +85,7 @@ class ClouderaManagerInventory:
                self.cache_time_sec = int(cache_time_sec)
             except Exception, e:
                if "invalid literal for int" in str(e):
-                  sys.stderr.write("The value is wrong by CM_CACHE_TIME_SEC: " + cache_time_sec  + ". It is not a valid integer number.\n")
+                  sys.stderr.write("The value is incorrect in CM_CACHE_TIME_SEC: " + cache_time_sec  + ". It is not a valid integer number.\n")
                   sys.exit(-1)
                else:
                   sys.stderr.write(str(e))
@@ -121,7 +98,7 @@ class ClouderaManagerInventory:
                self.timeout_sec = int(timeout_sec)
             except Exception, e:
                if "invalid literal for int" in str(e):
-                  sys.stderr.write("The value is wrong by CM_TIMEOUT_SEC: " + timeout_sec  + ". It is not a valid integer number.\n")
+                  sys.stderr.write("The value is incorrect in CM_TIMEOUT_SEC: " + timeout_sec  + ". It is not a valid integer number.\n")
                   sys.exit(-1)
                else:
                   sys.stderr.write(str(e))
@@ -134,7 +111,7 @@ class ClouderaManagerInventory:
         elif disable_ca_check.lower() == "false":
             self.disable_ca_check = False
         else:
-            sys.stderr.write("Unknown value by CM_DISABLE_CA_CHECK: " + disable_ca_check  + ". It can be only True or False\n")
+            sys.stderr.write("Unknown value in CM_DISABLE_CA_CHECK: " + disable_ca_check  + ". Valid values can only be True or False\n")
             sys.exit(-1)
 
         if debug == None:
@@ -144,7 +121,7 @@ class ClouderaManagerInventory:
         elif debug.lower() == "false":
             self.debug = False
         else:
-            sys.stderr.write("Unknown value by CM_DEBUG: " + debug + ". It can be only True or False\n")
+            sys.stderr.write("Unknown value in CM_DEBUG: " + debug + ". Valid values can only be True or False\n")
             sys.exit(-1)
 
         self.read_args()
@@ -205,14 +182,14 @@ class ClouderaManagerInventory:
                 clusters = json.loads(clusters_response)
                 for cluster in clusters["items"]:
                     cluster_name = cluster.get("displayName")
-                    cluster_name_updated = cluster_name.replace(" ", "-")
+                    cluster_name_updated = cluster_name.replace(" ", "_")
                     hosts = {"hosts" : []}
                     i = 2
                     while self.inventory.has_key(cluster_name_updated):
-                       if self.inventory.has_key(cluster_name_updated + "-" + str(i)):
+                       if self.inventory.has_key(cluster_name_updated + "_" + str(i)):
                           i = i + 1
                        else:
-                          cluster_name_updated = cluster_name_updated + "-" + str(i)
+                          cluster_name_updated = cluster_name_updated + "_" + str(i)
                           break
                     self.inventory[cluster_name_updated] = hosts
                     clusters_hosts_url = url + "/api/" + self.api_version + "/clusters/" + cluster_name + "/hosts"
@@ -227,7 +204,7 @@ class ClouderaManagerInventory:
                           self.inventory[cluster_name_updated]["hosts"].append(host)
 
              parsed_url = urlparse(url)
-             save_cookies_lwp(cookie, self.cookie_path + "." + str(parsed_url.hostname))
+             save_cookie(cookie, self.cookie_path + "." + str(parsed_url.hostname))
 
         except Exception, e:
              if "Bad credentials" in str(e):
@@ -237,7 +214,8 @@ class ClouderaManagerInventory:
              elif "CERTIFICATE_VERIFY_FAILED" in str(e):
                  sys.stderr.write("URL: " + url + "\n")
                  sys.stderr.write(str(e) + "\n")
-                 sys.stderr.write("\nYou can disable the CA check with this: export CM_DISABLE_CA_CHECK=True\n")
+                 sys.stderr.write("\nThe root CA check for Cloudera Manager server(s) can be disabled or enabled with this:\n\n")
+                 sys.stderr.write("export CM_DISABLE_CA_CHECK=True\n\n")
                  sys.exit(-1)
              else:
                  sys.stderr.write("URL: " + url + "\n")
@@ -248,7 +226,7 @@ class ClouderaManagerInventory:
         parser = argparse.ArgumentParser()
         parser.add_argument("--list", help = "List the clusters and the hosts", action = "store_true")
         parser.add_argument("--host", help = "", action = "store")
-        parser.add_argument("--refresh-cache", help = "Refresh the cache" , action = "store_true")
+        parser.add_argument("--refresh-cache", help = "Refresh the (Cloudera Manager) inventory cache" , action = "store_true")
         self.args = parser.parse_args()
 
         if self.args.refresh_cache:
@@ -276,13 +254,14 @@ class ClouderaManagerInventory:
         password = ""
 
         if cm_urls == None:
-           sys.stderr.write("CM_URL shell variable is empty, please set the Cloudera Manager's URL. Examples:\n\n")
-           sys.stderr.write("https://host-10-17-101-73.coe.cloudera.com:7183\n")
-           sys.stderr.write("https://host-10-17-101-73.coe.cloudera.com:7183,http://nightly512-1.vpc.cloudera.com:7180\n\n")
+           sys.stderr.write("CM_URL shell variable has not been set, configure the Cloudera Manager's URL. Examples:\n\n")
+           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.example.com:7183\n")
+           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.example.com:7183,http://nightly512-1.vpc.example.com:7180\n\n")
            sys.exit(-1)
 
         if username == None:
-           sys.stderr.write("\nCM_USERNAME shell variable is empty, please set the Cloudera Manager's username\n\n")
+           sys.stderr.write("CM_USERNAME shell variable has not been set, configure the Cloudera Manager's username. Example:\n\n")
+           sys.stderr.write("export CM_USERNAME=username\n\n")
            sys.exit(-1)
 
         urls = cm_urls.split(",")
@@ -292,7 +271,7 @@ class ClouderaManagerInventory:
            parsed_url = urlparse(url)
            cookie_path = self.cookie_path + "." + str(parsed_url.hostname)
            if os.path.isfile(cookie_path):
-              cookie = load_cookies_from_lwp(cookie_path)
+              cookie = load_cookie(cookie_path)
               result = self.cm_connection(url, username, password, cookie)
               if result != 1:
                  continue

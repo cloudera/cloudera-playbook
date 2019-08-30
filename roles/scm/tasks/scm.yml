@@ -1,10 +1,6 @@
 ---
-
-- name: Prepare Cloudera Manager settings
-  template:
-    src: "scm.j2"
-    dest: "{{ tmp_dir }}/scm.json"
-  delegate_to: localhost
+- set_fact:
+    scm_config_json: "{{ lookup('template', 'scm.j2', convert_data=False) }}"
 
 # https://cloudera.github.io/cm_api/apidocs/v13/path__cm_config.html
 - name: Update Cloudera Manager settings
@@ -12,20 +8,17 @@
     url: "{{ cm_api_url }}/cm/config"
     method: PUT
     body_format: json
-    body: "{{ lookup('file', ''+ tmp_dir + '/scm.json') }}"
+    body: "{{ scm_config_json|to_json }}"
     status_code: 200
     force_basic_auth: yes
     user: "{{ scm_default_user }}"
     password: "{{ scm_default_pass }}"
     return_content: yes
   register: scm_resp
-  delegate_to: localhost
-- debug: var=scm_resp
 
-- file:
-    path: "{{ tmp_dir }}/scm.json"
-    state: absent
-  delegate_to: localhost
+- debug:
+    var: scm_resp
+    verbosity: 1
 
 # https://cloudera.github.io/cm_api/apidocs/v13/path__cm_commands_importAdminCredentials.html
 - name: Import KDC admin credentials

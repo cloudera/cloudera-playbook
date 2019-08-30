@@ -13,6 +13,7 @@
  default_tkt_enctypes = aes256-cts
  udp_preference_limit = 1
  kdc_timeout = 3000
+ default_ccache_name = FILE:/tmp/krb5cc_%{uid}
 
 [realms]
  {{ krb5_realm }} = {
@@ -20,5 +21,5 @@
  }
 
 [domain_realm]
- .{{ domain }} = {{ krb5_realm }}
- {{ domain }} = {{ krb5_realm }}
+ .{{ cluster_domain }} = {{ krb5_realm }}
+ {{ cluster_domain }} = {{ krb5_realm }}

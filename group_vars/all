@@ -2,11 +2,32 @@
 
 ansible_become: true
 tmp_dir: /tmp
-krb5_realm: AD.SEC.CLOUDERA.COM
+krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
-computer_ou: ou=Hosts,ou=morhidi,ou=HadoopClusters,ou=morhidi,dc=ad,dc=sec,dc=cloudera,dc=com
-domain: vpc.cloudera.com
-kdc: w2k8-1.ad.sec.cloudera.com
+cluster_domain: gce.example.com
+kdc: w2k8-1.ad.sec.example.com
+computer_ou: OU=computer_hosts,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
+ldap_group_search_base: OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
+ldap_user_search_base: DC=ad,DC=sec,DC=example,DC=com?subtree?(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)
+override_gid: 999999
+ad_site: Default-First-Site-Name
+
+## 
+## Cluster software versions
+## 
+cluster_version_cdh: 5.16.2
+cluster_version_cm:  5.16.2
+cluster_version_cds: 2.4.0.cloudera2
+
+##
+## Java installation options
+##
+java_installation_strategy: package       # can be set to 'none', 'package' or 'rpm'
+java_package: java-1.8.0-openjdk
+java_rpm_location: /tmp/jdk-8u181-linux-x64.rpm
+java_rpm_remote_src: no
+java_jce_location: /tmp/jce_policy-8.zip
+java_jce_remote_src: no
 
 # Only the latest CDH minor version is available in the official repo
 #cdh_version: 5.8.3
@@ -30,3 +51,4 @@ cloudera_repository_baseurl:        "{{ configs_by_version[cdh_major_version].re
 cloudera_repository_gpgkey:         "{{ configs_by_version[cdh_major_version].repo_url }}/RPM-GPG-KEY-cloudera"
 scm_prepare_database_script_path:   "{{ configs_by_version[cdh_major_version].scm_prepare_database_script_path }}"
 scm_parcel_repository:              "{{ configs_by_version[cdh_major_version].scm_parcel_repository }}"
+

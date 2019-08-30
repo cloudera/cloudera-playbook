@@ -1,17 +1,97 @@
 [sssd]
-domains = {{ ad_domain }}
-config_file_version = 2
-services = nss, pam
 
+config_file_version = 2
+reconnection_retries = 3
+sbus_timeout = 30
+services = nss, pam
+domains = {{ ad_domain }}
+ 
+[nss]
+
+# There are two types of users which are available at the operating system level: service users (yarn, hdfs, etc.) and non-service users. Cloudera recommends that the service users be local users and the non-service users are in LDAP-compliant identity/directory services, such as OpenLDAP or Microsoft Active Directory. 
+
+filter_groups = root,mysql,hadoop,yarn,hdfs,mapred,kms,httpfs,hbase,hive,sentry,spark,solr,sqoop,oozie,hue,flume,impala,llama,postgres,sqoop2,kudu,kafka,accumulo,zookeeper,cloudera-scm,keytrustee
+
+filter_users = root,mysql,cloudera-scm,zookeeper,yarn,hdfs,mapred,kms,httpfs,hbase,hive,sentry,spark,solr,sqoop,oozie,hue,flume,impala,llama,sqoop2,postgres,kudu,kafka,accumulo,keytrustee
+
+reconnection_retries = 3
+ 
+# entry_cache_timeout = 3600
+# entry_negative_timeout = 30
+# entry_cache_nowait_percentage = 7
+
+[pam]
+
+reconnection_retries = 3
+ 
 [domain/{{ ad_domain }}]
-ad_domain = {{ ad_domain }}
-krb5_realm = {{ krb5_realm }}
-realmd_tags = manages-system joined-with-samba
-cache_credentials = True
-id_provider = ad
-krb5_store_password_if_offline = True
-default_shell = /bin/bash
-ldap_id_mapping = True
-use_fully_qualified_names = False
+
+debug_level = 3
+ad_enable_gc = false
+cache_credentials = true
+ldap_id_mapping = true
+
+# The domain users group is usually the primary group ID. If you correctly override it with override_gid, it should not appear unless you have specifically added the users to that group. If your group filter is correct, it does not search the organization unit where domain users exist and it will be filtered out.
+
+# When override_gid is enabled, the primary group of all the users in the domain is set to the value of override_gid. You must change the override_gid default value. 
+
+override_gid = {{ override_gid }}
+
+# The auto_private_groups option was added in SSSD 1.16.1. If this option is set to true, each user’s GID will be changed to match their UID. Do not enable override_gid and auto_private_groups at the same time.  
+
+# auto_private_groups = true
+ 
+full_name_format = %1$s
 fallback_homedir = /home/%u
+default_shell = /bin/bash
+ignore_group_members = true
+krb5_realm = {{ krb5_realm }}
+ad_domain = {{ ad_domain }}
+id_provider = ad
+chpass_provider = ad
+auth_provider = ad
+
+# Use the ad_access_filter option to specify groups that can login to the host via SSH. The default setting gives SSH access to members of the hadoop_admins and hadoop_users groups. Use this setting with caution. 
+
 access_provider = ad
+
+# ad_access_filter = (|(memberOf=CN=hadoop_admins,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com))
+
+# Cloudera recommends that you enable ad_site by specifying an Active Directory site with the ad_site option. When ad_site is enabled, SSSD discovers valid AD servers for the site and updates the server list automatically when the AD servers change. You do not have to hardcode the servers with the ad_server option.
+
+ad_site = {{ ad_site }} 
+
+case_sensitive = false
+enumerate = false
+ldap_schema = ad
+ldap_user_principal = nosuchattr
+ldap_force_upper_case_realm = true
+ldap_purge_cache_timeout = 0
+ldap_account_expire_policy = ad
+
+# Setting subdomains_provider to none disallows fetching subdomains explicitly. This can help resolve significant delays if there are multiple AD domains. Note that there is a known issue in versions of RHEL 6. For more information, see https://bugzilla.redhat.com/show_bug.cgi?id=1221358
+
+# subdomains_provider = none
+
+# If you know that the users and groups will be limited to a specific subsection of the directory, you can limit lookups with the ldap_group_search_base and ldap_user_search_base parameters. This can give significant performance improvements for large directories.
+
+ldap_group_search_base = {{ ldap_group_search_base }}
+ldap_user_search_base = {{ ldap_user_search_base }}
+
+# Uncomment the following lines if you are deploying on Azure, which has no reverse DNS, or if your environment has DNS managed by Active Directory.
+
+# dyndns_update = true
+# dyndns_refresh_interval = 43200
+# dyndns_update_ptr = true
+# dyndns_ttl = 3600
+
+ldap_use_tokengroups = false
+
+# Setting krb5_validate to false speeds up the login procedure by preventing TGT verification.
+
+krb5_validate = false
+
+# In environments with a large number of users and groups, you must set the idmap range with the ldap_idmap_range_size option.
+
+# ldap_idmap_range_size = 2000000
+

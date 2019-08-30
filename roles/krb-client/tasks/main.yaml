@@ -1,10 +1,18 @@
 ---
   - name: install krb5
-    yum: name={{ item }} state=present
-    with_items:
-      - krb5-libs
-      - krb5-workstation
-      - openldap-clients
+    yum:
+       name:
+         - krb5-libs
+         - krb5-workstation
+         - openldap-clients
+       state: present
 
   - name: copy krb5.conf
-    template: src=krb5.conf.j2 dest=/etc/krb5.conf mode=0644 owner=root group=root
+    template:
+      src: krb5.conf.j2
+      dest: /etc/krb5.conf
+      mode: 0644
+      owner: root
+      group: root
+      backup: yes
+      force: yes

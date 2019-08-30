@@ -6,6 +6,9 @@ scm_hostname: "{{ hostvars[groups['scm_server'][0]]['inventory_hostname'] }}"
 cluster_display_name: cluster_1
 
 cdh_services:
+
+  - type: hbase
+
   - type: hdfs
     dfs_data_dir_list: /dfs/dn
     fs_checkpoint_dir_list: /dfs/snn
@@ -24,6 +27,8 @@ cdh_services:
   - type: sentry
 
   - type: spark
+
+  - type: spark2
 
   - type: yarn
     yarn_nodemanager_local_dirs: /tmp/nm
