@@ -7,8 +7,8 @@
     {% for product in scm_products %}
     {{ prod_j() }}
     {
-      "version" : "{{ product['version'] }}",
-      "product" : "{{ product['product'] }}"
+      "product" : "{{ product.split('-')[0] }}",
+      "version" : "{{ '-'.join(product.split('-')[1:]) }}"
     }
     {% endfor %}
   ],

@@ -8,13 +8,6 @@ scm_repositories:
   - "{{ scm_parcel_repository }}"
   - https://archive.cloudera.com/spark2/parcels/{{cluster_version_cds}}/
 
-#FIXME duplicated version numbers -- auto-detect product version strings
-scm_products:
-  - product: CDH
-    version: 5.16.2-1.cdh5.16.2.p0.8 
-  - product: SPARK2
-    version: 2.4.0.cloudera2-1.cdh5.13.3.p0.1041012
-
 scm_csds:
   - https://archive.cloudera.com/spark2/csd/SPARK2_ON_YARN-{{cluster_version_cds}}.jar
 
