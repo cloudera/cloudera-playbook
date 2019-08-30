@@ -8,6 +8,7 @@
     name:
     - cloudera-manager-daemons
     - cloudera-manager-agent
+    update_cache: yes
     state: installed
 
 - name: Configure Cloudera Manager Agent 'server_host'
