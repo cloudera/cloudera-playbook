@@ -2,11 +2,11 @@
 
 - name: Check license file exists
   stat:
-    path: "{{ hostvars[scm_hostname]['license_file'] }}"
+    path: "{{ scm_license_file }}"
   register: file
 
 - debug:
-    msg: "License file '{{ hostvars[scm_hostname]['license_file'] }}' exists = {{ file.stat.exists }}"
+    msg: "License file '{{ scm_license_file }}' exists = {{ file.stat.exists }}"
     verbosity: 1
 
 # https://cloudera.github.io/cm_api/apidocs/v12/path__cm_license.html
@@ -15,7 +15,7 @@
     curl
     -u {{ scm_default_user }}:{{ scm_default_pass }}
     -X POST -H 'Content-Type:multipart/form-data'
-    -F license=@{{ hostvars[scm_hostname]['license_file'] }}
+    -F license=@{{ scm_license_file }}
     {{ cm_api_url }}/cm/license
   args:
     warn: False

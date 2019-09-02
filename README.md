@@ -25,7 +25,7 @@ scp_if_ssh = True
 $ vi ~/ansible_hosts
 
 [scm_server]
-host1.example.com        license_file=/path/to/cloudera_license.txt
+host1.example.com
 
 [db_server]
 host2.example.com

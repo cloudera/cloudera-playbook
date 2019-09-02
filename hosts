@@ -1,5 +1,5 @@
 [scm_server]
-<host>        license_file=/path/to/cloudera_license.txt
+<host>
 
 [db_server]
 <host>

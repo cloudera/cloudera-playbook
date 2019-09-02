@@ -63,6 +63,7 @@ configs_by_version:
 scm_default_user: admin
 scm_default_pass: admin
 scm_port: 7180
+scm_license_file: /path/to/cloudera_license.txt
 scm_parcel_repositories:            "{{ configs_by_version[cluster_version_cdh_major].scm_parcel_repositories }}"
 scm_prepare_database_script_path:   "{{ configs_by_version[cluster_version_cm_major].scm_prepare_database_script_path }}"
 scm_repo_url:                       "{{ configs_by_version[cluster_version_cm_major].scm_repo_url }}"
