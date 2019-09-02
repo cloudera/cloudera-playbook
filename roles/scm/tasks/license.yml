@@ -1,10 +1,13 @@
 ---
 
 - name: Check license file exists
-  stat: path={{ hostvars[scm_hostname]['license_file'] }}
+  stat:
+    path: "{{ hostvars[scm_hostname]['license_file'] }}"
   register: file
 
-- debug: msg="License file '{{ hostvars[scm_hostname]['license_file'] }}' exists = {{ file.stat.exists }}"
+- debug:
+    msg: "License file '{{ hostvars[scm_hostname]['license_file'] }}' exists = {{ file.stat.exists }}"
+    verbosity: 1
 
 # https://cloudera.github.io/cm_api/apidocs/v12/path__cm_license.html
 - name: Upload license file to Cloudera Manager
@@ -20,21 +23,11 @@
   failed_when: "'owner' not in resp.stdout"
   notify:
     - restart cloudera-scm-server
-  when: file.stat.exists == True
+  when: file.stat.exists
 
-- debug: var=resp
-
-# URI module does not have the equivalent to cURL's -F/--form
-#  uri:
-#    url: {{ cm_api_url }}/cm/license
-#    method: POST
-#    body: "c-l-o-u-d-e-r-a\nContent-Disposition: form-data; name=\"license\"\n\n{{ lookup('file', '/path/to/cloudera_license.txt') }}\nc-l-o-u-d-e-r-a"
-#    HEADER_Content-Type: "multipart/form-data; boundary=c-l-o-u-d-e-r-a"
-#    HEADER_Accept: "[*/*]"
-#    status_code: 200
-#    force_basic_auth: yes
-#    user: "{{ scm_default_user }}"
-#    password: "{{ scm_default_pass }}"
+- debug:
+    var: resp
+    verbosity: 1
 
 # https://cloudera.github.io/cm_api/apidocs/v12/path__cm_trial_begin.html
 - name: Begin Cloudera Manager trial license
@@ -48,7 +41,7 @@
   ignore_errors: True
   notify:
     - restart cloudera-scm-server
-  when: file.stat.exists == False
+  when: not file.stat.exists
 
 - meta: flush_handlers
 

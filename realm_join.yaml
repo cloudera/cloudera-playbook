@@ -1,0 +1,12 @@
+---
+- hosts: all
+  vars_prompt:
+    - name: "bind_user"
+      prompt: "bind user"
+      private: no
+
+    - name: "bind_password"
+      prompt: "bind password"
+      private: yes
+  roles:
+    - realm/join

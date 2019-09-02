@@ -1,0 +1,4 @@
+[{{ ad_domain }}]
+computer-ou = {{ computer_ou }}
+# Please note that the computer-name / netbios name cannot exceed 15 characters
+computer-name = {{ inventory_hostname_short[-15:]}}

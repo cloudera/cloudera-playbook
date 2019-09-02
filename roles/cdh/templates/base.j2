@@ -1,14 +1,14 @@
 {
-  "cdhVersion" : "{{ cdh_version }}",
+  "cdhVersion" : "{{ cluster_version_cdh }}",
   "displayName" : "{{ cluster_display_name }}",
-  "cmVersion" : "{{ scm_version }}",
+  "cmVersion" : "{{ cluster_version_cm }}",
   "products" : [
     {% set prod_j = joiner(",") %}
     {% for product in scm_products %}
     {{ prod_j() }}
     {
-      "version" : "{{ product['version'] }}",
-      "product" : "{{ product['product'] }}"
+      "product" : "{{ product.split('-')[0] }}",
+      "version" : "{{ '-'.join(product.split('-')[1:]) }}"
     }
     {% endfor %}
   ],

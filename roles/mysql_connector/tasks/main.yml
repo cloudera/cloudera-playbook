@@ -1,4 +1,40 @@
 ---
 
-- name: Install MySQL JDBC Connector
-  yum: name=mysql-connector-java state=installed
+- name: Create /usr/share/java directory
+  file:
+    path: /usr/share/java
+    state: directory
+    mode: 0755
+
+- name: Install unzip package
+  package:
+    name:
+    - unzip
+    state: installed
+
+- stat:
+    path: /usr/share/java/mysql-connector-java.jar
+  register: mysql_connector_java
+
+- name: Download MySQL Connector/J 
+  get_url:
+    url: https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.48.zip
+    dest: "{{ tmp_dir }}/mysql-connector-java.zip"
+    checksum: "md5:5da24facd99964f296ecde32abcd2384"
+    mode: 0644
+  when: not mysql_connector_java.stat.exists
+
+- name: Extract MySQL Connector/J zip file
+  unarchive:
+    src: "{{ tmp_dir }}/mysql-connector-java.zip"
+    dest: "{{ tmp_dir }}"
+    copy: no
+  when: not mysql_connector_java.stat.exists
+
+- name: Copy MySQL Connector/J jar file to correct location
+  copy:
+    src: "{{ tmp_dir }}/mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.jar"
+    dest: /usr/share/java/mysql-connector-java.jar
+    mode: 0644
+    remote_src: yes
+  when: not mysql_connector_java.stat.exists

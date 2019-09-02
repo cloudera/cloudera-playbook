@@ -3,4 +3,6 @@
 *.iml
 .idea/
 .DS_Store
-site.retry
+docker
+*test*
+*.retry

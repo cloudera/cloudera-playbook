@@ -1,0 +1,3 @@
+---
+  - name: Remove hosts from the realm
+    command: realm leave

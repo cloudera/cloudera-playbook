@@ -1,0 +1,36 @@
+{
+  "refName": "HBASE-1",
+  "serviceType": "HBASE",
+  "serviceConfigs": [
+    {
+      "name": "hdfs_service",
+      "ref": "HDFS-1"
+    }, {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    } 
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "HBASE-1-MASTER-BASE",
+      "roleType": "MASTER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HBASE-1-REGIONSERVER-BASE",
+      "roleType": "REGIONSERVER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HBASE-1-HBASETHRIFTSERVER-BASE",
+      "roleType": "HBASETHRIFTSERVER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "HBASE-1-HBASERESTSERVER-BASE",
+      "roleType": "HBASERESTSERVER",
+      "configs": [],
+      "base": true
+    }
+  ]
+}
