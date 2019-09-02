@@ -2,7 +2,19 @@
 
 ansible_become: true
 tmp_dir: /tmp
-krb5_realm: AD.SEC.EXAMPLE.COM
+
+## ------------------------------------------------------------------------------------------------------------
+## Security options
+## ------------------------------------------------------------------------------------------------------------
+
+krb5_realm: EXAMPLE.COM
+
+# 'ad', 'mit', or 'none' to disable security
+krb5_kdc_type: mit
+krb5_kdc_master_passwd: changeme
+krb5_kdc_admin_user: "cloudera-scm/admin@{{ krb5_realm }}"
+krb5_kdc_admin_passwd: changeme
+
 ad_domain: "{{ krb5_realm.lower() }}"
 cluster_domain: gce.example.com
 kdc: w2k8-1.ad.sec.example.com

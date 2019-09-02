@@ -5,7 +5,7 @@
 <host>
 
 [krb5_server]
-<host>        default_realm=CLOUDERA.COM
+<host>
 
 [utility_servers:children]
 scm_server

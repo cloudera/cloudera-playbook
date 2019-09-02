@@ -3,7 +3,7 @@
   kdc_tcp_ports = 88
 
 [realms]
-  {{ default_realm|upper }} = {
+  {{ krb5_realm|upper }} = {
     max_renewable_life = 7d
     master_key_type = aes256-cts
     acl_file = /var/kerberos/krb5kdc/kadm5.acl

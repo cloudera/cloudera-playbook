@@ -31,7 +31,7 @@ host1.example.com        license_file=/path/to/cloudera_license.txt
 host2.example.com
 
 [krb5_server]
-host3.example.com        default_realm=<REALM>
+host3.example.com
 
 [utility_servers:children]
 scm_server

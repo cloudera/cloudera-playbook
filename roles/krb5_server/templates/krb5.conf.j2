@@ -6,7 +6,7 @@
 [libdefaults]
   ticket_lifetime = 1d
   renew_lifetime = 7d
-  default_realm = {{ default_realm|upper }}
+  default_realm = {{ krb5_realm|upper }}
   dns_lookup_realm = false
   dns_lookup_kdc = false
   forwardable = true
@@ -15,12 +15,12 @@
   kdc_timeout = 3000
 
 [realms]
-  {{ default_realm|upper }} = {
+  {{ krb5_realm|upper }} = {
     kdc = {{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}
     admin_server = {{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}
     default_domain = {{ ansible_fqdn.split('.')[1:]|join('.') }}
   }
 
 [domain_realm]
-  .{{ ansible_fqdn.split('.')[1:]|join('.') }} = {{ default_realm|upper }}
-  {{ ansible_fqdn.split('.')[1:]|join('.') }} = {{ default_realm|upper }}
+  .{{ ansible_fqdn.split('.')[1:]|join('.') }} = {{ krb5_realm|upper }}
+  {{ ansible_fqdn.split('.')[1:]|join('.') }} = {{ krb5_realm|upper }}
