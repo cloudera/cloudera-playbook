@@ -22,6 +22,11 @@ cdh_services:
   - type: impala
     scratch_dirs: /tmp/impala
 
+  - type: nifi
+  - type: nifiregistry
+  - type: nifitoolkitca
+    nifi_toolkit_tls_ca_server_token: abcdefghijklmnopqrstuvwxyz
+
   - type: oozie
 
   - type: sentry

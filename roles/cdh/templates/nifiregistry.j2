@@ -1,0 +1,29 @@
+{
+  "refName": "NIFIREGISTRY-1",
+  "serviceType": "NIFIREGISTRY",
+  "serviceConfigs": [
+    {
+      "name": "kerberos.auth.enabled",
+      "value": "{{ (krb5_kdc_type == 'ad') or (krb5_kdc_type == 'mit') | lower }}"
+    }, {
+      "name": "nifitoolkitca_service",
+      "ref": "NIFITOOLKITCA-1"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "NIFIREGISTRY-1-NIFI_REGISTRY_SERVER-BASE",
+      "roleType": "NIFI_REGISTRY_SERVER",
+      "configs": [
+        {
+          "name": "ssl_enabled",
+          "value": "true"
+        }, {
+          "name": "nifi.registry.toolkit.tls.regenerate",
+          "value": "true"
+        }
+      ],
+      "base": true
+    }
+  ]
+}
