@@ -52,7 +52,7 @@
       "configs": [],
       "base": true
     }
-    {% if (krb5_kdc_type == 'ad') or (krb5_kdc_type == 'mit') %}
+    {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
      , {
       "refName": "HUE-1-KT_RENEWER-BASE",
       "roleType": "KT_RENEWER",

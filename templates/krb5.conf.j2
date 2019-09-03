@@ -1,0 +1,22 @@
+[libdefaults]
+default_realm = {{ krb5_realm|upper }}
+dns_lookup_kdc = false
+dns_lookup_realm = false
+ticket_lifetime = 1d
+renew_lifetime = 7d
+forwardable = true
+default_tgs_enctypes = {{ krb5_enc_types }}
+default_tkt_enctypes = {{ krb5_enc_types }}
+permitted_enctypes = {{ krb5_enc_types }}
+udp_preference_limit = 1
+kdc_timeout = 3000
+
+[realms]
+{{ krb5_realm|upper }} = {
+  kdc = {{ krb5_kdc_host }}
+  admin_server = {{ krb5_kdc_host }}
+}
+
+[domain_realm]
+.{{ ansible_domain }} = {{ krb5_realm|upper }}
+{{ ansible_domain }} = {{ krb5_realm|upper }}

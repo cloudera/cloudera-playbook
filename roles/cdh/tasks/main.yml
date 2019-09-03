@@ -87,6 +87,7 @@
   retries: 10
   delay: 60
   when: not cluster_exists
+  failed_when: "'Failed to import cluster template' in result.content"
 
 - debug:
     var: result

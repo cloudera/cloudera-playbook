@@ -1,6 +1,4 @@
 ---
-- set_fact:
-    scm_config_json: "{{ lookup('template', 'scm.j2', convert_data=False) }}"
 
 # https://cloudera.github.io/cm_api/apidocs/v13/path__cm_config.html
 - name: Update Cloudera Manager settings
@@ -8,7 +6,7 @@
     url: "{{ cm_api_url }}/cm/config"
     method: PUT
     body_format: json
-    body: "{{ scm_config_json|to_json }}"
+    body: "{{ lookup('template', 'scm.j2', convert_data=False) }}"
     status_code: 200
     force_basic_auth: yes
     user: "{{ scm_default_user }}"
@@ -30,4 +28,20 @@
     user: "{{ scm_default_user }}"
     password: "{{ scm_default_pass }}"
     return_content: yes
+  register: response
   when: krb5_kdc_type != 'none'
+
+- name: Wait for KDC admin credentials import to complete
+  uri: 
+    url: "{{ cm_api_url }}/commands/{{ response.json.id }}"
+    body_format: json
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  register: result
+  until: not result.json.active
+  retries: 30
+  delay: 10
+  when: krb5_kdc_type != 'none'
+  failed_when: result.json.success is defined and not result.json.success

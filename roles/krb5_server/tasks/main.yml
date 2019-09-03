@@ -1,20 +1,5 @@
 ---
 
-- name: Install KRB5 workstation
-  yum:
-    name: krb5-workstation
-    state: installed
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['cdh_servers'] }}"
-
-- name: Set krb5.conf
-  template:
-    src: krb5.conf.j2
-    dest: /etc/krb5.conf
-    backup: yes
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['cdh_servers'] }}"
-
 - name: Install KRB5 server
   yum:
     name:
@@ -28,8 +13,16 @@
     dest: /var/kerberos/krb5kdc/kdc.conf
     backup: yes
 
+- name: Set krb5.conf
+  template:
+    src: krb5.conf.j2
+    dest: /etc/krb5.conf
+    backup: yes
+
 - name: Create KDC database
-  command: /usr/sbin/kdb5_util create -s -P {{ krb5_kdc_master_passwd }} creates=/var/kerberos/krb5kdc/principal
+  command: "/usr/sbin/kdb5_util create -s -P {{ krb5_kdc_master_passwd }}"
+  args:
+    creates: /var/kerberos/krb5kdc/principal
 
 - name: Set kadm5.acl
   template:

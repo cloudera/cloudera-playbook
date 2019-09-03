@@ -1,0 +1,9 @@
+---
+krb5_realm: CLOUDERA.LOCAL
+krb5_kdc_type: MIT KDC
+krb5_kdc_host: "{{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}"
+krb5_kdc_admin_user: "cloudera-scm/admin@{{ krb5_realm }}"
+krb5_kdc_admin_passwd: changeme
+krb5_kdc_master_passwd: changeme
+krb5_enc_types: aes256-cts
+krb5_cm_managed_krb5_conf: false

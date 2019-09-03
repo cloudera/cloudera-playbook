@@ -4,7 +4,6 @@
        name:
          - krb5-libs
          - krb5-workstation
-         - openldap-clients
        state: present
 
   - name: copy krb5.conf

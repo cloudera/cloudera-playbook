@@ -8,6 +8,7 @@
     - cloudera-manager-daemons
     - cloudera-manager-server
     - cloudera-manager-agent
+    - openldap-clients
     state: installed
 
 - name: Prepare Cloudera Manager Server External Database
