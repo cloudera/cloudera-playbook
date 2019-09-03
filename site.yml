@@ -38,13 +38,13 @@
 - name: Install MIT KDC Server
   hosts: krb5_server
   roles:
-    - krb5_server
+    - krb5/server
   tags: krb5
 
 - name: Install MIT KDC Client
   hosts: all
   roles:
-    - { role: krb5_client, when: (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') }
+    - { role: krb5/client, when: (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') }
   tags: krb5
 
 - name: Configure EPEL Repository

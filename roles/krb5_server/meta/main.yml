@@ -1,3 +1,0 @@
----
-dependencies:
-  - { role: krb5_common }
