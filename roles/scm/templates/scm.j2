@@ -1,25 +1,36 @@
 {
-  "items" : [
-    {% if krb5_kdc_type != 'none' %}
-    {
+  "items" : [ {
+{% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
       "name" : "KDC_HOST",
-      "value" : "{{ hostvars[groups['krb5_server'][0]]['inventory_hostname'] }}"
+      "value" : "{{ krb5_kdc_host }}"
     }, {
       "name" : "KDC_TYPE",
-      {% if krb5_kdc_type == 'ad' %}
-      "value" : "Active Directory"
-      {% else %}
-      "value" : "MIT KDC"
-      {% endif %}
+      "value" : "{{ krb5_kdc_type }}"
     }, {
       "name" : "SECURITY_REALM",
-      "value" : "{{ krb5_realm|upper }}"
+      "value" : "{{ krb5_realm | upper }}"
     }, {
       "name" : "KRB_MANAGE_KRB5_CONF",
-      "value" : "false"
-    },
+      "value" : {{ krb5_cm_managed_krb5_conf | lower }}
+  {% if krb5_enc_types is defined %}
+    }, {
+      "name" : "KRB_ENC_TYPES",
+      "value" : "{{ krb5_enc_types }}"
+  {% endif %}
+  {% if krb5_kdc_type == 'Active Directory' %}
+    {% if krb5_ad_delete_on_regenerate is defined %} 
+    }, {
+      "name" : "AD_DELETE_ON_REGENERATE",
+      "value" : {{ krb5_ad_delete_on_regenerate | lower }}
     {% endif %}
-    {
+    {% if krb5_ad_suffix is defined %}  
+    }, {
+      "name" : "AD_KDC_DOMAIN",
+      "value" : "{{ krb5_ad_suffix }}"
+    {% endif %}
+  {% endif %}
+    }, {
+{% endif %}
       "name" : "REMOTE_PARCEL_REPO_URLS",
       "value" : {% set repo_j = joiner(",") %}
       "{% for repo in scm_parcel_repositories %}{{ repo_j() }}{{ repo }}{% endfor %}"

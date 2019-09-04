@@ -10,7 +10,7 @@
       "value": "true"
     }, {
       "name": "hadoop_security_authentication",
-      {% if (krb5_kdc_type == 'ad') or (krb5_kdc_type == 'mit') %}
+      {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
       "value": "kerberos"
       {% else %}
       "value": "simple"
@@ -40,7 +40,7 @@
           "name": "dfs_data_dir_list",
           "variable": "DFS_DATA_DIR_LIST"
         }
-        {% if (krb5_kdc_type == 'ad') or (krb5_kdc_type == 'mit') %}
+        {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
          , {
           "name": "dfs_datanode_port",
           "value": "1004"

@@ -7,16 +7,25 @@ tmp_dir: /tmp
 ## Security options
 ## ------------------------------------------------------------------------------------------------------------
 
-krb5_realm: EXAMPLE.COM
-
-# 'ad', 'mit', or 'none' to disable security
-krb5_kdc_type: mit
-krb5_kdc_master_passwd: changeme
+krb5_realm: MIT.EXAMPLE.COM
+# 'Active Directory', 'MIT KDC', or 'none' to disable security
+krb5_kdc_type: MIT KDC
 krb5_kdc_admin_user: "cloudera-scm/admin@{{ krb5_realm }}"
 krb5_kdc_admin_passwd: changeme
+krb5_kdc_master_passwd: changeme
+
+# krb5_realm: AD.EXAMPLE.COM
+# krb5_kdc_type: Active Directory
+# krb5_kdc_host: my.ad.example.com
+# krb5_kdc_admin_user: "admin@{{ krb5_realm }}"
+# krb5_kdc_admin_passwd: changeme
+# krb5_ad_suffix: "OU=Clusters,DC=ad,DC=example,DC=com"
+# krb5_ad_delete_on_regenerate: true
+
+# krb5_cm_managed_krb5_conf: false
+# krb5_enc_types: "aes256-cts aes128-cts rc4-hmac"
 
 ad_domain: "{{ krb5_realm.lower() }}"
-cluster_domain: gce.example.com
 kdc: w2k8-1.ad.sec.example.com
 computer_ou: OU=computer_hosts,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
 ldap_group_search_base: OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com

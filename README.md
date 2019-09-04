@@ -88,7 +88,7 @@ AWS users can use Ansible’s ``--private-key`` option to authenticate using a P
 The playbook can install a local MIT KDC and configure Hadoop Security. To enable Hadoop Security:
 
 * Specify the '[krb5_server]' host in the inventory (see above)
-* Set 'krb5_kdc_type' to 'mit' in ``group_vars/krb5_server.yml``
+* Set 'krb5_kdc_type' to 'MIT KDC' in ``group_vars/krb5_server.yml``
 
 # Overriding CDH service/role configuration
 
@@ -286,7 +286,6 @@ Further information about dynamic inventory and ad-hoc commands can be found in 
 ```
 krb5_realm: AD.SEC.EXAMPLE.COM
 ad_domain: "{{ krb5_realm.lower() }}"
-cluster_domain: gce.example.com
 kdc: w2k8-1.ad.sec.example.com
 computer_ou: ou=computer_hosts,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
 ldap_group_search_base: OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
