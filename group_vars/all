@@ -56,7 +56,8 @@ cloudera_archive: https://archive.cloudera.com
 
 configs_by_version:
   "5":
-    scm_repo_url: "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/"
+    scm_repo_url:    "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/{{ cluster_version_cm }}"
+    scm_repo_gpgkey: "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories: 
       - "{{ cloudera_archive }}/cdh5/parcels/{{ cluster_version_cdh }}/"
       - "{{ cloudera_archive }}/spark2/parcels/{{ cluster_version_cds }}/"
@@ -64,7 +65,8 @@ configs_by_version:
       - "{{ cloudera_archive }}/spark2/csd/SPARK2_ON_YARN-{{cluster_version_cds}}.jar"
     scm_prepare_database_script_path: "/usr/share/cmf/schema/scm_prepare_database.sh"
   "6":
-    scm_repo_url: "{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_repo_url:    "{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_repo_gpgkey: "{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories: 
       - "{{ cloudera_archive }}/cdh6/{{ cluster_version_cdh }}/parcels"
     scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
@@ -76,7 +78,7 @@ scm_license_file: /path/to/cloudera_license.txt
 scm_parcel_repositories:            "{{ configs_by_version[cluster_version_cdh_major].scm_parcel_repositories }}"
 scm_prepare_database_script_path:   "{{ configs_by_version[cluster_version_cm_major].scm_prepare_database_script_path }}"
 scm_repo_url:                       "{{ configs_by_version[cluster_version_cm_major].scm_repo_url }}"
-scm_repo_gpgkey:                    "{{ scm_repo_url }}/RPM-GPG-KEY-cloudera"
+scm_repo_gpgkey:                    "{{ configs_by_version[cluster_version_cm_major].scm_repo_gpgkey }}"
 
 ## ------------------------------------------------------------------------------------------------------------
 ## Java installation options
