@@ -56,8 +56,8 @@ cloudera_archive: https://archive.cloudera.com
 
 configs_by_version:
   "5":
-    scm_repo_url:    "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/{{ cluster_version_cm }}"
-    scm_repo_gpgkey: "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/RPM-GPG-KEY-cloudera"
+    scm_repo_url:    "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/"
+    scm_repo_gpgkey: "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories: 
       - "{{ cloudera_archive }}/cdh5/parcels/{{ cluster_version_cdh }}/"
       - "{{ cloudera_archive }}/spark2/parcels/{{ cluster_version_cds }}/"
