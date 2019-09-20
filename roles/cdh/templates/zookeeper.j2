@@ -6,6 +6,11 @@
       "name": "zookeeper_datadir_autocreate",
       "value": "true"
     }
+    {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
+    ,{
+       "name" : "enableSecurity",
+       "value" : "true",
+     }
   ],
   "roleConfigGroups": [
     {
