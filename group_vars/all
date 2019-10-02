@@ -79,6 +79,7 @@ scm_parcel_repositories:            "{{ configs_by_version[cluster_version_cdh_m
 scm_prepare_database_script_path:   "{{ configs_by_version[cluster_version_cm_major].scm_prepare_database_script_path }}"
 scm_repo_url:                       "{{ configs_by_version[cluster_version_cm_major].scm_repo_url }}"
 scm_repo_gpgkey:                    "{{ configs_by_version[cluster_version_cm_major].scm_repo_gpgkey }}"
+scm_csds:                           "{{ configs_by_version[cluster_version_cm_major].scm_csds | default([]) }}"
 
 ## ------------------------------------------------------------------------------------------------------------
 ## Java installation options
