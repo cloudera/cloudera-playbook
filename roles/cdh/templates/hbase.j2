@@ -6,6 +6,14 @@
       "name": "hdfs_service",
       "ref": "HDFS-1"
     }, {
+    {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
+      "name" : "hbase_restserver_security_authentication",
+      "value" : "kerberos",
+    }, {
+      "name" : "hbase_security_authentication",
+      "value" : "kerberos",
+    }, {
+    {% endif %}
       "name": "zookeeper_service",
       "ref": "ZOOKEEPER-1"
     } 
