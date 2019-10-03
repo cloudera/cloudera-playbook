@@ -2,6 +2,7 @@
 
 - name: Apply temporary workaround for Cloudera Manager issue OPSAPS-36322
   include: 36322.yml
+  when: cluster_install_groups_users | default(false)
 
 - name: Install Cloudera Manager Agents
   yum:

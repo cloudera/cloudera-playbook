@@ -4,25 +4,28 @@
 - name: Configure Cloudera Manager Repository
   hosts: cdh_servers
   roles:
-    - cm_repo
+    - role: cm_repo
   tags: cm_repo
 
 - name: Install rngd
   hosts: cdh_servers
   roles:
-    - rngd
+    - role: rngd
+      when: cluster_install_rngd
   tags: rngd
 
 - name: Install Java
   hosts: cdh_servers
   roles:
-    - java
+    - role: java
+      when: cluster_install_java 
   tags: java
 
 - name: Install MariaDB and create databases
   hosts: db_server
   roles:
-    - mariadb
+    - role: mariadb
+      when: cluster_install_mysql
   tags:
     - mysql
     - mysql_server
@@ -30,7 +33,8 @@
 - name: Install MySQL Connector
   hosts: cdh_servers
   roles:
-    - mysql_connector
+    - role: mysql_connector
+      when: cluster_install_mysql
   tags:
     - mysql
     - mysql_client
@@ -38,36 +42,42 @@
 - name: Install MIT KDC Server
   hosts: krb5_server
   roles:
-    - krb5/server
+    - role: krb5/server
+      when: cluster_install_krb5_server
   tags: krb5
 
 - name: Install MIT KDC Client
   hosts: all
   roles:
-    - { role: krb5/client, when: (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') }
+    - role: krb5/client
+      when: (krb5_kdc_type is defined) and (krb5_kdc_type != 'none')
   tags: krb5
 
 - name: Configure EPEL Repository
   hosts: scm_server
   roles:
-    - epel
+    - role: epel
   tags: epel
 
 - name: Install Cloudera Manager Agents
   hosts: cdh_servers
   roles:
-    - cm_agents
+    - role: cm_agents
   tags: cm_agents
 
 - name: Install Cloudera Manager Server
   hosts: scm_server
   roles:
-    - scm
-  tags: cluster_template
+    - role: scm
+  tags: 
+    - cm_server
+    - cluster_template
 
 - name: Install CDH
   hosts: scm_server
   roles:
+    - role: cdh
+      when: cluster_install_cdh
+  tags: 
     - cdh
-  tags: cluster_template
-
+    - cluster_template
