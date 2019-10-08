@@ -58,3 +58,13 @@ databases:
     user: 'oozie'
     pass: 'oozie_password'
     type: '{{ database_type }}'
+  das:
+    name: 'das'
+    user: 'das'
+    pass: 'das_password'
+    type: '{{ database_type }}'
+  ranger:
+    name: 'ranger'
+    user: 'ranger'
+    pass: 'ranger_password'
+    type: '{{ database_type }}'
