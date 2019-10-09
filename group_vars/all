@@ -39,11 +39,13 @@ ad_site: Default-First-Site-Name
 
 # Version of CDH to install
 cluster_version_cdh: 6.3.0
+#cluster_version_cdh: 7.x
 
 # Version of Cloudera Manager to install
 cluster_version_cm:  "{{ cluster_version_cdh }}"
+#cluster_version_cm:  7.x.0
 
-# Version of CDS Powered by Apache Spark (note: not installed if CDH6 is also selected)
+# Version of CDS Powered by Apache Spark (note: not installed if CDH6/7 is also selected)
 cluster_version_cds: 2.4.0.cloudera2
 
 # Helper variables for major and minor versions
@@ -52,23 +54,31 @@ cluster_version_cdh_minor: "{{ cluster_version_cdh.split('.')[1] }}"
 cluster_version_cm_major: "{{ cluster_version_cm.split('.')[0] }}"
 cluster_version_cm_minor: "{{ cluster_version_cm.split('.')[1] }}"
 
-cloudera_archive: https://archive.cloudera.com
+cloudera_archive_protocol: https://
+cloudera_archive: archive.cloudera.com
+cloudera_archive_authn: ""
 
 configs_by_version:
   "5":
-    scm_repo_url:    "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/"
-    scm_repo_gpgkey: "{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/RPM-GPG-KEY-cloudera"
+    scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/"
+    scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories: 
-      - "{{ cloudera_archive }}/cdh5/parcels/{{ cluster_version_cdh }}/"
-      - "{{ cloudera_archive }}/spark2/parcels/{{ cluster_version_cds }}/"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cdh5/parcels/{{ cluster_version_cdh }}/"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/spark2/parcels/{{ cluster_version_cds }}/"
     scm_csds:
-      - "{{ cloudera_archive }}/spark2/csd/SPARK2_ON_YARN-{{cluster_version_cds}}.jar"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/spark2/csd/SPARK2_ON_YARN-{{cluster_version_cds}}.jar"
     scm_prepare_database_script_path: "/usr/share/cmf/schema/scm_prepare_database.sh"
   "6":
-    scm_repo_url:    "{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
-    scm_repo_gpgkey: "{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
+    scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories: 
-      - "{{ cloudera_archive }}/cdh6/{{ cluster_version_cdh }}/parcels"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cdh6/{{ cluster_version_cdh }}/parcels"
+    scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
+  "7":
+    scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
+    scm_parcel_repositories:
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cdh7/{{ cluster_version_cdh }}/parcels"
     scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
 
 scm_default_user: admin
