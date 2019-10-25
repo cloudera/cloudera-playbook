@@ -6,7 +6,7 @@
     {% if 'host_template' in hostvars[host] %}
     {{ host_joiner() }}
     {
-      "hostName" : "{{ scm_host_names[host] }}",
+      "hostName" : "{{ scm_hosts['names'][host] }}",
       "hostTemplateRefName" : "{{ hostvars[host]['host_template'] }}"
       {% if 'role_ref_names' in hostvars[host] %}
       ,"roleRefNames" : [ "{{ hostvars[host]['role_ref_names'] }}" ]
@@ -18,7 +18,7 @@
   "variables" : [
   {% set var_joiner = joiner(",") %}
   {% for item in cdh_services %}
-    {% for (k,v) in item.iteritems() %}
+    {% for (k,v) in item.items() %}
       {% if not k|lower == 'type' %}
       {{ var_joiner() }}
       {
