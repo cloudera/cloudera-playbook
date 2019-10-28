@@ -97,7 +97,7 @@ scm_csds:                           "{{ configs_by_version[cluster_version_cm_ma
 
 java_installation_strategy: package       # can be set to 'none', 'package' or 'rpm'
 
-java_package: java-1.8.0-openjdk
+java_package: java-1.8.0-openjdk-devel
 java_rpm_location: /tmp/jdk-8u181-linux-x64.rpm
 java_rpm_remote_src: no
 java_jce_location: /tmp/jce_policy-8.zip
