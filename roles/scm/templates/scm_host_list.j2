@@ -1,0 +1,16 @@
+{%- set scm_hosts =  { "ids" : {}, "names" : {} } -%}
+{%- for host, vars in hostvars.items() -%}
+  {%- for scm_host in scm_host_list['json']['items'] -%}
+    {%- set found_host = False -%}
+    {%- if scm_host.hostname == vars.inventory_hostname or scm_host.ipAddress == vars.inventory_hostname -%}
+      {%- set found_host = True -%}
+    {%- elif alternative_ip|default('private_ip') in vars and scm_host.ipAddress == vars[alternative_ip|default('private_ip')] -%}
+      {%- set found_host = True -%}
+    {%- endif -%}
+    {%- if found_host -%}
+      {%- set x = scm_hosts.ids.__setitem__(host, scm_host.hostId) -%}
+      {%- set x = scm_hosts.names.__setitem__(host, scm_host.hostname) -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}
+{{ scm_hosts|to_yaml }}

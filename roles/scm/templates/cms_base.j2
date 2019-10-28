@@ -6,7 +6,7 @@
       "name": "mgmt-SERVICEMONITOR",
       "type": "SERVICEMONITOR",
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }, {
       "name": "mgmt-ACTIVITYMONITOR",
@@ -15,13 +15,13 @@
         "roleConfigGroupName": "mgmt-ACTIVITYMONITOR-BASE"
       },
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }, {
       "name": "mgmt-HOSTMONITOR",
       "type": "HOSTMONITOR",
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }, {
       "name": "mgmt-REPORTSMANAGER",
@@ -30,19 +30,19 @@
         "roleConfigGroupName": "mgmt-REPORTSMANAGER-BASE"
       },
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }, {
       "name": "mgmt-EVENTSERVER",
       "type": "EVENTSERVER",
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }, {
       "name": "mgmt-ALERTPUBLISHER",
       "type": "ALERTPUBLISHER",
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }, {
       "name": "mgmt-NAVIGATOR",
@@ -51,7 +51,7 @@
         "roleConfigGroupName": "mgmt-NAVIGATOR-BASE"
       },
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }, {
       "name": "mgmt-NAVIGATORMETASERVER",
@@ -60,7 +60,7 @@
         "roleConfigGroupName": "mgmt-NAVIGATORMETASERVER-BASE"
       },
       "hostRef": {
-        "hostId": "{{ scm_host_ids[scm_hostname] }}"
+        "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
     }
   ],
