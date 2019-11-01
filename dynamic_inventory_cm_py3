@@ -1,0 +1,298 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+'''
+Created by Gabor Roczei <roczei@cloudera.com>
+
+=============================================================================
+Ansible Dynamic Inventory Script for Cloudera Manager
+=============================================================================
+
+The available Cloudera Manager clusters (Ansible groups, for example: Cluster_1, Balaton)
+can be listed with the following command:
+
+dynamic_inventory_cm --list
+
+Example Ansible ad-hoc commands:
+
+ansible all -u $USER --become-user $USER -i dynamic_inventory_cm --list-hosts
+ansible Balaton --ask-pass -u $USER --become-user $USER -i dynamic_inventory_cm -o -m command -a "time id -Gn $USER"
+ansible Cluster_1 --ask-pass -u $USER --become-user $USER -i dynamic_inventory_cm -o -m command -a "date"
+ansible --ask-pass -u $USER --become-user $USER -i dynamic_inventory_cm -o -m ping all
+'''
+
+import os
+import time
+import sys
+import argparse
+import json
+import urllib.request, urllib.error, urllib.parse
+import ssl
+import base64
+import getpass
+import http.cookiejar
+from urllib.parse import urlparse
+
+# Cache time (seconds)
+default_cache_time_sec = 30 * 24 * 60 * 60
+
+# Disabling SSL CA check
+default_disable_ca_check = False
+
+# Cloudera Manager API timeout (seconds)
+default_timeout_sec = 60
+
+# Debug mode
+default_debug = False
+
+def save_cookie(cookiejar, filename):
+    lwp_cookiejar = http.cookiejar.LWPCookieJar()
+    for cookie in cookiejar:
+        parameters = dict(list(vars(cookie).items()))
+        parameters["rest"] = parameters["_rest"]
+        del parameters["_rest"]
+        cookie = http.cookiejar.Cookie(**parameters)
+        lwp_cookiejar.set_cookie(cookie)
+    lwp_cookiejar.save(filename, ignore_discard = True)
+    os.chmod(filename, 0o600)
+
+def load_cookie(filename):
+    lwp_cookiejar = http.cookiejar.LWPCookieJar()
+    lwp_cookiejar.load(filename, ignore_discard = True)
+    return lwp_cookiejar
+
+class ClouderaManagerInventory:
+
+    def __init__(self):
+        self.inventory = {"_meta" : { "hostvars": {} }}
+        self.cookie_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_cookie"
+        self.json_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_inventory.json"
+        self.api_version = ""
+
+        cache_time_sec = os.getenv("CM_CACHE_TIME_SEC")
+        disable_ca_check = os.getenv("CM_DISABLE_CA_CHECK")
+        timeout_sec = os.getenv("CM_TIMEOUT_SEC")
+        debug = os.getenv("CM_DEBUG")
+
+        if not os.path.exists(os.environ["HOME"] + os.sep + ".cm"):
+           os.makedirs(os.environ["HOME"] + os.sep + ".cm")
+           os.chmod(os.environ["HOME"] + os.sep + ".cm", 0o700)
+
+        if cache_time_sec == None:
+            self.cache_time_sec = default_cache_time_sec
+        else:
+            try:
+               self.cache_time_sec = int(cache_time_sec)
+            except Exception as e:
+               if "invalid literal for int" in str(e):
+                  sys.stderr.write("The value is incorrect in CM_CACHE_TIME_SEC: " + cache_time_sec  + ". It is not a valid integer number.\n")
+                  sys.exit(-1)
+               else:
+                  sys.stderr.write(str(e))
+                  sys.exit(-1)
+
+        if timeout_sec == None:
+            self.timeout_sec = default_timeout_sec
+        else:
+            try:
+               self.timeout_sec = int(timeout_sec)
+            except Exception as e:
+               if "invalid literal for int" in str(e):
+                  sys.stderr.write("The value is incorrect in CM_TIMEOUT_SEC: " + timeout_sec  + ". It is not a valid integer number.\n")
+                  sys.exit(-1)
+               else:
+                  sys.stderr.write(str(e))
+                  sys.exit(-1)
+        
+        if disable_ca_check == None:
+            self.disable_ca_check = default_disable_ca_check
+        elif disable_ca_check.lower() == "true":
+            self.disable_ca_check = True
+        elif disable_ca_check.lower() == "false":
+            self.disable_ca_check = False
+        else:
+            sys.stderr.write("Unknown value in CM_DISABLE_CA_CHECK: " + disable_ca_check  + ". Valid values can only be True or False\n")
+            sys.exit(-1)
+
+        if debug == None:
+            self.debug = default_debug
+        elif debug.lower() == "true":
+            self.debug = True
+        elif debug.lower() == "false":
+            self.debug = False
+        else:
+            sys.stderr.write("Unknown value in CM_DEBUG: " + debug + ". Valid values can only be True or False\n")
+            sys.exit(-1)
+
+        self.read_args()
+
+    def cm_connection(self, url, username, password, cookie):
+        try:
+             if self.disable_ca_check:
+                context = ssl._create_unverified_context()
+             else:
+                context = None
+             
+             cookie_handler = urllib.request.HTTPCookieProcessor(cookie)
+            
+             password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+             password_manager.add_password(realm = "Cloudera Manager",
+                          uri = url + "/api/v1",
+                          user = username,
+                          passwd = password)
+
+             auth_handler = urllib.request.HTTPBasicAuthHandler(password_manager)
+
+             if self.debug:
+                debuglevel = 1
+             else:
+                debuglevel = 0
+
+             http_handler = urllib.request.HTTPHandler(debuglevel = debuglevel)
+             https_handler = urllib.request.HTTPSHandler(context = context, debuglevel = debuglevel)
+             error_handler = urllib.request.HTTPErrorProcessor()
+
+             opener = urllib.request.build_opener(cookie_handler, auth_handler, http_handler, https_handler, error_handler)
+             urllib.request.install_opener(opener)
+
+             userpass = username + ":" + password
+             auth_string = base64.b64encode(userpass.encode()).decode()
+             headers = {"Authorization" : "Basic %s" % auth_string}
+
+             version_url = url + "/api/version"
+             version_request = urllib.request.Request(version_url, None, headers)
+             version_response = urllib.request.urlopen(version_request, timeout = self.timeout_sec).read()
+
+             if version_response:
+               self.api_version = version_response.decode()
+
+             hosts_url = url + "/api/" + self.api_version + "/hosts"
+             hosts_response = opener.open(hosts_url, timeout = self.timeout_sec).read()
+             host_names = {}
+
+             if hosts_response:
+                hosts = json.loads(hosts_response.decode())
+                for host in hosts["items"]:
+                    hostid = host.get("hostId")
+                    host_names[hostid] = host.get("hostname")
+
+             clusters_url = url + "/api/" + self.api_version + "/clusters"
+             clusters_response = opener.open(clusters_url, timeout = self.timeout_sec).read()
+
+             if clusters_response:
+                clusters = json.loads(clusters_response.decode())
+                for cluster in clusters["items"]:
+                    cluster_name = cluster.get("displayName")
+                    cluster_name_updated = cluster_name.replace(" ", "_")
+                    hosts = {"hosts" : []}
+                    i = 2
+                    while cluster_name_updated in self.inventory:
+                       if cluster_name_updated + "_" + str(i) in self.inventory:
+                          i = i + 1
+                       else:
+                          cluster_name_updated = cluster_name_updated + "_" + str(i)
+                          break
+                    self.inventory[cluster_name_updated] = hosts
+                    clusters_hosts_url = url + "/api/" + self.api_version + "/clusters/" + cluster_name + "/hosts"
+                    clusters_hosts_url = urllib.parse.quote(clusters_hosts_url,":/")
+                    clusters_hosts_response = opener.open(clusters_hosts_url, timeout = self.timeout_sec).read()
+
+                    if clusters_hosts_response:
+                       hostids = json.loads(clusters_hosts_response.decode())
+                       for hostid in hostids["items"]:
+                          hostid = hostid.get("hostId")
+                          host = host_names[hostid]
+                          self.inventory[cluster_name_updated]["hosts"].append(host)
+
+             parsed_url = urlparse(url)
+             save_cookie(cookie, self.cookie_path + "." + str(parsed_url.hostname))
+
+        except Exception as e:
+             if "Bad credentials" in str(e):
+                 if os.path.exists(self.cookie_path):
+                     os.remove(self.cookie_path)
+                 return 1
+             elif "CERTIFICATE_VERIFY_FAILED" in str(e):
+                 sys.stderr.write("URL: " + url + "\n")
+                 sys.stderr.write(str(e) + "\n")
+                 sys.stderr.write("\nThe root CA check for Cloudera Manager server(s) can be disabled or enabled with this:\n\n")
+                 sys.stderr.write("export CM_DISABLE_CA_CHECK=True\n\n")
+                 sys.exit(-1)
+             else:
+                 sys.stderr.write("URL: " + url + "\n")
+                 sys.stderr.write(str(e) + "\n")
+                 sys.exit(-1)
+
+    def read_args(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--list", help = "List the clusters and the hosts", action = "store_true")
+        parser.add_argument("--host", help = "", action = "store")
+        parser.add_argument("--refresh-cache", help = "Refresh the (Cloudera Manager) inventory cache" , action = "store_true")
+        self.args = parser.parse_args()
+
+        if self.args.refresh_cache:
+            self.option_refresh_cache()
+
+        if self.args.list:
+            self.option_list()
+
+        if self.args.host:
+            self.option_host()
+
+    def option_list(self):
+        if os.path.exists(self.json_path) and (time.time() - os.path.getmtime(self.json_path) < self.cache_time_sec):
+           json_data = open(self.json_path, "r")
+           self.inventory = json.load(json_data)
+           print(json.dumps(self.inventory, sort_keys = True, indent = 4, separators=(",", ": ")))
+           sys.exit(0)
+
+        self.option_refresh_cache()
+        print(json.dumps(self.inventory, sort_keys = True, indent = 4, separators=(",", ": ")))
+
+    def option_refresh_cache(self):
+        cm_urls = os.getenv("CM_URL")
+        username = os.getenv("CM_USERNAME")
+        password = ""
+
+        if cm_urls == None:
+           sys.stderr.write("CM_URL shell variable has not been set, configure the Cloudera Manager's URL. Examples:\n\n")
+           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.example.com:7183\n")
+           sys.stderr.write("export CM_URL=https://host-10-17-101-73.coe.example.com:7183,http://nightly512-1.vpc.example.com:7180\n\n")
+           sys.exit(-1)
+
+        if username == None:
+           sys.stderr.write("CM_USERNAME shell variable has not been set, configure the Cloudera Manager's username. Example:\n\n")
+           sys.stderr.write("export CM_USERNAME=username\n\n")
+           sys.exit(-1)
+
+        urls = cm_urls.split(",")
+       
+        for url in urls:
+           url = url.strip()
+           parsed_url = urlparse(url)
+           cookie_path = self.cookie_path + "." + str(parsed_url.hostname)
+           if os.path.isfile(cookie_path):
+              cookie = load_cookie(cookie_path)
+              result = self.cm_connection(url, username, password, cookie)
+              if result != 1:
+                 continue
+
+           cookie = http.cookiejar.LWPCookieJar()
+           while True:
+              prompt_message = "Cloudera Manager's URL: " + url + "\nCloudera Manager's password: " 
+              password = getpass.getpass(prompt_message)
+              result = self.cm_connection(url, username, password, cookie)
+              if result != 1:
+                 break
+              user_input = input("Cloudera Manager's username (default: %s): " % username)
+              if user_input:
+                 username = user_input.strip()
+
+        with open(self.json_path, "w") as outfile:
+           json.dump(self.inventory, outfile)
+    
+    def option_host(self):
+        print(json.dumps(self.inventory, sort_keys = True, indent = 4, separators=(",", ": ")))
+
+if __name__ == "__main__":
+    ClouderaManagerInventory()

@@ -118,7 +118,7 @@ For example ``roles/cdh/templates/hdfs.j2``:
 
 # Dynamic Inventory Script for Cloudera Manager
  
-To make integration easier, Gabor Roczei created a dynamic inventory [script](https://github.com/cloudera/cloudera-playbook/blob/master/dynamic_inventory_cm) that allows Ansible to gather data from Cloudera Manager. Its main advantages are:
+To make integration easier, Gabor Roczei created a dynamic inventory [script](https://github.com/cloudera/cloudera-playbook/blob/master/dynamic_inventory_cm_py2) that allows Ansible to gather data from Cloudera Manager. Its main advantages are:
 
 * Cache management of inventory for better performance
 * Cloudera Manager’s HTTP cookie handling   
@@ -175,7 +175,10 @@ Note: The cloudera-playbook git repository is not officially supported by Cloude
 ```ini
 $ vi $HOME/.ansible.cfg
 [defaults]
-inventory = $HOME/cloudera-playbook/dynamic_inventory_cm
+# Python 2 version:
+inventory = $HOME/cloudera-playbook/dynamic_inventory_cm_py2
+# Python 3 version:
+# inventory = $HOME/cloudera-playbook/dynamic_inventory_cm_py3
 # Do not gather the host information (facts) by default. This can give significant speedups for large clusters.
 gathering = explicit
 # Disable key check if host is not initially in 'known_hosts'
@@ -185,7 +188,7 @@ host_key_checking = False
 scp_if_ssh = True
 ```
 
-Note: Update the inventory path of the dynamic_inventory_cm if necessary
+Note: Update the inventory path of the dynamic_inventory_cm_py2 if necessary
 
 **Step 6**: Change the working directory to cloudera-playbook
 
@@ -196,13 +199,13 @@ $ cd cloudera-playbook
 **Step 7**: The available Cloudera Manager clusters (Ansible groups, such as Cluster_1, Balaton) can be listed with the following command:
 
 ```
-$ ./dynamic_inventory_cm --list
+$ ./dynamic_inventory_cm_py2 --list
 ```
 
 Note: The cache of the Cloudera Manager inventory can be refreshed with the following command:
 
 ```
-$ ./dynamic_inventory_cm --refresh-cache
+$ ./dynamic_inventory_cm_py2 --refresh-cache
 ```
 
 **Step 8**: Setup the SSH public key authentication for remote hosts:
