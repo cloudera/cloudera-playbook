@@ -26,7 +26,7 @@
 
   - name: Join using realmd
     expect:
-      command: /bin/bash -c "/usr/sbin/realm join {{ ad_domain }} -U {{ bind_user }}"
+      command: /bin/bash -c "/usr/sbin/realm join {{ ad_domain }} -U {{ bind_user }} --membership-software=adcli --user-principal=host/{{inventory_hostname}}@{{krb5_realm}}"
       responses:
         Password for .*: "{{ bind_password }}"
 
