@@ -56,7 +56,7 @@ host_template=HostTemplate-Workers
 
 [cdh_servers:children]
 utility_servers
-gateway_servers
+edge_servers
 master_servers
 worker_servers
 ```
