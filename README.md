@@ -38,8 +38,8 @@ scm_server
 db_server
 krb5_server
 
-[gateway_servers]
-host4.example.com        host_template=HostTemplate-Gateway role_ref_names=HDFS-HTTPFS-1
+[edge_servers]
+host4.example.com        host_template=HostTemplate-Edge role_ref_names=HDFS-HTTPFS-1
 
 [master_servers]
 host5.example.com        host_template=HostTemplate-Master1
