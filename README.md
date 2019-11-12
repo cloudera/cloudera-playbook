@@ -4,7 +4,10 @@ An Ansible Playbook that installs the Cloudera stack on RHEL/CentOS
 
 # Running the playbook
 
-* Setup an [Ansible Control Machine](http://docs.ansible.com/ansible/intro_installation.html) 
+* Setup an [Ansible Control Machine](http://docs.ansible.com/ansible/intro_installation.html). 
+
+Please **do not use Ansible 2.9.0**. This version has an [issue with templating](https://github.com/ansible/ansible/issues/64745) which causes the playbook execution to fail. Instead, use the latest 2.8.x version as this is not affected. 
+
 * Create Ansible configuration (optional):
 
 ```ini
