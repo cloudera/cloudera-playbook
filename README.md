@@ -2,11 +2,11 @@
 
 An Ansible Playbook that installs the Cloudera stack on RHEL/CentOS
 
-# Running the playbook
+## Running the playbook
 
 * Setup an [Ansible Control Machine](http://docs.ansible.com/ansible/intro_installation.html). 
 
-Please **do not use Ansible 2.9.0**. This version has an [issue with templating](https://github.com/ansible/ansible/issues/64745) which causes the playbook execution to fail. Instead, use the latest 2.8.x version as this is not affected. 
+**Please do not use Ansible 2.9.0**. This version has an [issue with templating](https://github.com/ansible/ansible/issues/64745) which causes the playbook execution to fail. Instead, use any 2.8.x version or a later 2.9.x version as these are not affected. 
 
 * Create Ansible configuration (optional):
 
@@ -86,14 +86,14 @@ ansible_user=ec2-user
 
 AWS users can use Ansible’s ``--private-key`` option to authenticate using a PEM file instead of SSH keys.
 
-# Enabling Kerberos
+## Enabling Kerberos
 
 The playbook can install a local MIT KDC and configure Hadoop Security. To enable Hadoop Security:
 
 * Specify the '[krb5_server]' host in the inventory (see above)
 * Set 'krb5_kdc_type' to 'MIT KDC' in ``group_vars/krb5_server.yml``
 
-# Overriding CDH service/role configuration
+## Overriding CDH service/role configuration
 
 The playbook uses [Cloudera Manager Templates](https://www.cloudera.com/documentation/enterprise/latest/topics/install_cluster_template.html) to provision a cluster.
 As part of the template import process Cloudera Manager applies [Autoconfiguration](https://www.cloudera.com/documentation/enterprise/latest/topics/cm_mc_autoconfig.html)
@@ -119,7 +119,7 @@ For example ``roles/cdh/templates/hdfs.j2``:
 }
 ```
 
-# Dynamic Inventory Script for Cloudera Manager
+## Dynamic Inventory Script for Cloudera Manager
  
 To make integration easier, Gabor Roczei created a dynamic inventory [script](https://github.com/cloudera/cloudera-playbook/blob/master/dynamic_inventory_cm_py2) that allows Ansible to gather data from Cloudera Manager. Its main advantages are:
 
@@ -133,7 +133,7 @@ To make integration easier, Gabor Roczei created a dynamic inventory [script](ht
 High level architecture of Ansible dynamic inventory vs. Cloudera Managers
 </p>
 
-## Configuration
+### Configuration
 
 **Step 1**: Configuration of the related Cloudera Manager(s)
 
@@ -285,7 +285,7 @@ Further information about dynamic inventory and ad-hoc commands can be found in 
 * [Developing Dynamic Inventory](http://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
 * [Documentation of Ansible Ad-Hoc commands](http://docs.ansible.com/ansible/latest/intro_adhoc.html)
 
-## SSSD setup with Ansible (applicable for RHEL 7 / CentOS 7) 
+### SSSD setup with Ansible (applicable for RHEL 7 / CentOS 7) 
 
 **Step 1**: Edit the default variables in group_vars/all:
 
@@ -352,7 +352,7 @@ Remove the Balaton hosts from the realm with this command (See the Ansible [Best
 $ ansible-playbook --limit Balaton -u root realm_leave.yaml
 ```
 
-# How do I contribute code?
+## How do I contribute code?
 You need to first sign and return an
 [ICLA](https://github.com/cloudera/cloudera-playbook/blob/master/icla/Cloudera_ICLA_25APR2018.pdf)
 and
@@ -360,17 +360,17 @@ and
 before we can accept and redistribute your contribution. Once these are submitted you are
 free to start contributing to cloudera-playbook. Submit these to CLA@cloudera.com.
 
-# Main steps
+### Main steps
 * Fork the repo and create a topic branch
 * Push commits to your repo
 * Create a pull request!
 
-## Find
+### Find
 We use Github issues to track bugs for this project. Find an issue that you would like to
 work on (or file one if you have discovered a new issue!). If no-one is working on it,
 assign it to yourself only if you intend to work on it shortly.
 
-## Fix
+### Fix
 
 Please write a good, clear commit message, with a short, descriptive title and
 a message that is exactly long enough to explain what the problem was, and how it was
