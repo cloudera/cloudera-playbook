@@ -38,11 +38,12 @@ ad_site: Default-First-Site-Name
 ## ------------------------------------------------------------------------------------------------------------
 
 # Version of CDH to install
-cluster_version_cdh: 6.3.0
+cluster_version_cdh: 6.3.2
 #cluster_version_cdh: 7.x
 
 # Version of Cloudera Manager to install
-cluster_version_cm:  "{{ cluster_version_cdh }}"
+cluster_version_cm:  6.3.1
+#cluster_version_cm:  "{{ cluster_version_cdh }}"
 #cluster_version_cm:  7.x.0
 
 # Version of CDS Powered by Apache Spark (note: not installed if CDH6/7 is also selected)
