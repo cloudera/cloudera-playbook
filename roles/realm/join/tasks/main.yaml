@@ -3,12 +3,10 @@
     yum:
        name:
          - adcli
-         - samba-common
          - sssd
          - realmd
          - oddjob
          - oddjob-mkhomedir
-         - samba-common-tools
          - python-pip
        state: present
       
