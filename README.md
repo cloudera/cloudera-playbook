@@ -183,7 +183,7 @@ inventory = $HOME/cloudera-playbook/dynamic_inventory_cm_py2
 # Python 3 version:
 # inventory = $HOME/cloudera-playbook/dynamic_inventory_cm_py3
 # Do not gather the host information (facts) by default. This can give significant speedups for large clusters.
-gathering = explicit
+# gathering = explicit
 # Disable key check if host is not initially in 'known_hosts'
 host_key_checking = False
 [ssh_connection]
@@ -291,8 +291,9 @@ Further information about dynamic inventory and ad-hoc commands can be found in 
 
 ```
 krb5_realm: AD.SEC.EXAMPLE.COM
+krb5_kdc_type: Active Directory
+krb5_kdc_host: w2k8-1.ad.sec.example.com
 ad_domain: "{{ krb5_realm.lower() }}"
-kdc: w2k8-1.ad.sec.example.com
 computer_ou: ou=computer_hosts,ou=hadoop_prd,dc=ad,dc=sec,dc=example,dc=com
 ldap_group_search_base: OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
 ldap_user_search_base: DC=ad,DC=sec,DC=example,DC=com?subtree?(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)
@@ -305,13 +306,13 @@ ad_site: Default-First-Site-Name
 If necessary, update this template file (See the Ansible [Templating (Jinja2)](https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html) documentation for more information):
 
 ```
-roles/krb-client/templates/krb5.conf.j2
+templates/krb5.conf.j2
 ```
 
 Run this command to apply it on the managed hosts:
 
 ```
-$ ansible-playbook -u root enable_kerberos.yaml
+$ ansible-playbook --tags krb5_client -u root site.yml
 ```
 
 **Step 3**: Join the host(s) to realm:

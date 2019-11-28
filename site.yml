@@ -45,7 +45,9 @@
   hosts: all
   roles:
     - { role: krb5/client, when: (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') }
-  tags: krb5
+  tags:
+    - krb5
+    - krb5_client
 
 - name: Configure EPEL Repository
   hosts: scm_server

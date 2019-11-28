@@ -25,8 +25,11 @@ krb5_kdc_master_passwd: changeme
 # krb5_cm_managed_krb5_conf: false
 # krb5_enc_types: "aes256-cts aes128-cts rc4-hmac"
 
+## ------------------------------------------------------------------------------------------------------------
+## SSSD installation options
+## ------------------------------------------------------------------------------------------------------------
+
 ad_domain: "{{ krb5_realm.lower() }}"
-kdc: w2k8-1.ad.sec.example.com
 computer_ou: OU=computer_hosts,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
 ldap_group_search_base: OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com
 ldap_user_search_base: DC=ad,DC=sec,DC=example,DC=com?subtree?(memberOf=CN=hadoop_users,OU=groups,OU=hadoop_prd,DC=ad,DC=sec,DC=example,DC=com)
