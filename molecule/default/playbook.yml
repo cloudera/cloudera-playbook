@@ -2,11 +2,8 @@
 - name: Pre-reqs
   hosts: all
   tasks:
-    - name: openjdk8
-      package:
-        name: java-1.8.0-openjdk
-  #roles:
-  # - role: cloudera-playbook
+    - debug:
+        msg: "Pre-reqs tasks if needed"
 
 - name: Converge
   # Note: To override the repo's "playbook group_vars" it's easier to use a "vars:" block here, as inventory vars have lower precedence!
