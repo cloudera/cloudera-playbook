@@ -287,6 +287,11 @@ Further information about dynamic inventory and ad-hoc commands can be found in 
 
 ### SSSD setup with Ansible (applicable for RHEL 7 / CentOS 7) 
 
+Cloudera blog articles:
+
+* [Best Practices Guide for Systems Security Services Daemon Configuration and Installation – Part 1](https://blog.cloudera.com/best-practices-guide-for-systems-security-services-daemon-configuration-and-installation-part-1)
+* [How-to: Automate the Systems Security Services Daemon Installation and Troubleshoot it with Ansible – Part 2](https://blog.cloudera.com/how-to-automate-the-systems-security-services-daemon-installation-and-troubleshoot-it-with-ansible-part-2)
+
 **Step 1**: Edit the default variables in group_vars/all:
 
 ```
