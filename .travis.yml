@@ -13,6 +13,8 @@ install:
   #- pip install ansible==2.8.2
   - pip install ansible==2.9.1
   - pip install docker
+  # 'jmespath' required by the 'cdh' role (that uses the 'json_query' filter)
+  - pip install jmespath
 script:
   - molecule test
   # TODO test more scenarios (multi-node !?)
