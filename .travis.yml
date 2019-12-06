@@ -1,0 +1,22 @@
+---
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+install:
+  # molecule version >v2.22 required for compatibility with ansible >2.8
+  - pip install molecule==2.22
+  # Note: ansible 2.9.0 is buggy, see the README
+  #- pip install ansible==2.8.2
+  - pip install ansible==2.9.1
+  - pip install docker
+script:
+  - molecule test
+  # TODO test more scenarios (multi-node !?)
+  #- molecule test --scenario-name xxx
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
