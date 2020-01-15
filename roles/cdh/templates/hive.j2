@@ -26,10 +26,10 @@
     }, {
       "name": "zookeeper_service",
       "ref": "ZOOKEEPER-1"
-    }, {
+    } {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} , {
       "name": "sentry_service",
       "ref": "SENTRY-1"
-    }
+    } {% endif %}
   ],
   "roleConfigGroups": [
     {
@@ -60,7 +60,7 @@
         }
       ],
       "base": true
-    }, {
+    } {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} , {
       "refName": "HIVE-1-HIVESERVER2-BASE",
       "roleType": "HIVESERVER2",
       "configs": [
@@ -70,6 +70,6 @@
         }
       ],
       "base": true
-    }
+    }  {% endif %}
   ]
 }

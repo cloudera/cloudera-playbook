@@ -11,10 +11,10 @@
     }, {
       "name": "admission_control_enabled",
       "value": "true"
-    }, {
+    }, {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} {
       "name": "sentry_service",
       "ref": "SENTRY-1"
-    }, {
+    }, {% endif %} {
       "name": "kerberos_reinit_interval",
       "value": "10"
     }, {

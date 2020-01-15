@@ -5,6 +5,7 @@
     "HDFS-1-GATEWAY-BASE",
     "HIVE-1-GATEWAY-BASE",
     "SPARK_ON_YARN-1-GATEWAY-BASE",
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
     "YARN-1-GATEWAY-BASE" ]
 }, {
   "refName": "HostTemplate-Edge",
@@ -13,7 +14,7 @@
     "HDFS-1-HTTPFS-BASE",
     "HBASE-1-HBASERESTSERVER-BASE",
     "HBASE-1-HBASETHRIFTSERVER-BASE",
-    "HIVE-1-HIVESERVER2-BASE",
+    {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "HIVE-1-HIVESERVER2-BASE",{% endif %}
     "HUE-1-HUE_SERVER-BASE",
     "HUE-1-HUE_LOAD_BALANCER-BASE",
     {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
@@ -21,6 +22,7 @@
     {% endif %}
     "OOZIE-1-OOZIE_SERVER-BASE",
     "SPARK_ON_YARN-1-GATEWAY-BASE",
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
     "YARN-1-GATEWAY-BASE" ]
 }, {
   "refName": "HostTemplate-Master1",
@@ -31,8 +33,9 @@
     "HDFS-1-FAILOVERCONTROLLER-BASE",
     "HDFS-1-JOURNALNODE-BASE",
     "HIVE-1-HIVEMETASTORE-BASE",
-    "SENTRY-1-SENTRY_SERVER-BASE",
+    {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "SENTRY-1-SENTRY_SERVER-BASE",{% endif %}
     "YARN-1-RESOURCEMANAGER-BASE",
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
   "refName": "HostTemplate-Master2",
@@ -43,8 +46,9 @@
     "HDFS-1-FAILOVERCONTROLLER-BASE",
     "HDFS-1-JOURNALNODE-BASE",
     "HIVE-1-HIVEMETASTORE-BASE",
-    "SENTRY-1-SENTRY_SERVER-BASE",
+    {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %}"SENTRY-1-SENTRY_SERVER-BASE",{% endif %}
     "YARN-1-RESOURCEMANAGER-BASE",
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
   "refName": "HostTemplate-Master3",
@@ -60,6 +64,7 @@
     "SPARK2_ON_YARN-1-SPARK2_YARN_HISTORY_SERVER-BASE",
     {% endif %}
     "YARN-1-JOBHISTORY-BASE",
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
   "refName": "HostTemplate-Workers",
@@ -73,5 +78,6 @@
     {% if cluster_version_cdh_major < '6' %}
     "SPARK2_ON_YARN-1-GATEWAY-BASE",
     {% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
     "YARN-1-NODEMANAGER-BASE" ]
 } ]
