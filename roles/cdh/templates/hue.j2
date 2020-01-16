@@ -25,7 +25,8 @@
       "ref": "IMPALA-1"
     }, {
       "name": "hive_service",
-      "ref": "HIVE-1"
+      {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "ref": "HIVE-1" {% endif %}
+      {% if cluster_version_cdh_major|int == 7 %}"ref": "HIVE_ON_TEZ-1" {% endif %}
     }, {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} {
       "name": "sentry_service",
       "ref": "SENTRY-1"

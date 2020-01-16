@@ -15,6 +15,7 @@
     "HBASE-1-HBASERESTSERVER-BASE",
     "HBASE-1-HBASETHRIFTSERVER-BASE",
     {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "HIVE-1-HIVESERVER2-BASE",{% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "HIVE_ON_TEZ-1-HIVESERVER2-BASE",{% endif %}
     "HUE-1-HUE_SERVER-BASE",
     "HUE-1-HUE_LOAD_BALANCER-BASE",
     {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
@@ -22,6 +23,7 @@
     {% endif %}
     "OOZIE-1-OOZIE_SERVER-BASE",
     "SPARK_ON_YARN-1-GATEWAY-BASE",
+    "HIVE-1-GATEWAY-BASE",
     {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
     "YARN-1-GATEWAY-BASE" ]
 }, {
@@ -33,6 +35,7 @@
     "HDFS-1-FAILOVERCONTROLLER-BASE",
     "HDFS-1-JOURNALNODE-BASE",
     "HIVE-1-HIVEMETASTORE-BASE",
+    "HIVE-1-GATEWAY-BASE",
     {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "SENTRY-1-SENTRY_SERVER-BASE",{% endif %}
     "YARN-1-RESOURCEMANAGER-BASE",
     {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
@@ -46,6 +49,7 @@
     "HDFS-1-FAILOVERCONTROLLER-BASE",
     "HDFS-1-JOURNALNODE-BASE",
     "HIVE-1-HIVEMETASTORE-BASE",
+    "HIVE-1-GATEWAY-BASE",
     {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %}"SENTRY-1-SENTRY_SERVER-BASE",{% endif %}
     "YARN-1-RESOURCEMANAGER-BASE",
     {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
@@ -59,6 +63,7 @@
     "HDFS-1-JOURNALNODE-BASE",
     "IMPALA-1-CATALOGSERVER-BASE",
     "IMPALA-1-STATESTORE-BASE",
+    "HIVE-1-GATEWAY-BASE",
     "SPARK_ON_YARN-1-SPARK_YARN_HISTORY_SERVER-BASE",
     {% if cluster_version_cdh_major < '6' %}
     "SPARK2_ON_YARN-1-SPARK2_YARN_HISTORY_SERVER-BASE",
