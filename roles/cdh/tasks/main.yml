@@ -84,8 +84,8 @@
     return_content: yes
   register: result
   until: not result.json.active
-  retries: 10
-  delay: 60
+  retries: 15
+  delay: 90
   when: not cluster_exists
   failed_when: "'Failed to import cluster template' in result.content"
 

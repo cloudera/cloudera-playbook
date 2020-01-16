@@ -44,7 +44,7 @@
       "hostRef": {
         "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
-    }, {
+    } {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} , {
       "name": "mgmt-NAVIGATOR",
       "type": "NAVIGATOR",
       "roleConfigGroupRef": {
@@ -62,7 +62,7 @@
       "hostRef": {
         "hostId": "{{ scm_hosts['ids'][scm_hostname] }}"
       }
-    }
+    } {% endif %}
   ],
   "roleConfigGroups": [
     {
@@ -121,7 +121,7 @@
           }
         ]
       }
-    }, {
+    } {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} , {
       "name": "mgmt-NAVIGATOR-BASE",
       "displayName": "Navigator Audit Server Default Group",
       "roleType": "NAVIGATOR",
@@ -177,6 +177,6 @@
           }
         ]
       }
-    }
+    } {% endif %}
   ]
 }
