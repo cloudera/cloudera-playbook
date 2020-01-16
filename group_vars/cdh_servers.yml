@@ -23,9 +23,18 @@ cdh_services:
     scratch_dirs: /tmp/impala
 
   - type: oozie
+  # Needed for CDH #
 
-  - type: sentry
+  # -type: sentry
 
+  # Needed for CDH
+
+  # Needed for CDP #
+  - type: tez
+ 
+  - type: hive_on_tez
+
+  # Needed for CDP #
   - type: spark
 
   - type: yarn
