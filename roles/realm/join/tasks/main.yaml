@@ -8,6 +8,7 @@
          - oddjob
          - oddjob-mkhomedir
          - python-pip
+         - openldap-clients
        state: present
       
   - name: Restart the messagebus service, otherwise the realmd service will not start
