@@ -39,6 +39,7 @@ innodb_buffer_pool_size         = {{ mysql_innodb_buffer_pool_size }}
 innodb_thread_concurrency       = 8
 innodb_flush_method             = O_DIRECT
 innodb_log_file_size            = 512M
+{% if cluster_version_cdh_major|int == 7 %}log_bin_trust_function_creators = 1 {% endif %}
 
 [mysqld_safe]
 log-error = {{ mysql_log }}

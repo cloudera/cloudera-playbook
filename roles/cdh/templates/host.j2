@@ -83,6 +83,7 @@
     {% if cluster_version_cdh_major < '6' %}
     "SPARK2_ON_YARN-1-GATEWAY-BASE",
     {% endif %}
-    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
+    "SOLR-1-SOLR_SERVER-BASE", {% endif %}
     "YARN-1-NODEMANAGER-BASE" ]
 } ]
