@@ -1,10 +1,53 @@
 {
   "refName": "RANGER-1",
   "serviceType": "RANGER",
+  "serviceConfigs": [
+      {
+          "name" : "keyadmin_user_password",
+          "value" : "Ch2ng3M3Ch2ng3M3"
+        }, {
+          "name" : "rangeradmin_user_password",
+          "value" : "Ch2ng3M3Ch2ng3M3"
+        }, {
+          "name" : "rangertagsync_user_password",
+          "value" : "Ch2ng3M3Ch2ng3M3"
+        }, {
+          "name" : "rangerusersync_user_password",
+          "value" : "Ch2ng3M3Ch2ng3M3"
+        }
+  ],
   "roleConfigGroups": [
     {
-      "refName": "SOLR-1-SOLR_SERVER-BASE",
-      "roleType": "SOLR_SERVER",
+      "refName": "RANGER-1-RANGER_ADMIN-BASE",
+      "roleType": "RANGER_ADMIN",
+      "base": true,
+      "configs": [
+          {
+            "name" : "ranger_admin_max_heap_size",
+            "value" : "1024"
+          }, {
+            "name" : "ranger_database_host",
+            "value" : "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+          }, {
+            "name" : "ranger_database_password",
+            "value" : "{{ databases.ranger.pass }}"
+          }, {
+            "name" : "ranger_database_type",
+            "value" : "{{ databases.ranger.type }}"
+          }, {
+            "name" : "ranger_database_user",
+            "value" : "{{ databases.ranger.user }}"
+          }
+      ] 
+    },
+    {
+      "refName": "RANGER-1-RANGER_USERSYNC-BASE",
+      "roleType": "RANGER_USERSYNC",
+      "base": true
+    },
+    {
+      "refName": "RANGER-1-RANGER_TAGSYNC-BASE",
+      "roleType": "RANGER_TAGSYNC",
       "base": true
     }
   ]

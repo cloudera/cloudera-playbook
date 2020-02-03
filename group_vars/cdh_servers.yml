@@ -27,14 +27,18 @@ cdh_services:
 
   # -type: sentry
 
-  # Needed for CDH
+  # Needed for CDH ( End ) #
 
   # Needed for CDP #
   - type: tez
  
   - type: hive_on_tez
 
-  # Needed for CDP #
+  - type: solr
+
+  - type: ranger
+
+  # Needed for CDP ( End ) #
   - type: spark
 
   - type: yarn

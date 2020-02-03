@@ -38,7 +38,10 @@
     "HIVE-1-GATEWAY-BASE",
     {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "SENTRY-1-SENTRY_SERVER-BASE",{% endif %}
     "YARN-1-RESOURCEMANAGER-BASE",
-    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
+    "RANGER-1-RANGER_ADMIN-BASE",
+    "RANGER-1-RANGER_USERSYNC-BASE",
+    "RANGER-1-RANGER_TAGSYNC-BASE",{% endif %}
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
   "refName": "HostTemplate-Master2",
