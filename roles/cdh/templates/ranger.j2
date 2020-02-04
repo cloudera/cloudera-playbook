@@ -33,7 +33,7 @@
             "value" : "{{ databases.ranger.pass }}"
           }, {
             "name" : "ranger_database_type",
-            "value" : "{{ databases.ranger.type }}"
+            "value" : {% if databases.ranger.type == "mysql" %}"MySQL"{% endif %}
           }, {
             "name" : "ranger_database_user",
             "value" : "{{ databases.ranger.user }}"
