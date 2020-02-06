@@ -17,10 +17,10 @@
     }, {
       "name": "hive_metastore_database_password",
       "value": "{{ databases.metastore.pass }}"
-    }, {
+    }, {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} {
       "name": "spark_on_yarn_service",
       "ref": "SPARK_ON_YARN-1"
-    }, {
+    }, {% endif %} {
       "name": "mapreduce_yarn_service",
       "ref": "YARN-1"
     }, {
