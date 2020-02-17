@@ -4,16 +4,16 @@
   "serviceConfigs": [
       {
           "name" : "keyadmin_user_password",
-          "value" : "Ch2ng3M3Ch2ng3M3"
+          "value" : "{{ ranger_keyadmin_user_password }}"
         }, {
           "name" : "rangeradmin_user_password",
-          "value" : "Ch2ng3M3Ch2ng3M3"
+          "value" : "{{ ranger_rangeradmin_user_password }}"
         }, {
           "name" : "rangertagsync_user_password",
-          "value" : "Ch2ng3M3Ch2ng3M3"
+          "value" : "{{ ranger_rangertagsync_user_passwor }}"
         }, {
           "name" : "rangerusersync_user_password",
-          "value" : "Ch2ng3M3Ch2ng3M3"
+          "value" : "{{ ranger_rangerusersync_user_password }}"
         }
   ],
   "roleConfigGroups": [
@@ -24,7 +24,7 @@
       "configs": [
           {
             "name" : "ranger_admin_max_heap_size",
-            "value" : "1024"
+            "value" : "{{ ranger_ranger_admin_max_heap_size }}"
           }, {
             "name" : "ranger_database_host",
             "value" : "{{ hostvars[db_hostname]['inventory_hostname'] }}"

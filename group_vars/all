@@ -106,3 +106,18 @@ java_rpm_location: /tmp/jdk-8u181-linux-x64.rpm
 java_rpm_remote_src: no
 java_jce_location: /tmp/jce_policy-8.zip
 java_jce_remote_src: no
+
+## ------------------------------------------------------------------------------------------------------------
+## Ranger installation options ( Ranger has a strong password policy )
+## ------------------------------------------------------------------------------------------------------------
+ranger_keyadmin_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_rangeradmin_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_rangertagsync_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_rangerusersync_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_ranger_admin_max_heap_size: 1024
+
+## ------------------------------------------------------------------------------------------------------------
+## Atlas installation options ( Atlas has a strong password policy )
+## ------------------------------------------------------------------------------------------------------------
+atlas_atlas_admin_password: "Ch2ng3M3Ch2ng3M3"
+
