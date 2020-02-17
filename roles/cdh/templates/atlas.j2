@@ -1,0 +1,22 @@
+{
+  "refName": "ATLAS-1",
+  "serviceType": "ATLAS",
+  "roleConfigGroups": [
+    {
+      "refName": "ATLAS-1-GATEWAY-BASE",
+      "roleType": "GATEWAY",
+      "base": true
+    },
+    {
+      "refName": "ATLAS-1-ATLAS_SERVER-BASE",
+      "roleType": "ATLAS_SERVER",
+      "base": true,
+      "configs": [
+          {
+            "name" : "atlas_admin_password",
+            "value" : "Ch2ngM3Ch2ngM3"
+          }
+      ] 
+    }
+  ]
+}

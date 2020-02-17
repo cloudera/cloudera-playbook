@@ -5,7 +5,9 @@
     "HDFS-1-GATEWAY-BASE",
     "HIVE-1-GATEWAY-BASE",
     "SPARK_ON_YARN-1-GATEWAY-BASE",
-    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
+    "ATLAS-1-GATEWAY-BASE",
+    "KAFKA-1-GATEWAY-BASE",{% endif %}
     "YARN-1-GATEWAY-BASE" ]
 }, {
   "refName": "HostTemplate-Edge",
@@ -15,7 +17,9 @@
     "HBASE-1-HBASERESTSERVER-BASE",
     "HBASE-1-HBASETHRIFTSERVER-BASE",
     {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "HIVE-1-HIVESERVER2-BASE",{% endif %}
-    {% if cluster_version_cdh_major|int == 7 %} "HIVE_ON_TEZ-1-HIVESERVER2-BASE",{% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "HIVE_ON_TEZ-1-HIVESERVER2-BASE",
+    "KAFKA-1-GATEWAY-BASE",
+    "ATLAS-1-GATEWAY-BASE",{% endif %}
     "HUE-1-HUE_SERVER-BASE",
     "HUE-1-HUE_LOAD_BALANCER-BASE",
     {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
@@ -39,6 +43,9 @@
     {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} "SENTRY-1-SENTRY_SERVER-BASE",{% endif %}
     "YARN-1-RESOURCEMANAGER-BASE",
     {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
+    "KAFKA-1-GATEWAY-BASE",
+    "ATLAS-1-GATEWAY-BASE",
+    "ATLAS-1-ATLAS_SERVER-BASE",
     "RANGER-1-RANGER_ADMIN-BASE",
     "RANGER-1-RANGER_USERSYNC-BASE",
     "RANGER-1-RANGER_TAGSYNC-BASE",{% endif %}
@@ -55,7 +62,8 @@
     "HIVE-1-GATEWAY-BASE",
     {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %}"SENTRY-1-SENTRY_SERVER-BASE",{% endif %}
     "YARN-1-RESOURCEMANAGER-BASE",
-    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
+    "KAFKA-1-GATEWAY-BASE",{% endif %}
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
   "refName": "HostTemplate-Master3",
@@ -72,7 +80,9 @@
     "SPARK2_ON_YARN-1-SPARK2_YARN_HISTORY_SERVER-BASE",
     {% endif %}
     "YARN-1-JOBHISTORY-BASE",
-    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
+    {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
+    "KAFKA-1-GATEWAY-BASE",
+    "ATLAS-1-GATEWAY-BASE",{% endif %}
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
   "refName": "HostTemplate-Workers",
@@ -87,6 +97,9 @@
     "SPARK2_ON_YARN-1-GATEWAY-BASE",
     {% endif %}
     {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
-    "SOLR-1-SOLR_SERVER-BASE", {% endif %}
+    "SOLR-1-SOLR_SERVER-BASE", 
+    "KAFKA-1-GATEWAY-BASE",
+    "ATLAS-1-GATEWAY-BASE",
+    "KAFKA-1-KAFKA_BROKER-BASE",{% endif %}
     "YARN-1-NODEMANAGER-BASE" ]
 } ]

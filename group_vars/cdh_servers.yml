@@ -38,6 +38,10 @@ cdh_services:
 
   - type: ranger
 
+  - type: kafka
+ 
+  - type: atlas
+
   # Needed for CDP ( End ) #
   - type: spark
 
