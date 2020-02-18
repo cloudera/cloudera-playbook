@@ -9,7 +9,7 @@ tmp_dir: /tmp
 
 krb5_realm: MIT.EXAMPLE.COM
 # 'Active Directory', 'MIT KDC', or 'none' to disable security
-krb5_kdc_type: MIT KDC
+krb5_kdc_type: none
 krb5_kdc_admin_user: "cloudera-scm/admin@{{ krb5_realm }}"
 krb5_kdc_admin_passwd: changeme
 krb5_kdc_master_passwd: changeme
@@ -79,10 +79,10 @@ configs_by_version:
       - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cdh6/{{ cluster_version_cdh }}/parcels"
     scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
   "7":
-    scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
-    scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
+    scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories:
-      - "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cdh7/{{ cluster_version_cdh }}/parcels"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/cdh7/{{ cluster_version_cdh }}/parcels"
     scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
 
 scm_default_user: admin
