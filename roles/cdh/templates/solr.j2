@@ -1,6 +1,12 @@
 {
   "refName": "SOLR-1",
   "serviceType": "SOLR",
+  "serviceConfigs": [
+    {
+      "name" : "solr_security_authentication",
+      "value" : "{% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}kerberos{% else %}simple{% endif %}"
+    }
+  ],
   "roleConfigGroups": [
     {
       "refName": "SOLR-1-SOLR_SERVER-BASE",

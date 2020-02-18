@@ -1,6 +1,12 @@
 {
   "refName": "ATLAS-1",
   "serviceType": "ATLAS",
+  "serviceConfigs": [
+      {
+          "name" : "kerberos.auth.enable",
+          "value" : "{% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}true{% else %}false{% endif %}"
+        }
+  ],
   "roleConfigGroups": [
     {
       "refName": "ATLAS-1-GATEWAY-BASE",

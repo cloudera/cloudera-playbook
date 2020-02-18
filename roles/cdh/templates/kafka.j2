@@ -1,6 +1,12 @@
 {
   "refName": "KAFKA-1",
   "serviceType": "KAFKA",
+  "serviceConfigs": [
+    {
+       "name" : "kerberos.auth.enable",
+       "value" : "{% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}true{% else %}false{% endif %}"
+    }
+  ],
   "roleConfigGroups": [
     {
       "refName": "KAFKA-1-GATEWAY-BASE",
