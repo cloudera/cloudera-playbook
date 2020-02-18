@@ -120,4 +120,5 @@ ranger_ranger_admin_max_heap_size: 1024
 ## Atlas installation options ( Atlas has a strong password policy )
 ## ------------------------------------------------------------------------------------------------------------
 atlas_atlas_admin_password: "Ch2ng3M3Ch2ng3M3"
+atlas_atlas_admin_username: "admin"
 
