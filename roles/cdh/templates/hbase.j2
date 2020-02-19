@@ -2,6 +2,10 @@
   "refName": "HBASE-1",
   "serviceType": "HBASE",
   "serviceConfigs": [
+    {% if cluster_version_cdh_major|int == 7 %}{
+      "name" : "hbase_atlas_hook_enable",
+      "value" : "true"
+    },{% endif %}
     {
       "name": "hdfs_service",
       "ref": "HDFS-1"
