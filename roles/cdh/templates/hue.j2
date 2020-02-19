@@ -32,7 +32,7 @@
       "ref": "SENTRY-1"
     }, {% endif %} {
       "name": "hue_service_safety_valve",
-      "value": "[impala]\nserver_port=21051\n\n[beeswax]\ndownload_cell_limit=10"
+      "value": "[impala]\nserver_port={% if cluster_version_cdh_major|int == 7 %}21050{% else %}21051{% endif %}\n\n[beeswax]\ndownload_cell_limit=10"
     }, {
       "name": "zookeeper_service",
       "ref": "ZOOKEEPER-1"
