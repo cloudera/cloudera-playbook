@@ -16,7 +16,7 @@
       "name" : "hbase_thriftserver_support_proxyuser",
       "value" : "true"
     },
-    {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
+    {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %} {
       "name" : "hbase_restserver_security_authentication",
       "value" : "kerberos",
     }, {
@@ -24,9 +24,9 @@
       "value" : "kerberos",
     }, {
       "name" : "hbase_service_config_safety_valve",
-      "value" : "<property><name>hbase.thrift.spnego.principal</name><value>HTTP/{{ hostvars[edge_servers]['inventory_hostname'] }}@{{ krb5_realm }}</value></property><property><name>hbase.thrift.spnego.keytab.file</name><value>REDACTED</value></property>"
-    }, {
-    {% endif %}
+      "value" : "<property><name>hbase.thrift.spnego.principal</name><value>HTTP/{{ hostvars[edge_hostname]['inventory_hostname'] }}@{{ krb5_realm }}</value></property><property><name>hbase.thrift.spnego.keytab.file</name><value>hbase.keytab</value></property>"
+    },
+    {% endif %} {
       "name": "zookeeper_service",
       "ref": "ZOOKEEPER-1"
     } 
@@ -55,3 +55,4 @@
     }
   ]
 }
+
