@@ -158,3 +158,12 @@
     home: /var/lib/zookeeper
     shell: /sbin/nologin
     system: yes
+    
+- name: Create user 'cmjobuser'
+  user:
+    name: cmjobuser
+    home: /var/lib/cmjobuser
+    shell: /sbin/nologin
+    system: yes
+    groups:
+    - hadoop
