@@ -1,6 +1,12 @@
 {
   "refName": "HIVE_ON_TEZ-1",
   "serviceType": "HIVE_ON_TEZ",
+  "serviceConfigs": [
+    {
+      "name": "tez_container_size",
+      "value": "{{ hive_tez_container_size }}"
+    }
+  ],
   "roleConfigGroups": [
     {
       "refName": "HIVE_ON_TEZ-1-HIVESERVER2-BASE",
