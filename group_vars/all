@@ -126,4 +126,11 @@ atlas_atlas_admin_username: "admin"
 ## YARN installation options ( On 16 Gb nodes autoconfig gives YARN not enough memory to run the TEZ test job )
 ## ------------------------------------------------------------------------------------------------------------
 yarn_yarn_nodemanager_resource_memory_mb: "4096"
+yarn_yarn_scheduler_maximum_allocation_mb: "4096"
+
+## ------------------------------------------------------------------------------------------------------------
+## Hive on Tez installation options
+## ------------------------------------------------------------------------------------------------------------
+hive_tez_container_size: "2048"
+
 
