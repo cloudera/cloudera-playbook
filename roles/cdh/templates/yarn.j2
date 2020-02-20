@@ -17,7 +17,7 @@
     }, {
       "name": "cm_yarn_enable_container_usage_aggregation",
       "value": "true"
-    }
+    } 
   ],
   "roleConfigGroups": [
     {
@@ -60,7 +60,12 @@
     }, {
       "refName": "YARN-1-RESOURCEMANAGER-BASE",
       "roleType": "RESOURCEMANAGER",
-      "configs": [],
+      "configs": [
+        {
+          "name": "yarn_scheduler_maximum_allocation_mb",
+          "value": "{{ yarn_yarn_scheduler_maximum_allocation_mb }}"
+        }
+      ],
       "base": true
     }
   ]
