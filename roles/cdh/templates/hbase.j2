@@ -6,6 +6,11 @@
       "name" : "hbase_atlas_hook_enable",
       "value" : "true"
     },{% endif %}
+    {% if ( cluster_version_cdh_major|int == 7 ) and ( cluster_version_cdh_minor|int > 0 ) %}{
+      "name": "atlas_service",
+      "ref": "ATLAS-1"
+    },
+    {% endif %}
     {
       "name": "hdfs_service",
       "ref": "HDFS-1"
