@@ -5,6 +5,12 @@
     {
       "name" : "solr_security_authentication",
       "value" : "{% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}kerberos{% else %}simple{% endif %}"
+    }, {
+      "name" : "hdfs_service",
+      "ref" : "HDFS-1"
+    }, {
+      "name" : "zookeeper_service",
+      "ref" : "ZOOKEEPER-1"
     }
   ],
   "roleConfigGroups": [
