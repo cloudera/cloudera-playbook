@@ -5,7 +5,23 @@
       {
           "name" : "kerberos.auth.enable",
           "value" : "{% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}true{% else %}false{% endif %}"
-        }
+        },
+        {
+          "name" : "hbase_service",
+          "ref" : "HBASE-1"
+        }, {
+          "name" : "hdfs_service",
+          "ref" : "HDFS-1"
+        }, {
+          "name" : "kafka_service",
+          "ref" : "KAFKA-1"
+       }, {
+         "name" : "ranger_service",
+         "ref" : "RANGER-1"
+      }, {
+         "name" : "solr_service",
+         "ref" : "SOLR-1"
+      }  
   ],
   "roleConfigGroups": [
     {
