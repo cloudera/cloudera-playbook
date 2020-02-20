@@ -4,9 +4,6 @@ db_hostname: "{{ hostvars[groups['db_server'][0]]['inventory_hostname'] }}"
 scm_hostname: "{{ hostvars[groups['scm_server'][0]]['inventory_hostname'] }}"
 edge_hostname: "{{ hostvars[groups['edge_servers'][0]]['inventory_hostname'] }}"
 
-yarn_yarn_nodemanager_resource_memory_mb: "{{ hostvars[groups['worker_servers'][0]]['ansible_memtotal_mb']*0.33|int }}"
-
-
 cluster_display_name: cluster_1
 
 cdh_services:
