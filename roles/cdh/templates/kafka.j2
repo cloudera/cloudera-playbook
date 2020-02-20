@@ -5,8 +5,17 @@
     {
        "name" : "kerberos.auth.enable",
        "value" : "{% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}true{% else %}false{% endif %}"
+    }, {
+      "name" : "hdfs_service",
+      "ref" : "HDFS-1"
+    }, {
+      "name" : "zookeeper_service",
+      "ref" : "ZOOKEEPER-1"
+    }, {
+      "name" : "ranger_service",
+      "ref" : "RANGER-1"
     }
-  ],
+    ],
   "roleConfigGroups": [
     {
       "refName": "KAFKA-1-GATEWAY-BASE",
