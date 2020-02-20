@@ -51,6 +51,9 @@
         }, {
            "name" : "container_executor_allowed_system_users",
            "value" : "nobody,impala,hive,llama,hbase,cmjobuser"
+        }, {
+           "name": "yarn_nodemanager_resource_memory_mb",
+           "value": "{{ yarn_yarn_nodemanager_resource_memory_mb }}"
         }
       ],
       "base": true
