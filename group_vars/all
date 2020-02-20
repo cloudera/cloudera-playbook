@@ -122,3 +122,8 @@ ranger_ranger_admin_max_heap_size: 1024
 atlas_atlas_admin_password: "Ch2ng3M3Ch2ng3M3"
 atlas_atlas_admin_username: "admin"
 
+## ------------------------------------------------------------------------------------------------------------
+## YARN installation options ( On 16 Gb nodes autoconfig gives YARN not enough memory to run the TEZ test job )
+## ------------------------------------------------------------------------------------------------------------
+yarn_yarn_nodemanager_resource_memory_mb: "4096"
+
