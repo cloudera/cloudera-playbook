@@ -86,3 +86,11 @@
   vars: 
     java_home: /usr/lib/jvm
   when: java_installation_strategy != 'none' and installed_jdk_provider == 'openjdk' and installed_jdk_version is not match("11.*")
+
+- name: Apply workaround for Kerberos issues introduced in OpenJDK 1.8u242 (JDK-8215032)
+  lineinfile:
+    path: /usr/lib/jvm/jre/lib/security/java.security
+    regexp: '^sun.security.krb5.disableReferrals'
+    line: sun.security.krb5.disableReferrals=true
+  when: cloudera_jdk_installation_strategy != 'none' and installed_jdk_provider == 'openjdk' and installed_jdk_version == '1.8.0' and installed_jdk_update|int >= 242
+
