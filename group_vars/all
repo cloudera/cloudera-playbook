@@ -62,6 +62,12 @@ cloudera_archive_protocol: https://
 cloudera_archive: archive.cloudera.com
 cloudera_archive_authn: ""
 
+# Version of CFM to install
+cfm_version: 1.0.1.0
+nifi_csd_version: 1.9.0.1.0.1.0-12
+nifica_csd_version: 1.9.0.1.0.1.0-12
+nifi_registry_csd_version: 0.3.0.1.0.1.0-12
+
 configs_by_version:
   "5":
     scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/"
@@ -77,6 +83,11 @@ configs_by_version:
     scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories: 
       - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cdh6/{{ cluster_version_cdh }}/parcels"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/CFM/parcels/{{ cfm_version }}"
+    scm_csds:
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/CFM/csd/{{ cfm_version }}/NIFI-{{ nifi_csd_version }}.jar"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/CFM/csd/{{ cfm_version }}/NIFICA-{{ nifica_csd_version }}.jar"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/CFM/csd/{{ cfm_version }}/NIFIREGISTRY-{{ nifi_registry_csd_version }}.jar"
     scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
   "7":
     scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"

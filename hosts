@@ -36,6 +36,13 @@ utility_servers
 gateway_servers
 master_servers
 worker_servers
+nifi_servers
+nifi_registry_servers
+
+[nifi_servers]
+<host>        host_template=HostTemplate-Nifi
+
+[nifi_registry_servers]
+<host>        host_template=HostTemplate-NifiRegistry
 
 [all:vars]
-ansible_user=ec2-user

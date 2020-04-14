@@ -358,6 +358,18 @@ Remove the Balaton hosts from the realm with this command (See the Ansible [Best
 $ ansible-playbook --limit Balaton -u root realm_leave.yaml
 ```
 
+## Steps required to not install CDF components
+
+By default CDF components(NIFI/NIFI Registry) are installed with the default setup, if you don't want to install these components please perform the below steps
+
+* In the group_vars/cdh_servers.yml file comment the CDF sections as shown below
+```
+   #  - type: nifi
+   #  - type: nifiregistry
+```
+* In the `hosts` file make sure you have the correct servers defined for all sections including `scm_server` and delete server contents under `[nifi_servers]` and  `[nifi_registry_servers]` sections
+
+
 ## How do I contribute code?
 You need to first sign and return an
 [ICLA](https://github.com/cloudera/cloudera-playbook/blob/master/icla/Cloudera_ICLA_25APR2018.pdf)

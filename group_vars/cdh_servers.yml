@@ -33,3 +33,8 @@ cdh_services:
     yarn_nodemanager_log_dirs: /var/log/nm
 
   - type: zookeeper
+
+  - type: nifi
+
+  - type: nifiregistry
+
