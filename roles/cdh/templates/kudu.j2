@@ -1,0 +1,42 @@
+{
+  "refName": "KUDU-1",
+  "serviceType": "KUDU",
+  "serviceConfigs": [
+    {
+      "name": "enable_security",
+      "value": "true"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "KUDU-1-KUDU_MASTER-BASE",
+      "roleType": "KUDU_MASTER",
+      "configs": [
+        {
+          "name": "fs_wal_dir",
+          "value": "/kudu/mwal"
+        },
+        {
+          "name": "fs_data_dirs",
+          "value": "/kudu/mdir"
+        }
+      ],
+      "base": true
+    },
+    {
+      "refName": "KUDU-1-KUDU_TSERVER-BASE",
+      "roleType": "KUDU_TSERVER",
+      "configs": [
+        {
+          "name": "fs_wal_dir",
+          "value": "/kudu/twal"
+        },
+        {
+          "name": "fs_data_dirs",
+          "value": "/kudu/tdir"
+        }
+      ],
+      "base": true
+    }
+  ]
+}
