@@ -75,6 +75,8 @@
 - name: Create user 'kudu'
   user:
     name: kudu
+    groups:
+    - hive
     home: /var/lib/kudu
     shell: /sbin/nologin
     system: yes

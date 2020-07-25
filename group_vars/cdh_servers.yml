@@ -22,6 +22,8 @@ cdh_services:
   - type: impala
     scratch_dirs: /tmp/impala
 
+  - type: kudu
+
   - type: oozie
 
   - type: sentry

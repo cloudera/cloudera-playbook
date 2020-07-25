@@ -7,12 +7,12 @@ tmp_dir: /tmp
 ## Security options
 ## ------------------------------------------------------------------------------------------------------------
 
-krb5_realm: MIT.EXAMPLE.COM
+krb5_realm: CLOUDERA.COM
 # 'Active Directory', 'MIT KDC', or 'none' to disable security
 krb5_kdc_type: MIT KDC
 krb5_kdc_admin_user: "cloudera-scm/admin@{{ krb5_realm }}"
-krb5_kdc_admin_passwd: changeme
-krb5_kdc_master_passwd: changeme
+krb5_kdc_admin_passwd: adminword1
+krb5_kdc_master_passwd: adminword1
 
 # krb5_realm: AD.EXAMPLE.COM
 # krb5_kdc_type: Active Directory
