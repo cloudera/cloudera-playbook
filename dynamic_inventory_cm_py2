@@ -67,7 +67,7 @@ class ClouderaManagerInventory:
         self.inventory = {"_meta" : { "hostvars": {} }}
         self.cookie_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_cookie"
         self.json_path = os.environ["HOME"] + os.sep + ".cm" + os.sep + ".cm_inventory.json"
-        self.api_version = ""
+        self.api_version = "v30"
 
         cache_time_sec = os.getenv("CM_CACHE_TIME_SEC")
         disable_ca_check = os.getenv("CM_DISABLE_CA_CHECK")
@@ -162,8 +162,8 @@ class ClouderaManagerInventory:
              version_request = urllib2.Request(version_url, None, headers)
              version_response = urllib2.urlopen(version_request, timeout = self.timeout_sec).read()
 
-             if version_response:
-               self.api_version = version_response
+             #if version_response:
+             #  self.api_version = version_response
 
              hosts_url = url + "/api/" + self.api_version + "/hosts"
              hosts_response = opener.open(hosts_url, timeout = self.timeout_sec).read()
