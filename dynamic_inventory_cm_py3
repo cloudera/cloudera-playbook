@@ -184,6 +184,7 @@ class ClouderaManagerInventory:
                 for cluster in clusters["items"]:
                     cluster_name = cluster.get("displayName")
                     cluster_name_updated = cluster_name.replace(" ", "_")
+                    cluster_name_updated = cluster_name.replace("-", "_")
                     hosts = {"hosts" : []}
                     i = 2
                     while cluster_name_updated in self.inventory:
