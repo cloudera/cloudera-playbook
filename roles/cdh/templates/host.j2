@@ -74,4 +74,20 @@
     "SPARK2_ON_YARN-1-GATEWAY-BASE",
     {% endif %}
     "YARN-1-NODEMANAGER-BASE" ]
-} ]
+}
+{% if groups['nifi_servers'] is defined and (groups['nifi_servers'] | length>0) %}
+,{
+  "refName": "HostTemplate-Nifi",
+  "cardinality": 1,
+  "roleConfigGroupsRefNames": [
+    "NIFI-1-NIFI_NODE-BASE" ]
+}
+{% endif %}
+{% if groups['nifi_registry_servers'] is defined and (groups['nifi_registry_servers'] | length>0) %}
+,{
+  "refName": "HostTemplate-NifiRegistry",
+  "cardinality": 1,
+  "roleConfigGroupsRefNames": [
+    "NIFIREGISTRY-1-NIFI_REGISTRY_SERVER-BASE" ]
+}
+{% endif %} ]

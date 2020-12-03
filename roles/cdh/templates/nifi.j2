@@ -1,0 +1,16 @@
+{
+  "refName": "NIFI-1",
+  "serviceType": "NIFI",
+  "serviceConfigs": [
+    {
+      "name": "zookeeper_service",
+      "ref": "ZOOKEEPER-1"
+    } ],
+  "roleConfigGroups": [
+     {
+      "refName" : "NIFI-1-NIFI_NODE-BASE",
+      "roleType" : "NIFI_NODE",
+      "base": true
+    }
+  ]
+}
