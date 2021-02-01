@@ -1,0 +1,10 @@
+---
+- name: Pre-reqs
+  hosts: all
+  tasks:
+    - debug:
+        msg: "Pre-reqs tasks if needed"
+
+- name: Converge
+  # Note: To override the repo's "playbook group_vars" it's easier to use a "vars:" block here, as inventory vars have lower precedence!
+  import_playbook: ../../site.yml

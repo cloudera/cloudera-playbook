@@ -1,0 +1,84 @@
+---
+# Molecule config for a single-node CDH cluster
+#
+# Notes:
+# - Linters are set enabled=false because the roles currently contains many lint warnings
+# - The 'destroy' action is commented out to avoid accidentally destroying your molecule cluster
+#
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+# Using geerlingguy's image that provides centos7 with ansible AND systemd
+platforms:
+  - name: "${MOLECULE_DISTRO:-centos7}-cdh01.local"
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+    pre_build_image: True
+    privileged: True
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/usr/sbin/init"
+    groups:
+      # following groups required by the role's site.yml playbook
+      - cdh_servers
+      - db_server
+      - scm_server # group used during 'scm' role
+      - krb5_server
+    # networks:
+    #   - name: molecule_cdh
+    # network_mode: bridge
+    # Host networking did not work on my Macbook (it hang at task waiting for the Ambari Agents registration)
+    #network_mode: host
+    published_ports:
+      # Cloudera Manager
+      - 0.0.0.0:7180:7180/tcp
+      # YARN
+      - 0.0.0.0:8088:8088/tcp
+      # HDFS
+      - 0.0.0.0:50070:50070/tcp
+      - 0.0.0.0:50075:50075/tcp
+
+provisioner:
+  name: ansible
+  config_options:
+    #TODO enable later
+    # defaults:
+    #   gathering: smart
+    #   fact_caching: jsonfile
+    #   fact_caching_connection: /tmp/facts_cache
+    ssh_connection:
+      pipelining: True
+
+  options:
+    diff: true
+    v: True
+  inventory:
+    group_vars:
+      # Note: 'all' inventory group_vars will be overriden by the 'all' playbook group_vars, but not specific groups
+      cdh_servers:
+        java_installation_strategy: package
+        # assigning templates to our host:
+        host_template: HostTemplate-Edge
+        role_ref_names: HDFS-HTTPFS-1
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+  test_sequence:
+    # - lint
+    #- destroy
+    - dependency
+    - syntax
+    - create
+    - prepare
+    - converge
+    #- idempotence
+    # - side_effect
+    - verify
+    #- destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
